@@ -1,5 +1,12 @@
 <yas>
 
+<scene root="cube" axis_length="5" />
+
+<ambient>
+ <ambient r="0.1" g="0.1" b="0.1" a="1.0" />
+ <background r="1" g="1" b="1" a="1" />
+ </ambient>
+
 <textures>
  <!-- Deve existir um ou mais blocos "texture" -->
  <!-- Os identificadores "id" nao podem ser repetidos -->
@@ -47,12 +54,6 @@
  <!-- os parametros devem ser interpretados, genericamente, -->
  <!-- como em WebGL; o cilindro deve adicionalmente ter tampas -->
  <rectangle x1="1" y1="1" x2="3" y2="3" />
- <triangle x1="1" y1="1" z1="1"
- x2="1" y2="3" z2="2"
- x3="1" y3="-2" z3="-3" />
- <cylinder base="4" top="5" height="5" slices="2" stacks="1" />
- <sphere radius="3" slices="1" stacks="1" />
- <torus inner="2" outer="4" slices="1" loops="2" />
  </primitive >
  </primitives >
 
@@ -73,9 +74,6 @@
 	 <!-- usando zero ou mais das instrucoes seguintes, sem -->
 	 <!-- limite nem ordem -->
 	 <!-- ex: bloco transformation pode ficar sem conteudo -->
-	 <translate x="0" y="0" z="0" />
-	 <rotate axis="x" angle="0" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 	 <!-- declaracao obrigatoria de pelo menos um material; -->
 	 <!-- o material id="inherit", mantem (herda) material do "pai" -->
@@ -120,9 +118,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0" z="0" />
-	 <rotate axis="x" angle="180" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>
@@ -147,9 +142,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0.5" z="0" />
-	 <rotate axis="y" angle="90" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>
@@ -175,9 +167,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0" z="0" />
-	 <rotate axis="y" angle="-90" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>
@@ -203,9 +192,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0" z="0.5" />
-	 <rotate axis="z" angle="90" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>
@@ -230,9 +216,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0" z="-0.5" />
-	 <rotate axis="x" angle="-90" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>
@@ -258,9 +241,6 @@
 
 	 <transformationref id="square1" />
 
-	 <translate x="0.5" y="0" z="0" />
-	 <rotate axis="x" angle="0" />
-	 <scale x="1" y="1" z="1" />
 	 </transformation>
 
 	 <materials>

@@ -81,15 +81,17 @@ class XMLscene extends CGFscene {
      * As loading is asynchronous, this may be called already after the application has started the run loop
      */
     onGraphLoaded() {
-        this.camera.near = this.graph.near;
-        this.camera.far = this.graph.far;
+        this.axis = new CGFaxis(this, this.graph.axisLength);
 
-        //TODO: Change reference length according to parsed graph
-        //this.axis = new CGFaxis(this, this.graph.referenceLength);
+        console.log(this.graph.ambient);
 
-        // TODO: Change ambient and background details according to parsed graph
+        this.setGlobalAmbientLight(this.graph.ambient[0],this.graph.ambient[1],this.graph.ambient[2],this.graph.ambient[3]);
 
         this.initLights();
+
+        /*this.rectangulo = new MyRectangle(this,this.graph.rectanglecoordinates[0],this.graph.rectanglecoordinates[1],this.graph.rectanglecoordinates[2],this.graph.rectanglecoordinates[3]);
+
+        console.log(this.graph.rectanglecoordinates);*/
 
         // Adds lights group.
         this.interface.addLightsGroup(this.graph.lights);
