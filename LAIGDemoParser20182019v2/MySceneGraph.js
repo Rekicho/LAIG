@@ -497,36 +497,51 @@ class MySceneGraph {
 
     parseTriangle(triangleNode, primitiveId){
         // x1
-        var x1 = this.reader.getFloat(rectangleNode, 'x1');
+        var x1 = this.reader.getFloat(triangleNode, 'x1');
         if (!(x1 != null && !isNaN(x1)))
             return "unable to parse x1-coordinate of the primitive for ID = " + primitiveId;
 
         // y1
-        var y1 = this.reader.getFloat(rectangleNode, 'y1');
+        var y1 = this.reader.getFloat(triangleNode, 'y1');
         if (!(y1 != null && !isNaN(y1)))
             return "unable to parse y1-coordinate of the primitive for ID = " + primitiveId;
 
         // z1
-        var z1 = this.reader.getFloat(rectangleNode, 'z1');
+        var z1 = this.reader.getFloat(triangleNode, 'z1');
         if (!(z1 != null && !isNaN(z1)))
             return "unable to parse z1-coordinate of the primitive for ID = " + primitiveId;
 
         // x2
-        var x2 = this.reader.getFloat(rectangleNode, 'x2');
+        var x2 = this.reader.getFloat(triangleNode, 'x2');
         if (!(x2 != null && !isNaN(x2)))
             return "unable to parse x2-coordinate of the primitive for ID = " + primitiveId;
 
         // y2
-        var y2 = this.reader.getFloat(rectangleNode, 'y2');
+        var y2 = this.reader.getFloat(triangleNode, 'y2');
         if (!(y2 != null && !isNaN(y2)))
             return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
 
         // z2
-        var z2 = this.reader.getFloat(rectangleNode, 'z2');
+        var z2 = this.reader.getFloat(triangleNode, 'z2');
         if (!(z2 != null && !isNaN(z2)))
             return "unable to parse z2-coordinate of the primitive for ID = " + primitiveId;
 
-        //this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
+        // x3
+        var x3 = this.reader.getFloat(triangleNode, 'x3');
+        if (!(x3 != null && !isNaN(x3)))
+            return "unable to parse x3-coordinate of the primitive for ID = " + primitiveId;
+
+        // y3
+        var y3 = this.reader.getFloat(triangleNode, 'y3');
+        if (!(y3 != null && !isNaN(y3)))
+            return "unable to parse y3-coordinate of the primitive for ID = " + primitiveId;
+
+        // z3
+        var z3 = this.reader.getFloat(triangleNode, 'z3');
+        if (!(z3 != null && !isNaN(z3)))
+            return "unable to parse z3-coordinate of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
     }
 
     /**
