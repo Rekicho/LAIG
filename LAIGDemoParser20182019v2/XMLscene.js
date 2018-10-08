@@ -88,10 +88,6 @@ class XMLscene extends CGFscene {
 
         this.initLights();
 
-        /*this.rectangulo = new MyRectangle(this,this.graph.rectanglecoordinates[0],this.graph.rectanglecoordinates[1],this.graph.rectanglecoordinates[2],this.graph.rectanglecoordinates[3]);
-
-        console.log(this.graph.rectanglecoordinates);*/
-
         // Adds lights group.
         this.interface.addLightsGroup(this.graph.lights);
 

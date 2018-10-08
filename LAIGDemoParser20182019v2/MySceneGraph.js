@@ -25,13 +25,13 @@ class MySceneGraph {
         this.scene = scene;
         scene.graph = this;      
 
-        this.nodes = [];
-
         this.idRoot = null;                    // The id of the root element.
         this.axisLength = 5;
 
         this.ambient = [];
         this.background = [];
+
+        this.primitives = [];
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -92,6 +92,7 @@ class MySceneGraph {
         // <scene>
         if ((index = nodeNames.indexOf("scene")) == -1)
             return "tag <scene> missing";
+
         else {
             if (index != SCENE_INDEX)
                 this.onXMLMinorError("tag <scene> out of order");
@@ -178,6 +179,8 @@ class MySceneGraph {
                 return error;
         }
 
+        */
+
         // <primitives>
         if ((index = nodeNames.indexOf("primitives")) == -1)
             return "tag <primitives> missing";
@@ -189,6 +192,8 @@ class MySceneGraph {
             if ((error = this.parsePrimitives(nodes[index])) != null)
                 return error;
         }
+
+        /*
 
         // <components>
         if ((index = nodeNames.indexOf("components")) == -1)
@@ -404,6 +409,8 @@ class MySceneGraph {
         var grandChildren = [];
         var nodeName;
 
+        var error;
+
         // Any number of primitives.
         for (var i = 0; i < children.length; i++) {
 
@@ -430,49 +437,28 @@ class MySceneGraph {
 
             nodeName = grandChildren[0].nodeName;
 
-            //TO DO: ADD OTHER PRIMITIVES
-            if (nodeName != "rectangle")
-                return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
+            switch(nodeName) {
+                case "rectangle": if ((error = this.parseRectangle(grandChildren[0], primitiveId)) != null)
+                                    return error;
+                                  break;
+                case "triangle":  if ((error = this.parseTriangle(grandChildren[0], primitiveId)) != null)
+                                  return error;
+                                  break;
 
-            // Retrieves the primitive position.
-            var positionPrimitive = [];
+                case "cylinder":  /*if ((error = this.parseCylinder(grandChildren[0], primitiveId)) != null)
+                                  return error;*/
+                                  break;
 
-            // x1
-            var x1 = this.reader.getFloat(grandChildren[0], 'x1');
-            if (!(x1 != null && !isNaN(x1)))
-                return "unable to parse x1-coordinate of the primitive for ID = " + primitiveId;
-            else
-                positionPrimitive.push(x1);
+                case "sphere":    /*if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
+                                  return error;*/
+                                  break;
 
-            // y1
-            var y1 = this.reader.getFloat(grandChildren[0], 'y1');
-            if (!(y1 != null && !isNaN(y1)))
-                return "unable to parse y1-coordinate of the primitive for ID = " + primitiveId;
-            else
-                positionPrimitive.push(y1);
+                case "torus":     /*if ((error = this.parseTorus(grandChildren[0]), primitiveId) != null)
+                                  return error;*/
+                                  break;
 
-            // x2
-            var x2 = this.reader.getFloat(grandChildren[0], 'x2');
-            if (!(x2 != null && !isNaN(x2)))
-                return "unable to parse x2-coordinate of the primitive for ID = " + primitiveId;
-            else
-                positionPrimitive.push(x2);
-
-            // y2
-            var y2 = this.reader.getFloat(grandChildren[0], 'y2');
-            if (!(y2 != null && !isNaN(y2)))
-                return "unable to parse y2-coordinate of the primitive for ID = " + lightId;
-            else
-                positionPrimitive.push(y2);
-
-            //TODO: CHECK 2 > 1
-
-            // TODO: Store Primitive global information.
-            //this.primitives[primitiveId] = ...;
-
-            //TEMPORARY
-            this.rectanglecoordinates = positionPrimitive;
-            //TEMPORARY
+                default: return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
+            }
             
             numPrimitives++;
         }
@@ -483,6 +469,64 @@ class MySceneGraph {
         this.log("Parsed primitives");
 
         return null;
+    }
+
+    parseRectangle(rectangleNode, primitiveId){
+        // x1
+        var x1 = this.reader.getFloat(rectangleNode, 'x1');
+        if (!(x1 != null && !isNaN(x1)))
+            return "unable to parse x1-coordinate of the primitive for ID = " + primitiveId;
+
+        // y1
+        var y1 = this.reader.getFloat(rectangleNode, 'y1');
+        if (!(y1 != null && !isNaN(y1)))
+            return "unable to parse y1-coordinate of the primitive for ID = " + primitiveId;
+
+        // x2
+        var x2 = this.reader.getFloat(rectangleNode, 'x2');
+        if (!(x2 != null && !isNaN(x2)))
+            return "unable to parse x2-coordinate of the primitive for ID = " + primitiveId;
+
+        // y2
+        var y2 = this.reader.getFloat(rectangleNode, 'y2');
+        if (!(y2 != null && !isNaN(y2)))
+            return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
+    }
+
+    parseTriangle(triangleNode, primitiveId){
+        // x1
+        var x1 = this.reader.getFloat(rectangleNode, 'x1');
+        if (!(x1 != null && !isNaN(x1)))
+            return "unable to parse x1-coordinate of the primitive for ID = " + primitiveId;
+
+        // y1
+        var y1 = this.reader.getFloat(rectangleNode, 'y1');
+        if (!(y1 != null && !isNaN(y1)))
+            return "unable to parse y1-coordinate of the primitive for ID = " + primitiveId;
+
+        // z1
+        var z1 = this.reader.getFloat(rectangleNode, 'z1');
+        if (!(z1 != null && !isNaN(z1)))
+            return "unable to parse z1-coordinate of the primitive for ID = " + primitiveId;
+
+        // x2
+        var x2 = this.reader.getFloat(rectangleNode, 'x2');
+        if (!(x2 != null && !isNaN(x2)))
+            return "unable to parse x2-coordinate of the primitive for ID = " + primitiveId;
+
+        // y2
+        var y2 = this.reader.getFloat(rectangleNode, 'y2');
+        if (!(y2 != null && !isNaN(y2)))
+            return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
+
+        // z2
+        var z2 = this.reader.getFloat(rectangleNode, 'z2');
+        if (!(z2 != null && !isNaN(z2)))
+            return "unable to parse z2-coordinate of the primitive for ID = " + primitiveId;
+
+        //this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
     }
 
     /**
@@ -586,7 +630,9 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        //this.scene.rectangulo.display();
+        for(var key in this.primitives){
+            this.primitives[key].display();
+        }
         // entry point for graph rendering
         //TODO: Render loop starting at root of graph
     }
