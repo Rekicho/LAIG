@@ -26,12 +26,16 @@ class MySceneGraph {
         scene.graph = this;      
 
         this.idRoot = null;                    // The id of the root element.
+        this.root = null;
         this.axisLength = 5;
 
         this.ambient = [];
         this.background = [];
 
+        this.textures = [];
+
         this.primitives = [];
+        this.components = [];
 
         // File reading 
         this.reader = new CGFXMLreader();
@@ -143,6 +147,8 @@ class MySceneGraph {
                 return error;
         }
 
+        */
+
         // <textures>
         if ((index = nodeNames.indexOf("textures")) == -1)
             return "tag <textures> missing";
@@ -154,6 +160,8 @@ class MySceneGraph {
             if ((error = this.parseTextures(nodes[index])) != null)
                 return error;
         }
+
+        /*
 
         // <materials>
         if ((index = nodeNames.indexOf("materials")) == -1)
@@ -193,8 +201,6 @@ class MySceneGraph {
                 return error;
         }
 
-        /*
-
         // <components>
         if ((index = nodeNames.indexOf("components")) == -1)
             return "tag <components> missing";
@@ -206,8 +212,6 @@ class MySceneGraph {
             if ((error = this.parseComponents(nodes[index])) != null)
                 return error;
         }
-
-        */
     }
 
     /**
@@ -223,6 +227,10 @@ class MySceneGraph {
         
         if (this.axisLength == null)
             return "no axis length";
+
+        this.log("Parsed scene");
+
+        return null;  
     }
 
     /**
@@ -304,6 +312,49 @@ class MySceneGraph {
             return "unable to parse alpha component of background color";
         else
             this.background.push(a);
+
+        this.log("Parsed ambient");
+
+        return null;
+    }
+
+    /**
+     * Parses the <textures> block.
+     */
+    parseTextures(texturesNode) {
+        var children = texturesNode.children;
+
+        if (children.length == 0)
+            return "at least one transformation must be defined";
+
+        // Any number of textures.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "texture") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current texture.
+            var textureId = this.reader.getString(children[i], 'id');
+            if (textureId == null)
+                return "no ID defined for texture";
+
+            // Checks for repeated IDs.
+            if (this.textures[textureId] != null)
+                return "ID must be unique for each texture (conflict: ID = " + textureId + ")";
+
+            var textureFile = this.reader.getString(children[i], 'file');
+
+            if (textureFile == null)
+                return "no File defined for texture with ID = " + textureId;
+
+            this.textures[textureId] = textureFile;
+        }
+
+        this.log("Parsed textures");
+
+        return null;
     }
 
     /**
@@ -312,8 +363,10 @@ class MySceneGraph {
     parseTransformations(transformationsNode) {
         var children = transformationsNode.children;
 
+        if (children.length == 0)
+            return "at least one transformation must be defined";
+
         this.transformations = [];
-        var numTransformations = 0;
 
         var grandChildren = [];
         var nodeNames = [];
@@ -384,12 +437,7 @@ class MySceneGraph {
             //TEMPORARY
             this.transCoord = translateCoord;
             //TEMPORARY
-
-            numTransformations++;
         }
-
-        if (numTransformations == 0)
-            return "at least one transformation must be defined";
 
         this.log("Parsed transformations");
 
@@ -403,8 +451,10 @@ class MySceneGraph {
 
         var children = primitivesNode.children;
 
+        if (primitivesNode.children == 0)
+            return "at least one primitive must be defined";
+
         this.primitives = [];
-        var numPrimitives = 0;
 
         var grandChildren = [];
         var nodeName;
@@ -459,12 +509,7 @@ class MySceneGraph {
 
                 default: return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
             }
-            
-            numPrimitives++;
         }
-
-        if (numPrimitives == 0)
-            return "at least one primitive must be defined";
 
         this.log("Parsed primitives");
 
@@ -548,11 +593,10 @@ class MySceneGraph {
      * Parses the <components> block.
      */
     parseComponents(componentsNode) {
-
         var children = componentsNode.children;
 
-        this.components = [];
-        var numComponents = 0;
+        if (children.length == 0)
+            return "at least one component must be defined";
 
         var grandChildren = [];
         var nodeNames = [];
@@ -583,36 +627,80 @@ class MySceneGraph {
             }
 
             // Gets indices of each element.
-            var transformationIndex = nodeNames.indexOf("transformation");
-            var materialsIndex = nodeNames.indexOf("materials");
-            var textureIndex = nodeNames.indexOf("texture");
+            //var transformationIndex = nodeNames.indexOf("transformation");
+            //var materialsIndex = nodeNames.indexOf("materials");
+            //var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            //SO PARA TESTE
+            if(childrenIndex == -1)
+                return "no children block for component id=" + componentId;
 
-            var transformationChildren =  grandChildren[transformationIndex].children;
+            var greatChildren = grandChildren[childrenIndex].children;
 
-            var transformationRefId = this.reader.getString(transformationChildren[0], 'id');
+            if(greatChildren.length < 0)
+                return "no children for component id=" + componentId;
 
-            this.componentTransformation = [];
+            var componentRef = [];
+            var primitiveRef = [];
+            
+            for (var j = 0; j < greatChildren.length; j++) {
 
-            this.components.push(componentId);
-            this.componentTransformation.push(transformationRefId);
+                switch(greatChildren[j].nodeName)
+                {
+                    case "componentref": 
+                        var componentRefId = this.reader.getString(greatChildren[j], 'id');
+                        if (componentRefId == null)
+                            return "no ID defined for componentRef of component ID=" + componentId;
+        
+                        // Checks for repeated IDs.
+                        if (componentRef.indexOf(componentRefId) != -1)
+                            return "ID must be unique for each componentRef (conflict: ID = " + componentRefId + ") for component" + componentId;
 
-            //TODO:FINISH
+                        componentRef.push(componentRefId);
+                        break;
+        
+                    case "primitiveref":
+                        var primitiveRefId = this.reader.getString(greatChildren[j], 'id');
+                        if (primitiveRefId == null)
+                            return "no ID defined for primitiveRef of component ID=" + componentId;
+        
+                        // Checks for repeated IDs.
+                        if (primitiveRef.indexOf(primitiveRefId) != -1)
+                            return "ID must be unique for each primitiveRef (conflict: ID = " + primitiveRefId + ") for component" + componentId;
 
-            // TODO: Store Light global information.
-            //this.lights[lightId] = ...;
-            numComponents++;
+                        primitiveRef.push(primitiveRefId);
+                        break;
+
+                    default: this.onXMLMinorError("unknown tag <" + greatChildren[j].nodeName + "> in children for component id=" + componentId);
+                             continue;
+                }
+            }
+            var children_primitives = [];
+
+            for(var j = 0; j < primitiveRef.length; j++){
+                if(!(primitiveRef[j] in this.primitives))
+                    continue;//return "no primitive with id = " + primitiveRef[j];
+
+                children_primitives.push(this.primitives[primitiveRef[j]]);
+            }
+
+            this.components[componentId] = new MyComponent(this.scene, componentRef, children_primitives);
         }
 
-        if (numComponents == 0)
-            return "at least one component must be defined";
+        var error;
 
-        this.log("Parsed component");
+        for(var key in this.components)
+        {
+            if((error = this.components[key].buildChildren() != null))
+                return error;
+
+            if(key == this.idRoot)
+                this.root = this.components[key];
+        }
+
+        this.log("Parsed components");
 
         return null;
-
     }
 
     /*
@@ -645,10 +733,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        for(var key in this.primitives){
-            this.primitives[key].display();
-        }
-        // entry point for graph rendering
-        //TODO: Render loop starting at root of graph
+        this.root.display();
     }
 }
