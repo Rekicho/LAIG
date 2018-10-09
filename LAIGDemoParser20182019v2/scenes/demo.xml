@@ -74,7 +74,7 @@
 			<cylinder base="1" top="1" height="1" slices="1" stacks="1" />
 		</primitive >
 		<primitive id="triangle">
- 			<triangle x1="0" y1="0" z1="0" x2="3" y2="0" z2="0" x3="2" y3="0" z3="5" />
+ 			<triangle x1="0" y1="-0.5" z1="0" x2="0.5" y2="0.5" z2="0" x3="-0.5" y3="0.5" z3="0" />
 		</primitive >
 		<primitive id="sphere">
  			<sphere radius="0.5" slices="1" stacks="1" />
@@ -91,7 +91,7 @@
 			<materials>
 	 			<material id="inherit" />
 	 		</materials>
-	 		<texture id="none" />
+	 		<texture id="none" length_s="1.0" length_t="1.0"/>
 	 		<children>
 	 			<primitiveref id="square" />
 	 		</children>
@@ -104,7 +104,7 @@
 	 		<materials>
 	 			<material id="inherit" />
 	 		</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 	 		<children>
 	 			<primitiveref id="square" />
 	 		</children>
@@ -117,7 +117,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
@@ -130,7 +130,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
@@ -143,7 +143,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
@@ -156,7 +156,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
@@ -168,7 +168,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="face1" />
 				<componentref id="face2" />
@@ -187,7 +187,7 @@
 			<materials>
 				<material id="defmaterial" />
 			</materials>
-			<texture id="balltexture" />
+			<texture id="balltexture" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="sphere" />
 			</children>
@@ -200,7 +200,7 @@
 			<materials>
 				<material id="defmaterial" />
 			</materials>
-			<texture id="courttexture" />
+			<texture id="courttexture" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -215,7 +215,7 @@
 			<materials>
 				<material id="rimmaterial" />
 			</materials>
-			<texture id="none"  />
+			<texture id="none"  length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -229,7 +229,7 @@
 			<materials>
 				<material id="defmaterial" />
 			</materials>
-			<texture id="backboard" />
+			<texture id="backboard" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -242,7 +242,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="tabela" />
 				<componentref id="aro" />
@@ -257,7 +257,7 @@
 			<materials>
 				<material id="suportematerial" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -271,7 +271,7 @@
 			<materials>
 				<material id="suportematerial" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -284,7 +284,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="suportecesto1" />
 				<componentref id="suportecesto2" />
@@ -298,7 +298,7 @@
 			<materials>
 				<material id="defmaterial" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cesto" />
 				<componentref id="suportecestototal" />
@@ -312,7 +312,7 @@
 			<materials>
 				<material id="defmaterial" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cesto" />
 				<componentref id="suportecestototal" />
@@ -326,7 +326,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cestototal1" />
 				<componentref id="cestototal2" />
@@ -334,71 +334,68 @@
 		</component>
 		<component id="triangulo1">
 			<transformation>
-				<scale x="1.4" y="1.5" z="1.5" />
-				<translate x="0" y="6.475" z="1.5" />
+				<translate x="0" y="0" z="1.5" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="triangle" />
 			</children>
-		</component>
+		</component>		
 		<component id="triangulo2">
 			<transformation>
-				<scale x="1.4" y="1.5" z="1.5" />
 				<rotate axis="y" angle="180" />
-				<translate x="0" y="6.475" z="1.5" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="triangle" />
+				<componentref id="triangulo1" />
 			</children>
 		</component>
 		<component id="quadrado1">
 			<transformation>
-				<scale x="1.5" y="1.5" z="4.5" />
-				<translate x="0.2" y="6.5" z="0" />
-				<rotate axis="y" angle="90" />
-				<rotate axis="x" angle="27.69" />
+				<scale x="1.0" y="1.0" z="3" />
+				<translate x="0" y="0.5" z="0" />
+				<rotate axis="x" angle="-90" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
 		</component>
 		<component id="quadrado2">
 			<transformation>
-				<scale x="1.5" y="1.5" z="4.5" />
-				<translate x="-0.2" y="6.5" z="0" />
-				<rotate axis="y" angle="-90" />
-				<rotate axis="x" angle="27.69" />
+				<scale x="1.11803399" y="1.11803399" z="3" />
+				<translate x="0.22" y="0" z="0" />
+				<rotate axis="y" angle="90" />
+				<rotate axis="x" angle="26.56505118" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
 		</component>
 		<component id="quadrado3">
 			<transformation>
-				<scale x="1.4" y="1.5" z="4.5" />
-				<translate x="0" y="6.95" z="0" />
-				<rotate axis="x" angle="-90" />
+				<scale x="1.11803399" y="1.11803399" z="3" />
+				<translate x="-0.22" y="0" z="0" />
+				<rotate axis="y" angle="-90" />
+				<rotate axis="x" angle="26.56505118" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="square" />
 			</children>
@@ -406,12 +403,13 @@
 		<!-- scoreboard -->
 		<component id="scoreboard">
 			<transformation>
-				<transformationref id="transf1" />	
+				<scale x="1.5" y="1.5" z="1" />
+				<translate x="0" y="6" z="0" />
 			</transformation>
 			<materials>
 				<material id="scorematerial" />
 			</materials>
-			<texture id="none" />
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="triangulo1" />
 				<componentref id="triangulo2" />
@@ -428,7 +426,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" />	
+			<texture id="none" length_s="1.0" length_t="1.0"/>	
 			<children>
 				<componentref id="cestos" />
 				<componentref id="courtfloor" />
