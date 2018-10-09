@@ -77,7 +77,7 @@
  			<triangle x1="0" y1="-0.5" z1="0" x2="0.5" y2="0.5" z2="0" x3="-0.5" y3="0.5" z3="0" />
 		</primitive >
 		<primitive id="sphere">
- 			<sphere radius="0.5" slices="1" stacks="1" />
+ 			<sphere radius="0.5" slices="20" stacks="20" />
 		</primitive >
 		<primitive id="torus">
 			<torus inner="0.45" outer="0.5" slices="1" loops="1" />
@@ -431,6 +431,7 @@
 				<componentref id="cestos" />
 				<componentref id="courtfloor" />
 				<componentref id="scoreboard" />
+				<componentref id="basketball">
 			</children>
 		</component>
 	</components>

@@ -492,25 +492,25 @@ class MySceneGraph {
                                     return error;
                                   break;
                 case "triangle":  if ((error = this.parseTriangle(grandChildren[0], primitiveId)) != null)
-                                  return error;
+                                    return error;
                                   break;
 
                 case "cylinder":  /*if ((error = this.parseCylinder(grandChildren[0], primitiveId)) != null)
-                                  return error;*/
+                                    return error;*/
                                   break;
 
-                case "sphere":    /*if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
-                                  return error;*/
+                case "sphere":    if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
+                                    return error;
                                   break;
 
                 case "torus":     /*if ((error = this.parseTorus(grandChildren[0]), primitiveId) != null)
-                                  return error;*/
+                                    return error;*/
                                   break;
 
                 default: return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
             }
         }
-
+        
         this.log("Parsed primitives");
 
         return null;
@@ -537,7 +537,7 @@ class MySceneGraph {
         if (!(y2 != null && !isNaN(y2)))
             return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
 
-        this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
+        //this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
     }
 
     parseTriangle(triangleNode, primitiveId){
@@ -586,7 +586,26 @@ class MySceneGraph {
         if (!(z3 != null && !isNaN(z3)))
             return "unable to parse z3-coordinate of the primitive for ID = " + primitiveId;
 
-        this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
+        //this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
+    }
+
+    parseSphere(sphereNode, primitiveId){
+        // radius
+        var radius = this.reader.getFloat(sphereNode, 'radius');
+        if (!(radius != null && !isNaN(radius)))
+            return "unable to parse radius of the primitive for ID = " + primitiveId;
+
+        // slices
+        var slices = this.reader.getInteger(sphereNode, 'slices');
+        if (!(slices != null && !isNaN(slices)))
+            return "unable to parse slices of the primitive for ID = " + primitiveId;
+
+        // stacks
+        var stacks = this.reader.getInteger(sphereNode, 'stacks');
+        if (!(stacks != null && !isNaN(stacks)))
+            return "unable to parse stacks of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MySphere(this.scene, radius, slices, stacks);
     }
 
     /**
