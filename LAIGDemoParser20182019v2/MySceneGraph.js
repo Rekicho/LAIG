@@ -23,7 +23,7 @@ class MySceneGraph {
 
         // Establish bidirectional references between scene and graph.
         this.scene = scene;
-        scene.graph = this;      
+        scene.graph = this;
 
         this.idRoot = null;                    // The id of the root element.
         this.root = null;
@@ -176,6 +176,8 @@ class MySceneGraph {
                 return error;
         }
 
+        */
+
         // <transformations>
         if ((index = nodeNames.indexOf("transformations")) == -1)
             return "tag <transformations> missing";
@@ -187,8 +189,6 @@ class MySceneGraph {
             if ((error = this.parseTransformations(nodes[index])) != null)
                 return error;
         }
-
-        */
 
         // <primitives>
         if ((index = nodeNames.indexOf("primitives")) == -1)
@@ -225,13 +225,13 @@ class MySceneGraph {
             return "no root ID";
 
         this.axisLength = this.reader.getString(scenesNode, 'axis_length');
-        
+
         if (this.axisLength == null)
             return "no axis length";
 
         this.log("Parsed scene");
 
-        return null;  
+        return null;
     }
 
     /**
@@ -250,7 +250,7 @@ class MySceneGraph {
 
         //Ambient Light
 
-        if(ambientIndex == -1)
+        if (ambientIndex == -1)
             return "no ambient light";
 
         // r
@@ -283,7 +283,7 @@ class MySceneGraph {
 
         //Background color
 
-        if(backgroundIndex == -1)
+        if (backgroundIndex == -1)
             return "no background color";
 
         // r
@@ -389,53 +389,115 @@ class MySceneGraph {
 
             grandChildren = children[i].children;
 
-            // Specifications for the current primitive.
+            this.scene.loadIdentity();
 
-            nodeNames = [];
-            for (var j = 0; j < grandChildren.length; j++) {
-                nodeNames.push(grandChildren[j].nodeName);
-            }
+            var error = this.parseTransformationBlock(grandChildren);
 
-            // Gets indices of each element.
-            /*var translateIndex = nodeNames.indexOf("translate");
-            //var rotateIndex = nodeNames.indexOf("rotate");
-            //var scaleIndex = nodeNames.indexOf("scale");*/
+            if (error != null)
+                return error + "in transformation id=" + transformationId;
 
-            //GET ALL TRANSLATE, ROTATE, SCALE
+            this.transformations[transformationId] = this.scene.getMatrix();
 
-            //FOR TESTING, nodeNames[0] is translate
-
-            var translate = grandChildren[0];
-
-            var translateCoord = [];
-
-            // x
-            var x = this.reader.getFloat(translate, 'x');
-            if (!(x != null && !isNaN(x)))
-                return "unable to parse x-translation of the transformation for ID = " + transformationId;
-            else
-                translateCoord.push(x);
-
-            // y
-            var y = this.reader.getFloat(translate, 'y');
-            if (!(y != null && !isNaN(y)))
-                return "unable to parse y-translation of the transformation for ID = " + transformationId;
-            else
-                translateCoord.push(y);
-
-            // z
-            var z = this.reader.getFloat(translate, 'z');
-            if (!(z != null && !isNaN(z)))
-                return "unable to parse z-translation of the transformation for ID = " + transformationId;
-            else
-                translateCoord.push(z);
-
-            // TODO: Store Light global information.
-            //this.lights[lightId] = ...;
+            this.scene.loadIdentity();
         }
 
         this.log("Parsed transformations");
 
+        return null;
+    }
+
+    parseTransformationBlock(transformarionblockNode) {
+
+        var error;
+
+        for (var i = 0; i < transformarionblockNode.length; i++) {
+
+            switch (transformarionblockNode[i].nodeName) {
+
+                case "translate":
+                    if ((error = this.parseTranslate(transformarionblockNode[i])) != null)
+                        return error + " in transformation block ";
+                    break;
+
+                case "rotate":
+                    if ((error = this.parseRotate(transformarionblockNode[i])) != null)
+                        return error + " in transformation block ";
+                    break;
+
+                case "scale":
+                    if ((error = this.parseScale(transformarionblockNode[i])) != null)
+                        return error + " in transformation block ";
+                    break;
+
+                default: return "unknown transformation " + transformarionblockNode[i].nodeName;
+            }
+        }
+
+        return null;
+    }
+
+    parseTranslate(translateNode) {
+        // x
+        var x = this.reader.getFloat(translateNode, 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of translate";
+        // y
+        var y = this.reader.getFloat(translateNode, 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of translate";
+        // z
+        var z = this.reader.getFloat(translateNode, 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of translate";
+
+        this.scene.translate(x, y, z);
+        return null;
+    }
+
+    parseRotate(rotateNode) {
+        // axis
+        var axis = this.reader.getString(rotateNode, 'axis');
+        if (axis == null)
+            return "unable to parse axis of rotate";
+
+        // angle
+        var angle = this.reader.getFloat(rotateNode, 'angle');
+        if (!(angle != null && !isNaN(angle)))
+            return "unable to parse angle of rotate";
+
+        angle *= DEGREE_TO_RAD;
+
+        switch (axis) {
+            case "x":
+                this.scene.rotate(angle, 1, 0, 0);
+                break;
+            case "y":
+                this.scene.rotate(angle, 0, 1, 0);
+                break;
+            case "z":
+                this.scene.rotate(angle, 0, 0, 1);
+                break;
+            default: return "unkown axis" + axis;
+        }
+
+        return null;
+    }
+
+    parseScale(scaleNode) {
+        // x
+        var x = this.reader.getFloat(scaleNode, 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of scale";
+        // y
+        var y = this.reader.getFloat(scaleNode, 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of scale";
+        // z
+        var z = this.reader.getFloat(scaleNode, 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of scale";
+
+        this.scene.scale(x, y, z);
         return null;
     }
 
@@ -482,36 +544,36 @@ class MySceneGraph {
 
             nodeName = grandChildren[0].nodeName;
 
-            switch(nodeName) {
+            switch (nodeName) {
                 case "rectangle": if ((error = this.parseRectangle(grandChildren[0], primitiveId)) != null)
-                                    return error;
-                                  break;
-                case "triangle":  if ((error = this.parseTriangle(grandChildren[0], primitiveId)) != null)
-                                    return error;
-                                  break;
+                    return error;
+                    break;
+                case "triangle": if ((error = this.parseTriangle(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
 
                 case "cylinder":  /*if ((error = this.parseCylinder(grandChildren[0], primitiveId)) != null)
                                     return error;*/
-                                  break;
+                    break;
 
-                case "sphere":    if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
-                                    return error;
-                                  break;
+                case "sphere": if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
 
                 case "torus":     /*if ((error = this.parseTorus(grandChildren[0]), primitiveId) != null)
                                     return error;*/
-                                  break;
+                    break;
 
                 default: return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
             }
         }
-        
+
         this.log("Parsed primitives");
 
         return null;
     }
 
-    parseRectangle(rectangleNode, primitiveId){
+    parseRectangle(rectangleNode, primitiveId) {
         // x1
         var x1 = this.reader.getFloat(rectangleNode, 'x1');
         if (!(x1 != null && !isNaN(x1)))
@@ -533,9 +595,11 @@ class MySceneGraph {
             return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
+
+        return null;
     }
 
-    parseTriangle(triangleNode, primitiveId){
+    parseTriangle(triangleNode, primitiveId) {
         // x1
         var x1 = this.reader.getFloat(triangleNode, 'x1');
         if (!(x1 != null && !isNaN(x1)))
@@ -582,9 +646,11 @@ class MySceneGraph {
             return "unable to parse z3-coordinate of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
+
+        return null;
     }
 
-    parseSphere(sphereNode, primitiveId){
+    parseSphere(sphereNode, primitiveId) {
         // radius
         var radius = this.reader.getFloat(sphereNode, 'radius');
         if (!(radius != null && !isNaN(radius)))
@@ -601,6 +667,8 @@ class MySceneGraph {
             return "unable to parse stacks of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MySphere(this.scene, radius, slices, stacks);
+
+        return null;
     }
 
     /**
@@ -614,6 +682,8 @@ class MySceneGraph {
 
         var grandChildren = [];
         var nodeNames = [];
+
+        var error;
 
         // Any number of components.
         for (var i = 0; i < children.length; i++) {
@@ -646,14 +716,15 @@ class MySceneGraph {
             //var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
-            if(transformationIndex == -1)
+            if (transformationIndex == -1)
                 return "no transformation for component id=" + componentId;
 
             var greatChildren = grandChildren[transformationIndex].children;
 
-            if(greatChildren.length < 0)
+            if (greatChildren.length < 0)
                 return "no transformations for component id=" + componentId;
 
+            nodeNames = [];
             for (var j = 0; j < greatChildren.length; j++) {
                 nodeNames.push(greatChildren[j].nodeName);
             }
@@ -662,61 +733,61 @@ class MySceneGraph {
 
             var transformationrefIndex = nodeNames.indexOf("transformationref");
 
-            if(greatChildren.length != 1 && transformationrefIndex != -1)
+            if (greatChildren.length != 1 && transformationrefIndex != -1)
                 return "more than one transformarionref for compoent id=" + componentId;
 
+            this.scene.loadIdentity();
 
-            if(greatChildren.length == 1 && transformationrefIndex != -1)
-            {
-                //TEMPORARY
-                this.scene.loadIdentity();
-                transformation = this.scene.getMatrix();
-                //TEMPORARY
-                /*
+            if (greatChildren.length == 1 && transformationrefIndex != -1) {
                 var transformationrefID = this.reader.getString(greatChildren[transformationrefIndex], 'id');
 
                 if (transformationrefID == null)
                         return "no ID defined for transformationref of component ID=" + componentId;
 
-                transformation = this.transformations[transformationrefID]  ;                      
-                */
+                transformation = this.transformations[transformationrefID];                      
             }
 
             else {
-                transformation = this.parseTransformationBlock(greatChildren);
+                error = this.parseTransformationBlock(greatChildren);
+
+                if (error != null)
+                    return error + "in compenent id=" + componentId;
+
+                transformation = this.scene.getMatrix();
             }
 
-            if(childrenIndex == -1)
+            this.scene.loadIdentity();
+
+            if (childrenIndex == -1)
                 return "no children block for component id=" + componentId;
 
             greatChildren = grandChildren[childrenIndex].children;
 
-            if(greatChildren.length < 0)
+            if (greatChildren.length < 0)
                 return "no children for component id=" + componentId;
 
             var componentRef = [];
             var primitiveRef = [];
-            
+
             for (var j = 0; j < greatChildren.length; j++) {
-                switch(greatChildren[j].nodeName)
-                {
-                    case "componentref": 
+                switch (greatChildren[j].nodeName) {
+                    case "componentref":
                         var componentRefId = this.reader.getString(greatChildren[j], 'id');
                         if (componentRefId == null)
                             return "no ID defined for componentRef of component ID=" + componentId;
-        
+
                         // Checks for repeated IDs.
                         if (componentRef.indexOf(componentRefId) != -1)
                             return "ID must be unique for each componentRef (conflict: ID = " + componentRefId + ") for component" + componentId;
 
                         componentRef.push(componentRefId);
                         break;
-        
+
                     case "primitiveref":
                         var primitiveRefId = this.reader.getString(greatChildren[j], 'id');
                         if (primitiveRefId == null)
                             return "no ID defined for primitiveRef of component ID=" + componentId;
-        
+
                         // Checks for repeated IDs.
                         if (primitiveRef.indexOf(primitiveRefId) != -1)
                             return "ID must be unique for each primitiveRef (conflict: ID = " + primitiveRefId + ") for component" + componentId;
@@ -725,13 +796,13 @@ class MySceneGraph {
                         break;
 
                     default: this.onXMLMinorError("unknown tag <" + greatChildren[j].nodeName + "> in children for component id=" + componentId);
-                             continue;
+                        continue;
                 }
             }
             var children_primitives = [];
 
-            for(var j = 0; j < primitiveRef.length; j++){
-                if(!(primitiveRef[j] in this.primitives))
+            for (var j = 0; j < primitiveRef.length; j++) {
+                if (!(primitiveRef[j] in this.primitives))
                     continue;//return "no primitive with id = " + primitiveRef[j];
 
                 children_primitives.push(this.primitives[primitiveRef[j]]);
@@ -740,14 +811,11 @@ class MySceneGraph {
             this.components[componentId] = new MyComponent(this.scene, transformation, componentRef, children_primitives);
         }
 
-        var error;
-
-        for(var key in this.components)
-        {
-            if((error = this.components[key].buildChildren() != null))
+        for (var key in this.components) {
+            if ((error = this.components[key].buildChildren() != null))
                 return error;
 
-            if(key == this.idRoot)
+            if (key == this.idRoot)
                 this.root = this.components[key];
         }
 

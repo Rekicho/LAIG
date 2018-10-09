@@ -18,6 +18,8 @@ class MyComponent extends CGFobject
 
 	display()
 	{
+		this.scene.pushMatrix();
+
 		if(this.transformation != null)
 			this.scene.multMatrix(this.transformation);
 
@@ -26,6 +28,8 @@ class MyComponent extends CGFobject
 
 		for(var i = 0; i < this.children.length; i++)
 			this.children[i].display();
+
+		this.scene.popMatrix();
 	};
 
 	buildChildren()
