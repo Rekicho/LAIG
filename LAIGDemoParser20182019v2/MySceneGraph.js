@@ -33,6 +33,7 @@ class MySceneGraph {
         this.background = [];
 
         this.textures = [];
+        this.transformations = [];
 
         this.primitives = [];
         this.components = [];
@@ -366,8 +367,6 @@ class MySceneGraph {
         if (children.length == 0)
             return "at least one transformation must be defined";
 
-        this.transformations = [];
-
         var grandChildren = [];
         var nodeNames = [];
 
@@ -433,10 +432,6 @@ class MySceneGraph {
 
             // TODO: Store Light global information.
             //this.lights[lightId] = ...;
-
-            //TEMPORARY
-            this.transCoord = translateCoord;
-            //TEMPORARY
         }
 
         this.log("Parsed transformations");
@@ -537,7 +532,7 @@ class MySceneGraph {
         if (!(y2 != null && !isNaN(y2)))
             return "unable to parse y2-coordinate of the primitive for ID = " + primitiveId;
 
-        //this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
+        this.primitives[primitiveId] = new MyRectangle(this.scene, x1, y1, x2, y2);
     }
 
     parseTriangle(triangleNode, primitiveId){
@@ -586,7 +581,7 @@ class MySceneGraph {
         if (!(z3 != null && !isNaN(z3)))
             return "unable to parse z3-coordinate of the primitive for ID = " + primitiveId;
 
-        //this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
+        this.primitives[primitiveId] = new MyTriangle(this.scene, x1, y1, z1, x2, y2, z2, x3, y3, z3);
     }
 
     parseSphere(sphereNode, primitiveId){
@@ -646,15 +641,55 @@ class MySceneGraph {
             }
 
             // Gets indices of each element.
-            //var transformationIndex = nodeNames.indexOf("transformation");
+            var transformationIndex = nodeNames.indexOf("transformation");
             //var materialsIndex = nodeNames.indexOf("materials");
             //var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            if(transformationIndex == -1)
+                return "no transformation for component id=" + componentId;
+
+            var greatChildren = grandChildren[transformationIndex].children;
+
+            if(greatChildren.length < 0)
+                return "no transformations for component id=" + componentId;
+
+            for (var j = 0; j < greatChildren.length; j++) {
+                nodeNames.push(greatChildren[j].nodeName);
+            }
+
+            var transformation;
+
+            var transformationrefIndex = nodeNames.indexOf("transformationref");
+
+            if(greatChildren.length != 1 && transformationrefIndex != -1)
+                return "more than one transformarionref for compoent id=" + componentId;
+
+
+            if(greatChildren.length == 1 && transformationrefIndex != -1)
+            {
+                //TEMPORARY
+                this.scene.loadIdentity();
+                transformation = this.scene.getMatrix();
+                //TEMPORARY
+                /*
+                var transformationrefID = this.reader.getString(greatChildren[transformationrefIndex], 'id');
+
+                if (transformationrefID == null)
+                        return "no ID defined for transformationref of component ID=" + componentId;
+
+                transformation = this.transformations[transformationrefID]  ;                      
+                */
+            }
+
+            else {
+                transformation = this.parseTransformationBlock(greatChildren);
+            }
+
             if(childrenIndex == -1)
                 return "no children block for component id=" + componentId;
 
-            var greatChildren = grandChildren[childrenIndex].children;
+            greatChildren = grandChildren[childrenIndex].children;
 
             if(greatChildren.length < 0)
                 return "no children for component id=" + componentId;
@@ -663,7 +698,6 @@ class MySceneGraph {
             var primitiveRef = [];
             
             for (var j = 0; j < greatChildren.length; j++) {
-
                 switch(greatChildren[j].nodeName)
                 {
                     case "componentref": 
@@ -703,7 +737,7 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            this.components[componentId] = new MyComponent(this.scene, componentRef, children_primitives);
+            this.components[componentId] = new MyComponent(this.scene, transformation, componentRef, children_primitives);
         }
 
         var error;

@@ -431,7 +431,7 @@
 				<componentref id="cestos" />
 				<componentref id="courtfloor" />
 				<componentref id="scoreboard" />
-				<componentref id="basketball">
+				<componentref id="basketball" />
 			</children>
 		</component>
 	</components>

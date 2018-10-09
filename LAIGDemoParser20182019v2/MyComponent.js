@@ -6,10 +6,11 @@
 
 class MyComponent extends CGFobject
 {
-	constructor(scene, componentRef, primitives) 
+	constructor(scene, transformation, componentRef, primitives) 
 	{
 		super(scene);
 
+		this.transformation = transformation;
 		this.componentRef = componentRef;
 		this.primitives = primitives;
 		this.children = [];
@@ -17,6 +18,9 @@ class MyComponent extends CGFobject
 
 	display()
 	{
+		if(this.transformation != null)
+			this.scene.multMatrix(this.transformation);
+
 		for(var i = 0; i < this.primitives.length; i++)
 			this.primitives[i].display();
 
