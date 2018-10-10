@@ -22,9 +22,11 @@ class MySphere extends CGFobject {
 		this.indices = [];
 
 		var ang = (2 * Math.PI) / this.slices;
+		var div = -1;
 
 		for (let j = 0; j <= this.stacks; j++) {
-			let div = j / this.stacks;
+			if(j != 0)
+				div += 2 / this.stacks;
 			let edge = this.slices * j;
 			let nextedge = this.slices * (j + 1);
 

@@ -713,9 +713,10 @@ class MySceneGraph {
             // Gets indices of each element.
             var transformationIndex = nodeNames.indexOf("transformation");
             //var materialsIndex = nodeNames.indexOf("materials");
-            //var textureIndex = nodeNames.indexOf("texture");
+            var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
+            // Transformation
             if (transformationIndex == -1)
                 return "no transformation for component id=" + componentId;
 
@@ -758,6 +759,37 @@ class MySceneGraph {
 
             this.scene.loadIdentity();
 
+            //Textures
+            if (textureIndex == -1)
+                return "no children block for component id=" + componentId;
+
+            var textureId = this.reader.getString(grandChildren[textureIndex], 'id');
+
+            if (textureId == null)
+                return "no ID defined for texture of component ID=" + componentId;
+
+            var textureString;
+
+            if (textureId == "inherit" || textureId == "none")
+                textureString = textureId;
+
+            else textureString = this.textures[textureId];
+            
+            if (textureString == null)
+                return "texture " + textureId + " not defined (from component ID=" + componentId + ")";
+
+            // length_s
+            var length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
+            if (!(length_s != null && !isNaN(length_s)))
+                return "unable to parse length_s of transformation of component ID = " + primitiveId;
+
+            // length_t
+            var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+            if (!(length_t != null && !isNaN(length_t)))
+                return "unable to parse length_t of transformation of component ID = " + primitiveId;
+
+
+            //Children
             if (childrenIndex == -1)
                 return "no children block for component id=" + componentId;
 
@@ -808,16 +840,23 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            this.components[componentId] = new MyComponent(this.scene, transformation, componentRef, children_primitives);
+            var compenent = new MyComponent(this.scene, transformation, textureString, length_s, length_t, componentRef, children_primitives);
+            
+            this.components[componentId] = compenent;
+            
+            if(componentId == this.idRoot)
+            {
+                if(textureString == "inherit")
+                    return "root component can't inherit texture";
+                this.root = compenent;
+            }
         }
 
-        for (var key in this.components) {
-            if ((error = this.components[key].buildChildren() != null))
-                return error;
+        if ((error = this.root.buildChildren() != null))
+            return error;
 
-            if (key == this.idRoot)
-                this.root = this.components[key];
-        }
+        if ((error = this.root.inheritTextures() != null))
+            return error;
 
         this.log("Parsed components");
 
