@@ -350,7 +350,9 @@ class MySceneGraph {
             if (textureFile == null)
                 return "no File defined for texture with ID = " + textureId;
 
-            this.textures[textureId] = textureFile;
+            var texture = new CGFtexture(this.scene,textureFile);
+
+            this.textures[textureId] = texture;
         }
 
         this.log("Parsed textures");
@@ -768,14 +770,14 @@ class MySceneGraph {
             if (textureId == null)
                 return "no ID defined for texture of component ID=" + componentId;
 
-            var textureString;
+            var texture;
 
             if (textureId == "inherit" || textureId == "none")
-                textureString = textureId;
+                texture = textureId;
 
-            else textureString = this.textures[textureId];
+            else texture = this.textures[textureId];
             
-            if (textureString == null)
+            if (texture == null)
                 return "texture " + textureId + " not defined (from component ID=" + componentId + ")";
 
             // length_s
@@ -840,22 +842,15 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            var compenent = new MyComponent(this.scene, transformation, textureString, length_s, length_t, componentRef, children_primitives);
+            var compenent = new MyComponent(this.scene, transformation, texture, length_s, length_t, componentRef, children_primitives);
             
             this.components[componentId] = compenent;
             
             if(componentId == this.idRoot)
-            {
-                if(textureString == "inherit")
-                    return "root component can't inherit texture";
                 this.root = compenent;
-            }
         }
 
         if ((error = this.root.buildChildren() != null))
-            return error;
-
-        if ((error = this.root.inheritTextures() != null))
             return error;
 
         this.log("Parsed components");
@@ -893,6 +888,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.root.display();
+        this.root.display("none");
     }
 }

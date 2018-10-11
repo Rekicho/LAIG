@@ -91,6 +91,8 @@ class XMLscene extends CGFscene {
         // Adds lights group.
         this.interface.addLightsGroup(this.graph.lights);
 
+        this.activeTexture = null;
+
         this.sceneInited = true;
     }
 

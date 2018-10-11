@@ -6,37 +6,52 @@
 
 class MyComponent extends CGFobject
 {
-	constructor(scene, transformation, textureString, length_s, length_t, componentRef, primitives) 
+	constructor(scene, transformation, texture, length_s, length_t, componentRef, primitives) 
 	{
 		super(scene);
 
 		this.transformation = transformation;
 		this.componentRef = componentRef;
 		this.primitives = primitives;
-		this.textureString = textureString;
+		this.texture = texture;
 		this.length_s = length_s;
 		this.length_t = length_t;
 
 		this.children = [];
-
-		this.texture;
 	};
 
-	display()
+	display(texture)
 	{
-		if(this.texture != null)
-			this.texture.apply();
+		var temporaryTexture = this.texture;
+
+		if(this.texture == "inherit")
+			temporaryTexture = texture;
+
+		if(temporaryTexture == "none")
+		{
+			if(this.scene.activeTexture != null)
+			{
+				this.scene.activeTexture.unbind();
+				this.scene.activeTexture = null;
+			}
+		}
+
+		else
+		{
+			temporaryTexture.bind();
+			this.scene.activeTexture = temporaryTexture;
+		}
 
 		this.scene.pushMatrix();
 
 		if(this.transformation != null)
 			this.scene.multMatrix(this.transformation);
 
+		for(var i = 0; i < this.children.length; i++)
+				this.children[i].display(temporaryTexture);
+
 		for(var i = 0; i < this.primitives.length; i++)
 			this.primitives[i].display();
-
-		for(var i = 0; i < this.children.length; i++)
-			this.children[i].display();
 
 		this.scene.popMatrix();
 	};
@@ -61,38 +76,4 @@ class MyComponent extends CGFobject
 
 		return null;
 	};
-
-	inheritTextures(texture)
-	{
-		if(this.texture != null)
-			return null;
-
-		if(this.textureString == "inherit")
-		{
-			if(texture == "none")
-			{
-				console.log("can't inherit texture 'none'");
-				return "";
-			}
-
-			this.texture = new CGFappearance(this.scene);
-			this.texture.loadTexture(texture);
-
-			this.textureString = texture;
-		}
-
-		else if(this.textureString != "none")
-		{
-			this.texture = new CGFappearance(this.scene);
-			this.texture.loadTexture(this.textureString);
-		}
-
-		var error;
-
-		for(var i = 0; i < this.children.length; i++)
-			if(error = this.children[i].inheritTextures(this.textureString) != null)
-				return error;
-
-		return null;
-	}
 };
