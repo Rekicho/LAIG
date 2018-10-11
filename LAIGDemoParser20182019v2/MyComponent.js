@@ -4,10 +4,8 @@
  * @constructor
  */
 
-class MyComponent extends CGFobject
-{
-	constructor(scene, transformation, texture, length_s, length_t, componentRef, primitives) 
-	{
+class MyComponent extends CGFobject {
+	constructor(scene, transformation, texture, length_s, length_t, componentRef, primitives) {
 		super(scene);
 
 		this.transformation = transformation;
@@ -20,52 +18,46 @@ class MyComponent extends CGFobject
 		this.children = [];
 	};
 
-	display(texture)
-	{
+	display(texture) {
 		var temporaryTexture = this.texture;
 
-		if(this.texture == "inherit")
+		if (this.texture == "inherit")
 			temporaryTexture = texture;
 
-		if(temporaryTexture == "none")
-		{
-			if(this.scene.activeTexture != null)
-			{
+		if (temporaryTexture == "none") {
+			if (this.scene.activeTexture != null) {
 				this.scene.activeTexture.unbind();
 				this.scene.activeTexture = null;
 			}
 		}
 
-		else
-		{
+		else {
 			temporaryTexture.bind();
 			this.scene.activeTexture = temporaryTexture;
 		}
 
 		this.scene.pushMatrix();
 
-		if(this.transformation != null)
+		if (this.transformation != null)
 			this.scene.multMatrix(this.transformation);
 
-		for(var i = 0; i < this.children.length; i++)
-				this.children[i].display(temporaryTexture);
-
-		for(var i = 0; i < this.primitives.length; i++)
+		for (var i = 0; i < this.primitives.length; i++)
 			this.primitives[i].display();
+
+		for (var i = 0; i < this.children.length; i++)
+			this.children[i].display(temporaryTexture);
 
 		this.scene.popMatrix();
 	};
 
-	buildChildren()
-	{
-		if(this.children != 0)
+	buildChildren() {
+		if (this.children != 0)
 			return null;
 
 		var error;
 
-		for(var i = 0; i < this.componentRef.length; i++)
-		{
-			if(!(this.componentRef[i] in this.scene.graph.components)){
+		for (var i = 0; i < this.componentRef.length; i++) {
+			if (!(this.componentRef[i] in this.scene.graph.components)) {
 				console.log("component with id=" + this.componentRef[i] + " not found.");
 				return "";
 			}

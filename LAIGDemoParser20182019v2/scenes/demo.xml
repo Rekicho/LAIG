@@ -1,83 +1,83 @@
 <yas>
 	<scene root="court" axis_length="3" />
 	<views default="perspective">
-        <perspective id="perspective" near="0.1" far="500.0" angle="25.0">
-            <from x="100.0" y="100.0" z="100.0" />
-            <to x="0.0" y="0.0" z="0.0" />
-        </perspective>
-    </views>
+		<perspective id="perspective" near="0.1" far="500.0" angle="25.0">
+			<from x="100.0" y="100.0" z="100.0" />
+			<to x="0.0" y="0.0" z="0.0" />
+		</perspective>
+	</views>
 	<ambient>
- 		<ambient r="1.0" g="1.0" b="1.0" a="1.0" />
- 		<background r="0.529412" g="0.692237" b="0.921569" a="1.0" />
+		<ambient r="1.0" g="1.0" b="1.0" a="1.0" />
+		<background r="0.529412" g="0.692237" b="0.921569" a="1.0" />
 	</ambient>
- 	<lights>
-	    <omni id="light0" enabled="1" >
-            <location x="4" y="6" z="1" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="0" a="1" />
-        </omni>
-        <omni id="light1" enabled="1" >
-            <location x="10.5" y="6" z="1" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="0.5" g="0.5" b="0.5" a="1" />
-        </omni>
-        <omni id="light2" enabled="1" >
-            <location x="10.5" y="6" z="5" w="1" />
-            <ambient r="0" g="0" b="0" a="1" />
-            <diffuse r="1" g="1" b="1" a="1" />
-            <specular r="1" g="1" b="1" a="1" />
-        </omni>
- 	</lights>
-	<textures> 
- 		<texture id="courttexture" file="images/court.jpg" />
- 		<texture id="balltexture" file="images/ball.jpg" />
- 		<texture id="backboard" file="images/backboard.jpg" />
- 	</textures>
+	<lights>
+		<omni id="light0" enabled="1">
+			<location x="4" y="6" z="1" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="0" a="1" />
+		</omni>
+		<omni id="light1" enabled="1">
+			<location x="10.5" y="6" z="1" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="0.5" g="0.5" b="0.5" a="1" />
+		</omni>
+		<omni id="light2" enabled="1">
+			<location x="10.5" y="6" z="5" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+		</omni>
+	</lights>
+	<textures>
+		<texture id="courttexture" file="images/court.jpg" />
+		<texture id="balltexture" file="images/ball.jpg" />
+		<texture id="backboard" file="images/backboard.jpg" />
+	</textures>
 	<materials>
- 		<material id="defmaterial" shininess = "1" >
- 			<emission r="0" g="0" b="0" a="1" />
- 			<ambient r="1" g="1" b="1" a="1" />
- 			<diffuse r="0" g="0" b="0" a="1" />
- 			<specular r="0" g="0" b="0" a="0" />
- 		</material>
-		<material id="rimmaterial" shininess = "1" >
+		<material id="defmaterial" shininess = "1">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="0" g="0" b="0" a="1" />
+			<specular r="0" g="0" b="0" a="0" />
+		</material>
+		<material id="rimmaterial" shininess = "1">
 			<emission r="0" g="0" b="0" a="0" />
- 			<ambient r="1" g="0.25" b="0" a="1" />
- 			<diffuse r="0" g="0" b="0" a="0" />
- 			<specular r="0" g="0" b="0" a="0" />
- 		</material>
-	 	<material id="suportematerial" shininess = "1" >
+			<ambient r="1" g="0.25" b="0" a="1" />
+			<diffuse r="0" g="0" b="0" a="0" />
+			<specular r="0" g="0" b="0" a="0" />
+		</material>
+		<material id="suportematerial" shininess = "1">
 			<emission r="0" g="0" b="0" a="0" />
- 			<ambient r="1" g="1" b="1" a="1" />
- 			<diffuse r="0" g="0" b="0" a="0" />
- 			<specular r="0" g="0" b="0" a="0" />
- 		</material>
-		<material id="scorematerial" shininess = "1" >
- 			<emission r="0" g="0" b="0" a="0" />
- 			<ambient r="0" g="0" b="0" a="1" />
- 			<diffuse r="0" g="0" b="0" a="0" />
- 			<specular r="0" g="0" b="0" a="0" />
- 		</material>
- 	</materials>
+			<ambient r="1" g="1" b="1" a="1" />
+			<diffuse r="0" g="0" b="0" a="0" />
+			<specular r="0" g="0" b="0" a="0" />
+		</material>
+		<material id="scorematerial" shininess = "1">
+			<emission r="0" g="0" b="0" a="0" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0" g="0" b="0" a="0" />
+			<specular r="0" g="0" b="0" a="0" />
+		</material>
+	</materials>
 	<transformations>
 		<transformation id="transf1">
 			<scale x="1" y="1" z="1"/>
 		</transformation>
 	</transformations>
 	<primitives>
- 		<primitive id="square">
- 			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
- 		</primitive >
+		<primitive id="square">
+			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+		</primitive >
 		<primitive id="cylinder">
 			<cylinder base="1" top="1" height="1" slices="1" stacks="1" />
 		</primitive >
 		<primitive id="triangle">
- 			<triangle x1="0" y1="-0.5" z1="0" x2="0.5" y2="0.5" z2="0" x3="-0.5" y3="0.5" z3="0" />
+			<triangle x1="0" y1="-0.5" z1="0" x2="0.5" y2="0.5" z2="0" x3="-0.5" y3="0.5" z3="0" />
 		</primitive >
 		<primitive id="sphere">
- 			<sphere radius="0.5" slices="20" stacks="20" />
+			<sphere radius="0.5" slices="20" stacks="20" />
 		</primitive >
 		<primitive id="torus">
 			<torus inner="0.45" outer="0.5" slices="1" loops="1" />
@@ -85,29 +85,29 @@
 	</primitives >
 	<components>
 		<component id="face1">
-	 		<transformation>
-	 			<translate x="0" y="0" z="0.5" />
-	 		</transformation>
-			<materials>
-	 			<material id="inherit" />
-	 		</materials>
-	 		<texture id="inherit" length_s="1.0" length_t="1.0"/>
-	 		<children>
-	 			<primitiveref id="square" />
-	 		</children>
-	 	</component>
- 		<component id="face2">
-	 		<transformation>
-	 			<translate x="0" y="0" z="-0.5" />
-	 			<rotate axis="y" angle="180" />
+			<transformation>
+				<translate x="0" y="0" z="0.5" />
 			</transformation>
-	 		<materials>
-	 			<material id="inherit" />
-	 		</materials>
+			<materials>
+				<material id="inherit" />
+			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
-	 		<children>
-	 			<primitiveref id="square" />
-	 		</children>
+			<children>
+				<primitiveref id="square" />
+			</children>
+		</component>
+		<component id="face2">
+			<transformation>
+				<translate x="0" y="0" z="-0.5" />
+				<rotate axis="y" angle="180" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="square" />
+			</children>
 		</component>
 		<component id="face3">
 			<transformation>
@@ -215,7 +215,7 @@
 			<materials>
 				<material id="rimmaterial" />
 			</materials>
-			<texture id="none"  length_s="1.0" length_t="1.0"/>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<primitiveref id="torus" />
 			</children>
@@ -343,7 +343,7 @@
 			<children>
 				<primitiveref id="triangle" />
 			</children>
-		</component>		
+		</component>
 		<component id="triangulo2">
 			<transformation>
 				<rotate axis="y" angle="180" />
@@ -426,7 +426,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>	
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cestos" />
 				<componentref id="courtfloor" />

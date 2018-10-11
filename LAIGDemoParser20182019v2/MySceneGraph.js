@@ -27,7 +27,10 @@ class MySceneGraph {
 
         this.idRoot = null;                    // The id of the root element.
         this.root = null;
-        this.axisLength = 5;
+        this.axis_length;
+
+        this.cameras = [];
+        this.defaultCamera;
 
         this.ambient = [];
         this.background = [];
@@ -107,7 +110,6 @@ class MySceneGraph {
                 return error;
         }
 
-        /*
         // <views>
         if ((index = nodeNames.indexOf("views")) == -1)
             return "tag <views> missing";
@@ -119,8 +121,6 @@ class MySceneGraph {
             if ((error = this.parseViews(nodes[index])) != null)
                 return error;
         }
-
-        */
 
         // <ambient>
         if ((index = nodeNames.indexOf("ambient")) == -1)
@@ -224,12 +224,132 @@ class MySceneGraph {
         if (this.idRoot == null)
             return "no root ID";
 
-        this.axisLength = this.reader.getString(scenesNode, 'axis_length');
+        this.axis_length = this.reader.getInteger(scenesNode, 'axis_length');
 
-        if (this.axisLength == null)
+        if (!(this.axis_length != null && !isNaN(this.axis_length)))
             return "no axis length";
 
         this.log("Parsed scene");
+
+        return null;
+    }
+
+    /**
+     * Parses the <views> block.
+     */
+    parseViews(viewsNode) {
+        this.defaultCamera = this.reader.getString(viewsNode, 'default');
+
+        if (this.defaultCamera == null)
+            return "no default view";
+
+        var children = viewsNode.children;
+
+        if (children.length < 1)
+            return "no views";
+
+        var error;
+
+        for (var i = 0; i < children.length; i++) {
+            switch (children[i].nodeName) {
+                case "perspective":
+                    if ((error = this.parsePerspective(children[i])) != null)
+                        return error;
+                    break;
+                case "ortho":
+                    if ((error = this.parseOrtho(children[i])) != null)
+                        return error;
+                    break;
+                default: return "unkown tag " + children[i].nodeName + " in views";
+            }
+        }
+
+        this.log("Parsed views");
+
+        return null;
+    }
+
+    parsePerspective(perspectiveNode) {
+        // Get id of the current perspective.
+        var perspectiveId = this.reader.getString(perspectiveNode, 'id');
+        if (perspectiveId == null)
+            return "no ID defined for perspective";
+
+        // Checks for repeated IDs.
+        if (this.cameras[perspectiveId] != null)
+            return "ID must be unique for each view (conflict: ID = " + perspectiveId + ")";
+
+        // near
+        var near = this.reader.getFloat(perspectiveNode, 'near');
+        if (!(near != null && !isNaN(near)))
+            return "unable to parse near of view for ID = " + perspectiveId;
+
+        // far
+        var far = this.reader.getFloat(perspectiveNode, 'far');
+        if (!(far != null && !isNaN(far)))
+            return "unable to parse far of view for ID = " + perspectiveId;
+
+        // angle
+        var angle = this.reader.getFloat(perspectiveNode, 'angle');
+        if (!(angle != null && !isNaN(angle)))
+            return "unable to parse angle of view for ID = " + perspectiveId;
+
+        var children = perspectiveNode.children;
+
+        var nodeNames = [];
+        for (var i = 0; i < children.length; i++) {
+            nodeNames.push(children[i].nodeName);
+        }
+
+        var fromIndex = nodeNames.indexOf("from");
+        var toIndex = nodeNames.indexOf("to");
+
+        if(fromIndex == -1)
+            return "no from defined for prespective" + perspectiveId;
+
+        // x
+        var x = this.reader.getFloat(children[fromIndex], 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of from of view for ID = " + perspectiveId;
+
+        // y
+        var y = this.reader.getFloat(children[fromIndex], 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of from of view for ID = " + perspectiveId;
+
+        // z
+        var z = this.reader.getFloat(children[fromIndex], 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of from of view for ID = " + perspectiveId;
+
+        var from = vec3.fromValues(x,y,z);
+
+        if(toIndex == -1)
+            return "no to defined for prespective" + perspectiveId;
+
+        // x
+        x = this.reader.getFloat(children[toIndex], 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of to of view for ID = " + perspectiveId;
+
+        // y
+        y = this.reader.getFloat(children[toIndex], 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of to of view for ID = " + perspectiveId;
+
+        // z
+        z = this.reader.getFloat(children[toIndex], 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of to of view for ID = " + perspectiveId;
+
+        var to = vec3.fromValues(x,y,z);
+
+        var camera = new CGFcamera(angle*DEGREE_TO_RAD,near,far,from,to);
+
+        if(perspectiveId == this.defaultCamera)
+            this.scene.camera = camera;
+
+        this.cameras[perspectiveId] = camera;
 
         return null;
     }
@@ -350,7 +470,7 @@ class MySceneGraph {
             if (textureFile == null)
                 return "no File defined for texture with ID = " + textureId;
 
-            var texture = new CGFtexture(this.scene,textureFile);
+            var texture = new CGFtexture(this.scene, textureFile);
 
             this.textures[textureId] = texture;
         }
@@ -745,9 +865,9 @@ class MySceneGraph {
                 var transformationrefID = this.reader.getString(greatChildren[transformationrefIndex], 'id');
 
                 if (transformationrefID == null)
-                        return "no ID defined for transformationref of component ID=" + componentId;
+                    return "no ID defined for transformationref of component ID=" + componentId;
 
-                transformation = this.transformations[transformationrefID];                      
+                transformation = this.transformations[transformationrefID];
             }
 
             else {
@@ -776,7 +896,7 @@ class MySceneGraph {
                 texture = textureId;
 
             else texture = this.textures[textureId];
-            
+
             if (texture == null)
                 return "texture " + textureId + " not defined (from component ID=" + componentId + ")";
 
@@ -842,12 +962,12 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            var compenent = new MyComponent(this.scene, transformation, texture, length_s, length_t, componentRef, children_primitives);
-            
-            this.components[componentId] = compenent;
-            
-            if(componentId == this.idRoot)
-                this.root = compenent;
+            var component = new MyComponent(this.scene, transformation, texture, length_s, length_t, componentRef, children_primitives);
+
+            this.components[componentId] = component;
+
+            if (componentId == this.idRoot)
+                this.root = component;
         }
 
         if ((error = this.root.buildChildren() != null))

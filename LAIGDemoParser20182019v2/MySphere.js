@@ -26,7 +26,7 @@ class MySphere extends CGFobject {
 		var div = -1;
 
 		for (let j = 0; j <= this.stacks; j++) {
-			if(j != 0)
+			if (j != 0)
 				div += 2 / this.stacks;
 			let edge = this.slices * j;
 			let nextedge = this.slices * (j + 1);
