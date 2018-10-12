@@ -257,8 +257,8 @@ class MySceneGraph {
                         return error;
                     break;
                 case "ortho":
-                    if ((error = this.parseOrtho(children[i])) != null)
-                        return error;
+                    //if ((error = this.parseOrtho(children[i])) != null)
+                        //return error; FIX THIS
                     break;
                 default: return "unkown tag " + children[i].nodeName + " in views";
             }
@@ -304,7 +304,7 @@ class MySceneGraph {
         var fromIndex = nodeNames.indexOf("from");
         var toIndex = nodeNames.indexOf("to");
 
-        if(fromIndex == -1)
+        if (fromIndex == -1)
             return "no from defined for prespective" + perspectiveId;
 
         // x
@@ -322,9 +322,9 @@ class MySceneGraph {
         if (!(z != null && !isNaN(z)))
             return "unable to parse z of from of view for ID = " + perspectiveId;
 
-        var from = vec3.fromValues(x,y,z);
+        var from = vec3.fromValues(x, y, z);
 
-        if(toIndex == -1)
+        if (toIndex == -1)
             return "no to defined for prespective" + perspectiveId;
 
         // x
@@ -342,12 +342,120 @@ class MySceneGraph {
         if (!(z != null && !isNaN(z)))
             return "unable to parse z of to of view for ID = " + perspectiveId;
 
-        var to = vec3.fromValues(x,y,z);
+        var to = vec3.fromValues(x, y, z);
 
-        var camera = new CGFcamera(angle*DEGREE_TO_RAD,near,far,from,to);
+        var camera = new CGFcamera(angle * DEGREE_TO_RAD, near, far, from, to);
 
-        if(perspectiveId == this.defaultCamera)
+        if (perspectiveId == this.defaultCamera) {
             this.scene.camera = camera;
+            this.scene.interface.setActiveCamera(camera);
+        }
+
+        this.cameras[perspectiveId] = camera;
+
+        return null;
+    }
+
+    //FIX THIS
+
+    parseOrtho(orthoNode) {
+        // Get id of the current perspective.
+        var orthoId = this.reader.getString(orthoNode, 'id');
+        if (orthoId == null)
+            return "no ID defined for ortho";
+
+        // Checks for repeated IDs.
+        if (this.cameras[orthoId] != null)
+            return "ID must be unique for each view (conflict: ID = " + orthoId + ")";
+
+        // near
+        var near = this.reader.getFloat(orthoNode, 'near');
+        if (!(near != null && !isNaN(near)))
+            return "unable to parse near of view for ID = " + orthoId;
+
+        // far
+        var far = this.reader.getFloat(orthoNode, 'far');
+        if (!(far != null && !isNaN(far)))
+            return "unable to parse far of view for ID = " + orthoId;
+
+        // left
+        var left = this.reader.getFloat(orthoNode, 'left');
+        if (!(left != null && !isNaN(left)))
+            return "unable to parse left of view for ID = " + orthoId;
+
+        // right
+        var right = this.reader.getFloat(orthoNode, 'right');
+        if (!(right != null && !isNaN(right)))
+            return "unable to parse right of view for ID = " + orthoId;
+
+        // top
+        var top = this.reader.getFloat(orthoNode, 'top');
+        if (!(top != null && !isNaN(top)))
+            return "unable to parse top of view for ID = " + orthoId;
+
+        // bottom
+        var bottom = this.reader.getFloat(orthoNode, 'bottom');
+        if (!(bottom != null && !isNaN(bottom)))
+            return "unable to parse bottom of view for ID = " + orthoId;
+
+        var children = orthoNode.children;
+
+        var nodeNames = [];
+        for (var i = 0; i < children.length; i++) {
+            nodeNames.push(children[i].nodeName);
+        }
+
+        var fromIndex = nodeNames.indexOf("from");
+        var toIndex = nodeNames.indexOf("to");
+
+        if (fromIndex == -1)
+            return "no from defined for ortho" + orthoId;
+
+        // x
+        var x = this.reader.getFloat(children[fromIndex], 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of from of view for ID = " + orthoId;
+
+        // y
+        var y = this.reader.getFloat(children[fromIndex], 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of from of view for ID = " + orthoId;
+
+        // z
+        var z = this.reader.getFloat(children[fromIndex], 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of from of view for ID = " + orthoId;
+
+        var from = vec3.fromValues(x, y, z);
+
+        if (toIndex == -1)
+            return "no to defined for ortho" + orthoId;
+
+        // x
+        x = this.reader.getFloat(children[toIndex], 'x');
+        if (!(x != null && !isNaN(x)))
+            return "unable to parse x of to of view for ID = " + orthoId;
+
+        // y
+        y = this.reader.getFloat(children[toIndex], 'y');
+        if (!(y != null && !isNaN(y)))
+            return "unable to parse y of to of view for ID = " + orthoId;
+
+        // z
+        z = this.reader.getFloat(children[toIndex], 'z');
+        if (!(z != null && !isNaN(z)))
+            return "unable to parse z of to of view for ID = " + orthoId;
+
+        var to = vec3.fromValues(x, y, z);
+
+        //var up = vec3.fromValues(0, 0, 0); FIX THIS
+
+        var camera = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up);
+
+        if (perspectiveId == this.defaultCamera) {
+            this.scene.camera = camera;
+            this.scene.interface.setActiveCamera(camera);
+        }
 
         this.cameras[perspectiveId] = camera;
 
