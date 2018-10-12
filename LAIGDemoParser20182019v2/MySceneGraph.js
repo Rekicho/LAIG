@@ -134,8 +134,6 @@ class MySceneGraph {
                 return error;
         }
 
-        /*
-
         // <lights>
         if ((index = nodeNames.indexOf("lights")) == -1)
             return "tag <lights> missing";
@@ -147,8 +145,6 @@ class MySceneGraph {
             if ((error = this.parseLights(nodes[index])) != null)
                 return error;
         }
-
-        */
 
         // <textures>
         if ((index = nodeNames.indexOf("textures")) == -1)
@@ -543,6 +539,22 @@ class MySceneGraph {
             this.background.push(a);
 
         this.log("Parsed ambient");
+
+        return null;
+    }
+
+    /**
+     * Parses the <lights> block.
+     */
+    parseLights(lightsNode) {
+        var children = lightsNode.children;
+
+        var nodeNames = [];
+        for (var i = 0; i < children.length; i++) {
+            nodeNames.push(children[i].nodeName);
+        }
+
+        this.log("Parsed lights");
 
         return null;
     }
