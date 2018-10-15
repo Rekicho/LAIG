@@ -684,7 +684,6 @@ class MySceneGraph {
     }
 
     parseRGBA(rgbanode, materialId, type) {
-        console.log(rgbanode);
         // r
         var r = this.reader.getFloat(rgbanode, 'r');
         if (!(r != null && !isNaN(r)))

@@ -408,6 +408,9 @@
 			</transformation>
 			<materials>
 				<material id="scorematerial" />
+				<material id="defmaterial" />
+				<material id="rimmaterial" />
+				<material id="suportematerial" />
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>

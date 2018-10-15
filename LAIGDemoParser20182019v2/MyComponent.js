@@ -20,8 +20,10 @@ class MyComponent extends CGFobject {
 	};
 
 	display(texture) {
-		if(this.materials[0] != "inherit")
-			this.materials[0].apply();
+		var materialsIndex = this.scene.materialsIndex % this.materials.length;
+
+		if(this.materials[materialsIndex] != "inherit")
+			this.materials[materialsIndex].apply();
 
 		var temporaryTexture = this.texture;
 
