@@ -36,6 +36,7 @@ class MySceneGraph {
         this.background = [];
 
         this.textures = [];
+        this.materials = [];
         this.transformations = [];
 
         this.primitives = [];
@@ -134,6 +135,7 @@ class MySceneGraph {
                 return error;
         }
 
+        /*
         // <lights>
         if ((index = nodeNames.indexOf("lights")) == -1)
             return "tag <lights> missing";
@@ -145,6 +147,7 @@ class MySceneGraph {
             if ((error = this.parseLights(nodes[index])) != null)
                 return error;
         }
+        */
 
         // <textures>
         if ((index = nodeNames.indexOf("textures")) == -1)
@@ -158,8 +161,6 @@ class MySceneGraph {
                 return error;
         }
 
-        /*
-
         // <materials>
         if ((index = nodeNames.indexOf("materials")) == -1)
             return "tag <materials> missing";
@@ -171,8 +172,6 @@ class MySceneGraph {
             if ((error = this.parseMaterials(nodes[index])) != null)
                 return error;
         }
-
-        */
 
         // <transformations>
         if ((index = nodeNames.indexOf("transformations")) == -1)
@@ -254,7 +253,7 @@ class MySceneGraph {
                     break;
                 case "ortho":
                     //if ((error = this.parseOrtho(children[i])) != null)
-                        //return error; FIX THIS
+                    //return error; FIX THIS
                     break;
                 default: return "unkown tag " + children[i].nodeName + " in views";
             }
@@ -352,8 +351,6 @@ class MySceneGraph {
         return null;
     }
 
-    //FIX THIS
-
     parseOrtho(orthoNode) {
         // Get id of the current perspective.
         var orthoId = this.reader.getString(orthoNode, 'id');
@@ -444,7 +441,7 @@ class MySceneGraph {
 
         var to = vec3.fromValues(x, y, z);
 
-        //var up = vec3.fromValues(0, 0, 0); FIX THIS
+        var up = vec3.fromValues(0, 1, 0);
 
         var camera = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up);
 
@@ -598,6 +595,127 @@ class MySceneGraph {
         this.log("Parsed textures");
 
         return null;
+    }
+
+    /**
+     * Parses the <materials> block.
+     */
+    parseMaterials(materialsNode) {
+        var children = materialsNode.children;
+
+        if (children.length == 0)
+            return "at least one material must be defined";
+
+        // Any number of materials.
+        for (var i = 0; i < children.length; i++) {
+
+            if (children[i].nodeName != "material") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // Get id of the current material.
+            var materialId = this.reader.getString(children[i], 'id');
+            if (materialId == null)
+                return "no ID defined for material";
+
+            // Checks for repeated IDs.
+            if (this.materials[materialId] != null)
+                return "ID must be unique for each material (conflict: ID = " + materialId + ")";
+
+            var material = new CGFappearance(this.scene);
+
+            // shininess
+            var shininess = this.reader.getFloat(children[i], 'shininess');
+            if (!(shininess != null && !isNaN(shininess)))
+                return "unable to parse shininess of translate";
+
+            material.setShininess(shininess);
+
+            this.materials[materialId] = material;
+
+            var grandChildren = children[i].children;
+
+            var nodeNames = [];
+
+            for (var j = 0; j < grandChildren.length; j++) {
+                nodeNames.push(grandChildren[j].nodeName);
+            }
+
+            var emissionIndex = nodeNames.indexOf("emission");
+            var ambientIndex = nodeNames.indexOf("ambient");
+            var diffuseIndex = nodeNames.indexOf("diffuse");
+            var specularIndex = nodeNames.indexOf("specular");
+
+            // Emission
+            if (emissionIndex == -1)
+                return "no emission for material id=" + materialId;
+
+            // Ambient
+            if (ambientIndex == -1)
+                return "no ambient for material id=" + materialId;
+
+            // Diffuse
+            if (diffuseIndex == -1)
+                return "no diffuse for material id=" + materialId;
+
+            // Specular
+            if (specularIndex == -1)
+                return "no specular for material id=" + materialId;
+
+            var error;
+
+            if ((error = this.parseRGBA(grandChildren[emissionIndex], materialId, "emission")) != null)
+                return error + "of material " + materialId;
+
+            if ((error = this.parseRGBA(grandChildren[ambientIndex], materialId, "ambient")) != null)
+                return error + "of material " + materialId;
+
+            if ((error = this.parseRGBA(grandChildren[diffuseIndex], materialId, "diffuse")) != null)
+                return error + "of material " + materialId;
+
+            if ((error = this.parseRGBA(grandChildren[specularIndex], materialId, "specular")) != null)
+                return error + "of material " + materialId;
+        }
+
+        this.log("Parsed materials");
+
+        return null;
+    }
+
+    parseRGBA(rgbanode, materialId, type) {
+        console.log(rgbanode);
+        // r
+        var r = this.reader.getFloat(rgbanode, 'r');
+        if (!(r != null && !isNaN(r)))
+            return "unable to parse r of " + type;
+        // g
+        var g = this.reader.getFloat(rgbanode, 'g');
+        if (!(g != null && !isNaN(g)))
+            return "unable to parse g of " + type;
+        // b
+        var b = this.reader.getFloat(rgbanode, 'b');
+        if (!(b != null && !isNaN(b)))
+            return "unable to parse b of " + type;
+        // a
+        var a = this.reader.getFloat(rgbanode, 'a');
+        if (!(a != null && !isNaN(a)))
+            return "unable to parse a of " + type;
+
+        switch (type) {
+            case "emission":
+                this.materials[materialId].setEmission(r, g, b, a);
+                return null;
+            case "ambient":
+                this.materials[materialId].setAmbient(r, g, b, a);
+                return null;
+            case "diffuse":
+                this.materials[materialId].setDiffuse(r, g, b, a);
+                return null;
+            case "specular":
+                this.materials[materialId].setSpecular(r, g, b, a);
+                return null;
+        }
     }
 
     /**
@@ -954,7 +1072,7 @@ class MySceneGraph {
 
             // Gets indices of each element.
             var transformationIndex = nodeNames.indexOf("transformation");
-            //var materialsIndex = nodeNames.indexOf("materials");
+            var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
 
@@ -1001,9 +1119,38 @@ class MySceneGraph {
 
             this.scene.loadIdentity();
 
+            //Materials
+            if (materialsIndex == -1)
+                return "no materials block for component id=" + componentId;
+
+            greatChildren = grandChildren[materialsIndex].children;
+
+            if (greatChildren.length < 0)
+                return "no materials for component id=" + componentId;
+
+            var materialId;
+            var materials = [];
+
+            for (var j = 0; j < greatChildren.length; j++) {
+                materialId = this.reader.getString(greatChildren[j], 'id');
+
+                if (materialId == null)
+                    return "no ID defined for materialId of component ID=" + componentId;
+
+                if (materialId == "inherit")
+                    materials[j] = materialId;
+
+                else {
+                    if(this.materials[materialId] == null)
+                        return "no material " + materialId + "defined (found in component " + componentID + ")";
+
+                    materials[j] = this.materials[materialId];
+                }
+            }
+
             //Textures
             if (textureIndex == -1)
-                return "no children block for component id=" + componentId;
+                return "no texture block for component id=" + componentId;
 
             var textureId = this.reader.getString(grandChildren[textureIndex], 'id');
 
@@ -1029,7 +1176,6 @@ class MySceneGraph {
             var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
             if (!(length_t != null && !isNaN(length_t)))
                 return "unable to parse length_t of transformation of component ID = " + primitiveId;
-
 
             //Children
             if (childrenIndex == -1)
@@ -1082,7 +1228,7 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            var component = new MyComponent(this.scene, transformation, texture, length_s, length_t, componentRef, children_primitives);
+            var component = new MyComponent(this.scene, transformation, materials, texture, length_s, length_t, componentRef, children_primitives);
 
             this.components[componentId] = component;
 

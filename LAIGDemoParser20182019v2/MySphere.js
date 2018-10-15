@@ -38,11 +38,10 @@ class MySphere extends CGFobject {
 
 				this.vertices.push(this.radius * raiz * Math.cos(alpha), this.radius * raiz * Math.sin(alpha), this.radius * Math.sin(z_ang));
 				this.normals.push(raiz * Math.cos(alpha), raiz * Math.sin(alpha), Math.sin(z_ang));
-				this.texCoords.push(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)), 1 - (Math.sin(i * ang) * Math.sin(z_ang)));
-
+				this.texCoords.push(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)) / 2.0, 0.5 - (Math.sin(i * ang) * Math.cos(z_ang)) / 2.0);
 				//FALTA texCoords
-				console.log(this.radius * raiz * Math.cos(alpha), this.radius * raiz * Math.sin(alpha), this.radius * Math.sin(z_ang));
-				console.log(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)), 1 - (Math.sin(i * ang) * Math.cos(z_ang)));
+				//console.log(this.radius * raiz * Math.cos(alpha), this.radius * raiz * Math.sin(alpha), this.radius * Math.sin(z_ang));
+				//console.log(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)), 1 - (Math.sin(i * ang) * Math.cos(z_ang)));
 
 				if (j != this.stacks) {
 					this.indices.push(edge + i, edge + i + 1, nextedge + i);

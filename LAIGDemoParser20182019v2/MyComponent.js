@@ -5,20 +5,24 @@
  */
 
 class MyComponent extends CGFobject {
-	constructor(scene, transformation, texture, length_s, length_t, componentRef, primitives) {
+	constructor(scene, transformation, materials, texture, length_s, length_t, componentRef, primitives) {
 		super(scene);
 
 		this.transformation = transformation;
-		this.componentRef = componentRef;
-		this.primitives = primitives;
+		this.materials = materials;
 		this.texture = texture;
 		this.length_s = length_s;
 		this.length_t = length_t;
+		this.componentRef = componentRef;
+		this.primitives = primitives;
 
 		this.children = [];
 	};
 
 	display(texture) {
+		if(this.materials[0] != "inherit")
+			this.materials[0].apply();
+
 		var temporaryTexture = this.texture;
 
 		if (this.texture == "inherit")
