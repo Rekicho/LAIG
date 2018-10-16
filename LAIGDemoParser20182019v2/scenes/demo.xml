@@ -80,7 +80,7 @@
 			<sphere radius="1" slices="20" stacks="20" />
 		</primitive >
 		<primitive id="torus">
-			<torus inner="0.5" outer="1" slices="20" loops="20" />
+			<torus inner="0.25" outer="1" slices="20" loops="20" />
 		</primitive >
 	</primitives >
 	<components>
@@ -209,7 +209,7 @@
 		<component id="aro">
 			<transformation>
 				<translate x="-10.2" y="2.7" z="0" />
-				<scale x="0.3" y="0.1" z="0.3" />
+				<scale x="0.25" y="0.1" z="0.25" />
 				<rotate axis="x" angle="90" />
 			</transformation>
 			<materials>

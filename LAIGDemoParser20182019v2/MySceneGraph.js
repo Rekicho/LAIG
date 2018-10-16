@@ -919,8 +919,8 @@ class MySceneGraph {
                     return error;
                     break;
 
-                case "torus":     /*if ((error = this.parseTorus(grandChildren[0]), primitiveId) != null)
-                                    return error;*/
+                case "torus": if ((error = this.parseTorus(grandChildren[0], primitiveId)) != null)
+                    return error;
                     break;
 
                 default: return "Unknown primitive " + nodeName + "with ID = " + primitiveId;
@@ -1026,6 +1026,34 @@ class MySceneGraph {
             return "unable to parse stacks of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MySphere(this.scene, radius, slices, stacks);
+
+        return null;
+    }
+
+    parseTorus(torusNode, primitiveId) {
+        // inner
+        var inner = this.reader.getFloat(torusNode, 'inner');
+        if (!(inner != null && !isNaN(inner)))
+            return "unable to parse inner of the primitive for ID = " + primitiveId;
+
+        // outer
+        var outer = this.reader.getFloat(torusNode, 'outer');
+        if (!(outer != null && !isNaN(outer)))
+            return "unable to parse outer of the primitive for ID = " + primitiveId;
+
+        // slices
+        var slices = this.reader.getInteger(torusNode, 'slices');
+        if (!(slices != null && !isNaN(slices)))
+            return "unable to parse slices of the primitive for ID = " + primitiveId;
+
+        // loops
+        var loops = this.reader.getInteger(torusNode, 'loops');
+        if (!(loops != null && !isNaN(loops)))
+            return "unable to parse loops of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyTorus(this.scene, inner, outer, slices, loops);
+
+        console.log(primitiveId);
 
         return null;
     }
