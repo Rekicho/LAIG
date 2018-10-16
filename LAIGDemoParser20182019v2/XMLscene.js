@@ -71,6 +71,14 @@ class XMLscene extends CGFscene {
                 else
                     this.lights[i].disable();
 
+                if(this.graph.spots.hasOwnProperty(key)){
+                    var spot = this.graph.spots[key];
+
+                    this.lights[i].setSpotCutOff(spot[0]);
+                    this.lights[i].setSpotExponent(spot[1]);
+                    this.lights[i].setSpotDirection(spot[2][0] - light[1][0], spot[2][1] - light[1][1], spot[2][2] - light[1][2]);
+                }
+
                 this.lights[i].update();
 
                 i++;
