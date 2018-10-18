@@ -29,8 +29,8 @@ class MySceneGraph {
         this.root = null;
         this.axis_length;
 
-        this.cameras = [];
         this.defaultCamera;
+        this.cameras = [];
 
         this.ambient = [];
         this.background = [];
@@ -253,8 +253,8 @@ class MySceneGraph {
                         return error;
                     break;
                 case "ortho":
-                    //if ((error = this.parseOrtho(children[i])) != null)
-                    //return error; FIX THIS
+                    if ((error = this.parseOrtho(children[i])) != null)
+                        return error;
                     break;
                 default: return "unkown tag " + children[i].nodeName + " in views";
             }
@@ -446,12 +446,14 @@ class MySceneGraph {
 
         var camera = new CGFcameraOrtho(left, right, bottom, top, near, far, from, to, up);
 
-        if (perspectiveId == this.defaultCamera) {
+        if (orthoId == this.defaultCamera) {
             this.scene.camera = camera;
             this.scene.interface.setActiveCamera(camera);
         }
 
-        this.cameras[perspectiveId] = camera;
+        this.cameras[orthoId] = camera;
+
+        console.log(orthoId);
 
         return null;
     }
@@ -663,7 +665,7 @@ class MySceneGraph {
         if (!(angle != null && !isNaN(angle)))
             return "unable to parse angle of light" + lightId;
 
-        this.spots[lightId].push(angle * DEGREE_TO_RAD);
+        this.spots[lightId].push(angle);
 
         // exponent
         var exponent = this.reader.getFloat(spotNode, 'exponent');
@@ -1321,8 +1323,6 @@ class MySceneGraph {
 
         this.primitives[primitiveId] = new MyTorus(this.scene, inner, outer, slices, loops);
 
-        console.log(primitiveId);
-
         return null;
     }
 
@@ -1464,13 +1464,13 @@ class MySceneGraph {
 
             // length_s
             var length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
-            if (!(length_s != null && !isNaN(length_s)))
-                return "unable to parse length_s of transformation of component ID = " + primitiveId;
+            if (!(length_s != null && !isNaN(length_s)) && !(textureId == "inherit" || textureId == "none"))
+                return "unable to parse length_s of texture of compoment for ID = " + componentId;
 
             // length_t
             var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
-            if (!(length_t != null && !isNaN(length_t)))
-                return "unable to parse length_t of transformation of component ID = " + primitiveId;
+            if (!(length_t != null && !isNaN(length_t)) && !(textureId == "inherit" || textureId == "none"))
+                return "unable to parse length_t of texture of compoment for ID = " + componentId;
 
             //Children
             if (childrenIndex == -1)
@@ -1569,6 +1569,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.root.display("none");
+        this.root.display("none",null,null);
     }
 }

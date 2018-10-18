@@ -19,16 +19,24 @@ class MyComponent extends CGFobject {
 		this.children = [];
 	};
 
-	display(texture) {
+	display(texture, length_s, length_t) {
 		var materialsIndex = this.scene.materialsIndex % this.materials.length;
 
-		if(this.materials[materialsIndex] != "inherit")
+		if (this.materials[materialsIndex] != "inherit")
 			this.materials[materialsIndex].apply();
 
 		var temporaryTexture = this.texture;
+		var temporary_s = this.length_s;
+		var temporary_t = this.length_t;
 
-		if (this.texture == "inherit")
+		if (this.texture == "inherit") {
 			temporaryTexture = texture;
+
+			if(length_s != null)
+				temporary_s = length_s;
+			if(length_t != null)
+				temporary_t = length_t;
+		}
 
 		if (temporaryTexture == "none") {
 			if (this.scene.activeTexture != null) {
@@ -48,10 +56,13 @@ class MyComponent extends CGFobject {
 			this.scene.multMatrix(this.transformation);
 
 		for (var i = 0; i < this.primitives.length; i++)
+		{
+			//this.primitives[i].changeTex(temporary_s, temporary_t);
 			this.primitives[i].display();
+		}
 
 		for (var i = 0; i < this.children.length; i++)
-			this.children[i].display(temporaryTexture);
+			this.children[i].display(temporaryTexture, temporary_s, temporary_t);
 
 		this.scene.popMatrix();
 	};

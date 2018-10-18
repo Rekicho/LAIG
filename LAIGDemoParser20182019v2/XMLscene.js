@@ -13,6 +13,10 @@ class XMLscene extends CGFscene {
 
         this.interface = myinterface;
         this.lightValues = {};
+
+        this.currCamera;
+        this.cameraList = {};
+        this.lastCamera;
     }
 
     /**
@@ -71,7 +75,7 @@ class XMLscene extends CGFscene {
                 else
                     this.lights[i].disable();
 
-                if(this.graph.spots.hasOwnProperty(key)){
+                if (this.graph.spots.hasOwnProperty(key)) {
                     var spot = this.graph.spots[key];
 
                     this.lights[i].setSpotCutOff(spot[0]);
@@ -95,11 +99,20 @@ class XMLscene extends CGFscene {
 
         this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
         this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
-
         this.initLights();
 
         // Adds lights group.
         this.interface.addLightsGroup(this.graph.lights);
+        // Adds cameras group.
+        var i = 0;
+        for (var key in this.graph.cameras) {
+            if (key == this.graph.defaultCamera)
+                this.currCamera = i;
+            this.cameraList[key] = i;
+            i++;
+        }
+        this.lastCamera = this.currCamera;
+        this.interface.addCamerasGroup(this.cameraList);
 
         this.activeTexture = null;
 
@@ -127,6 +140,19 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
 
         if (this.sceneInited) {
+            if(this.currCamera != this.lastCamera){
+                var cam;
+                for(var key in this.cameraList){
+                    if(this.cameraList[key] == this.currCamera){
+                        cam = key;
+                    }
+                }
+                this.camera = this.graph.cameras[cam];
+                this.interface.setActiveCamera(this.graph.cameras[cam]);
+
+                this.lastCamera = this.currCamera;
+            }
+
             // Draw axis
             this.axis.display();
 
