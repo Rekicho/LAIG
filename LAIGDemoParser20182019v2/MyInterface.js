@@ -34,6 +34,7 @@ class MyInterface extends CGFinterface {
         var group = this.gui.addFolder("Lights");
         group.open();
 
+        console.log(lights);
         for (var key in lights) {
             if (lights.hasOwnProperty(key)) {
                 this.scene.lightValues[key] = lights[key][0];

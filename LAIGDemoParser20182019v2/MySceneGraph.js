@@ -453,8 +453,6 @@ class MySceneGraph {
 
         this.cameras[orthoId] = camera;
 
-        console.log(orthoId);
-
         return null;
     }
 
@@ -1274,7 +1272,7 @@ class MySceneGraph {
         if (!(stacks != null && !isNaN(stacks)))
             return "unable to parse stacks of the primitive for ID = " + primitiveId;
 
-        this.primitives[primitiveId] = new MySphere(this.scene, 1, slices, stacks);
+        this.primitives[primitiveId] = new MyCylinder(this.scene, base, top, height, slices, stacks);
 
         return null;
     }

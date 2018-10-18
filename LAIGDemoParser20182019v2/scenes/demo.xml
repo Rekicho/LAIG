@@ -9,8 +9,8 @@
 			<from x="25.0" y="10.0" z="0.0" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
-		<ortho id="ortho" near="0.1" far="100.0" left="100.0" right="100.0" top="100.0" bottom="100.0">
-			<from x="0.0" y="10.0" z="25.0" />
+		<ortho id="ortho" near="0.1" far="100.0" left="-30.0" right="30.0" top="10.0" bottom="-10.0">
+			<from x="15.0" y="15.0" z="15.0" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</ortho>
 	</views>
@@ -274,8 +274,7 @@
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<!-- <componentref id="cube" /> -->
-				<primitiveref id="cylinder" />
+				<componentref id="cube" />
 			</children>
 		</component>
 		<!-- Suporte 2 do Cesto. -->
@@ -428,7 +427,7 @@
 				<material id="rimmaterial" />
 				<material id="suportematerial" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="backboard" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="triangulo1" />
 				<componentref id="triangulo2" />

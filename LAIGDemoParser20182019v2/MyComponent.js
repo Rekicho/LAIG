@@ -32,9 +32,9 @@ class MyComponent extends CGFobject {
 		if (this.texture == "inherit") {
 			temporaryTexture = texture;
 
-			if(length_s != null)
+			if (length_s != null)
 				temporary_s = length_s;
-			if(length_t != null)
+			if (length_t != null)
 				temporary_t = length_t;
 		}
 
@@ -55,9 +55,8 @@ class MyComponent extends CGFobject {
 		if (this.transformation != null)
 			this.scene.multMatrix(this.transformation);
 
-		for (var i = 0; i < this.primitives.length; i++)
-		{
-			//this.primitives[i].changeTex(temporary_s, temporary_t);
+		for (var i = 0; i < this.primitives.length; i++) {
+			this.primitives[i].changeTex(temporary_s, temporary_t);
 			this.primitives[i].display();
 		}
 

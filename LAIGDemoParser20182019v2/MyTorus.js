@@ -5,7 +5,6 @@
  */
 
 class MyTorus extends CGFobject {
-
     constructor(scene, inner, outter, slices, loops) {
         super(scene);
 
@@ -28,11 +27,12 @@ class MyTorus extends CGFobject {
 
             for (var i = 0; i <= this.slices; i++) {
                 var ang2 = i * 2 * Math.PI / this.slices;
+
                 var aux2 = this.outter + (this.inner * Math.cos(ang1));
 
                 this.vertices.push(Math.cos(ang2) * aux2, Math.sin(ang2) * aux2, this.inner * Math.sin(ang1));
                 this.normals.push(Math.cos(ang2) * aux2, Math.sin(ang2) * aux2, this.inner * Math.sin(ang1));
-                this.texCoords.push(1 - (j / this.loops), 1 - (i / this.slices));
+                this.texCoords.push(1 - (1 / this.slices) * i, (j / this.loops));
             }
         }
 
@@ -48,4 +48,6 @@ class MyTorus extends CGFobject {
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     };
+
+    changeTex(length_s, length_t){};
 };

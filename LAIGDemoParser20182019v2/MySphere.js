@@ -16,53 +16,41 @@ class MySphere extends CGFobject {
 	};
 
 	initBuffers() {
-
 		this.vertices = [];
-		this.normals = [];
 		this.indices = [];
+		this.normals = [];
 		this.texCoords = [];
 
-		var ang = (2 * Math.PI) / this.slices;
+		for (var j = 0; j <= this.stacks; j++) {
+			var angst = j * Math.PI / this.stacks;
 
-		
-		var z_ang = -Math.PI/2;
-		var inc = Math.PI/this.stacks;
+			for (var i = 0; i <= this.slices; i++) {
+				var angsl = (2 * Math.PI) * i / this.slices;
 
-		for (let j = 0; j <= this.stacks; j++) {
-			let edge = this.slices * j;
-			let nextedge = this.slices * (j + 1);
+				this.vertices.push(this.radius * Math.cos(angsl) * Math.sin(angst),
+					this.radius * Math.cos(angst),
+					this.radius * Math.sin(angsl) * Math.sin(angst));
 
-			for (let i = 0; i < this.slices; i++) {
-				let alpha = i * ang;
-				let raiz = Math.sqrt(1 - Math.pow(Math.sin(z_ang), 2));
+				this.normals.push(this.radius * Math.cos(angsl) * Math.sin(angst),
+					this.radius * Math.cos(angst),
+					this.radius * Math.sin(angsl) * Math.sin(angst));
 
-				this.vertices.push(this.radius * raiz * Math.cos(alpha), this.radius * raiz * Math.sin(alpha), this.radius * Math.sin(z_ang));
-				this.normals.push(raiz * Math.cos(alpha), raiz * Math.sin(alpha), Math.sin(z_ang));
-				this.texCoords.push(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)) / 2.0, 0.5 - (Math.sin(i * ang) * Math.cos(z_ang)) / 2.0);
-				//FALTA texCoords
-				//console.log(this.radius * raiz * Math.cos(alpha), this.radius * raiz * Math.sin(alpha), this.radius * Math.sin(z_ang));
-				//console.log(0.5 + (Math.cos(i * ang) * Math.cos(z_ang)), 1 - (Math.sin(i * ang) * Math.cos(z_ang)));
-
-				if (j != this.stacks) {
-					this.indices.push(edge + i, edge + i + 1, nextedge + i);
-					this.indices.push(nextedge + i, edge + i + 1, edge + i);
-
-					if (i == this.slices - 1) {
-						this.indices.push(edge, edge + i + 1, edge + i);
-						this.indices.push(edge + i, edge + i + 1, edge);
-					}
-
-					else {
-						this.indices.push(nextedge + i + 1, nextedge + i, edge + i + 1);
-						this.indices.push(edge + i + 1, nextedge + i, nextedge + i + 1);
-					}
-				}
+				this.texCoords.push(1 - (i / this.slices), 1 - (j / this.stacks));
 			}
+		}
 
-			z_ang += inc;
+		for (var j = 0; j < this.stacks; j++) {
+			for (var i = 0; i < this.slices; i++) {
+				var ind = i + (this.slices + 1) * j;
+
+				this.indices.push(ind, ind + this.slices + 2, ind + this.slices + 1);
+				this.indices.push(ind, ind + 1, ind + this.slices + 2);
+			}
 		}
 
 		this.primitiveType = this.scene.gl.TRIANGLES;
 		this.initGLBuffers();
 	};
+
+	changeTex() {};
 };
