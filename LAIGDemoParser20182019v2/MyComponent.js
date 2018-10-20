@@ -25,7 +25,7 @@ class MyComponent extends CGFobject {
 		if (this.materials[materialsIndex] != "inherit")
 			material = this.materials[materialsIndex];
 
-		material.apply();		
+		material.apply();
 
 		var temporaryTexture = this.texture;
 		var temporary_s = this.length_s;
@@ -34,9 +34,9 @@ class MyComponent extends CGFobject {
 		if (this.texture == "inherit") {
 			temporaryTexture = texture;
 
-			if (length_s != null)
+			if (temporary_s == null)
 				temporary_s = length_s;
-			if (length_t != null)
+			if (temporary_t == null)
 				temporary_t = length_t;
 		}
 
@@ -76,7 +76,7 @@ class MyComponent extends CGFobject {
 
 		for (var i = 0; i < this.componentRef.length; i++) {
 			if (!(this.componentRef[i] in this.scene.graph.components)) {
-				console.log("component with id=" + this.componentRef[i] + " not found.");
+				console.error("component with id=" + this.componentRef[i] + " not found.");
 				return "";
 			}
 			this.children.push(this.scene.graph.components[this.componentRef[i]]);

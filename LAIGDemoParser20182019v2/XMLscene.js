@@ -122,7 +122,6 @@ class XMLscene extends CGFscene {
         this.sceneInited = true;
     }
 
-
     /**
      * Displays the scene.
      */
@@ -143,10 +142,10 @@ class XMLscene extends CGFscene {
         this.pushMatrix();
 
         if (this.sceneInited) {
-            if(this.currCamera != this.lastCamera){
+            if (this.currCamera != this.lastCamera) {
                 var cam;
-                for(var key in this.cameraList){
-                    if(this.cameraList[key] == this.currCamera){
+                for (var key in this.cameraList) {
+                    if (this.cameraList[key] == this.currCamera) {
                         cam = key;
                     }
                 }

@@ -56,5 +56,12 @@ class MyTriangle extends CGFobject {
 		this.initGLBuffers();
 	};
 
-	changeTex(length_s, length_t){};
+	changeTex(length_s, length_t) {
+		this.texCoords = [
+			(this.c - this.a * this.cos_a) / length_s, (length_t - this.a * this.sin_a) / length_t,
+			0, 1,
+			this.c / length_s, 1
+		];
+		this.updateTexCoordsGLBuffers();
+	};
 };

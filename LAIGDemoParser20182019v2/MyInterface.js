@@ -33,7 +33,7 @@ class MyInterface extends CGFinterface {
 
         var group = this.gui.addFolder("Lights");
         group.open();
-        
+
         for (var key in lights) {
             if (lights.hasOwnProperty(key)) {
                 this.scene.lightValues[key] = lights[key][0];
@@ -43,31 +43,27 @@ class MyInterface extends CGFinterface {
     }
 
     addCamerasGroup(cameras) {
-        this.gui.add(this.scene,"currCamera",cameras)
+        this.gui.add(this.scene, "currCamera", cameras)
     }
 
-    initKeys() 
-	{
-		this.scene.gui=this;
-		this.processKeyboard=function(){};
-		this.activeKeys={};
+    initKeys() {
+        this.scene.gui = this;
+        this.processKeyboard = function () { };
+        this.activeKeys = {};
     };
-    
-    processKeyDown(event) 
-	{
-        this.activeKeys[event.code]=true;
-        
-        if(event.code == "KeyM")
+
+    processKeyDown(event) {
+        this.activeKeys[event.code] = true;
+
+        if (event.code == "KeyM")
             this.scene.materialsIndex++;
-	};
+    };
 
-	processKeyUp(event) 
-	{
-		this.activeKeys[event.code]=false;
-	};
+    processKeyUp(event) {
+        this.activeKeys[event.code] = false;
+    };
 
-	isKeyPressed(keyCode) 
-	{
-		return this.activeKeys[keyCode] || false;
-	};
+    isKeyPressed(keyCode) {
+        return this.activeKeys[keyCode] || false;
+    };
 }
