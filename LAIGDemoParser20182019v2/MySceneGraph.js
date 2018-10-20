@@ -1248,17 +1248,17 @@ class MySceneGraph {
     parseCylinder(cylinderNode, primitiveId) {
         // base
         var base = this.reader.getFloat(cylinderNode, 'base');
-        if (!(base != null && !isNaN(base) && base > 0))
+        if (!(base != null && !isNaN(base) && base >= 0))
             return "unable to parse base of the primitive for ID = " + primitiveId;
 
         // top
         var top = this.reader.getFloat(cylinderNode, 'top');
-        if (!(top != null && !isNaN(top) && top > 0))
+        if (!(top != null && !isNaN(top) && top >= 0))
             return "unable to parse top of the primitive for ID = " + primitiveId;
 
         // height
         var height = this.reader.getFloat(cylinderNode, 'height');
-        if (!(height != null && !isNaN(height) && height > 0))
+        if (!(height != null && !isNaN(height) && height >= 0))
             return "unable to parse height of the primitive for ID = " + primitiveId;
 
         // slices
@@ -1279,7 +1279,7 @@ class MySceneGraph {
     parseSphere(sphereNode, primitiveId) {
         // radius
         var radius = this.reader.getFloat(sphereNode, 'radius');
-        if (!(radius != null && !isNaN(radius) && radius > 0))
+        if (!(radius != null && !isNaN(radius) && radius >= 0))
             return "unable to parse radius of the primitive for ID = " + primitiveId;
 
         // slices
@@ -1466,7 +1466,7 @@ class MySceneGraph {
 
             // length_t
             var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
-            if (!(length_t != null && !isNaN(length_t) && length_t > 0) && !(textureId == "inherit" || textureId == "none"))
+            if (!(length_t != null && !isNaN(length_t) && length_t >= 0) && !(textureId == "inherit" || textureId == "none"))
                 return "unable to parse length_t of texture of compoment for ID = " + componentId;
 
             //Children
