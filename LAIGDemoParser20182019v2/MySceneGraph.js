@@ -1435,7 +1435,7 @@ class MySceneGraph {
 
                 else {
                     if (this.materials[materialId] == null)
-                        return "no material " + materialId + "defined (found in component " + componentID + ")";
+                        return "no material " + materialId + " defined (found in component " + materialId + ")";
 
                     materials[j] = this.materials[materialId];
                 }
@@ -1567,6 +1567,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.root.display("none",null,null);
+        this.root.display(this.scene.defaultMaterial, this.scene.defaultTexture, "none",null,null);
     }
 }

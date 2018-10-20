@@ -114,6 +114,9 @@ class XMLscene extends CGFscene {
         this.lastCamera = this.currCamera;
         this.interface.addCamerasGroup(this.cameraList);
 
+        this.defaultMaterial = new CGFappearance(this);
+        this.defaultTexture = new CGFtexture(this);
+
         this.activeTexture = null;
 
         this.sceneInited = true;

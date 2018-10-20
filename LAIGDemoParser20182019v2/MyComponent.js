@@ -19,11 +19,13 @@ class MyComponent extends CGFobject {
 		this.children = [];
 	};
 
-	display(texture, length_s, length_t) {
+	display(material, texture, length_s, length_t) {
 		var materialsIndex = this.scene.materialsIndex % this.materials.length;
 
 		if (this.materials[materialsIndex] != "inherit")
-			this.materials[materialsIndex].apply();
+			material = this.materials[materialsIndex];
+
+		material.apply();		
 
 		var temporaryTexture = this.texture;
 		var temporary_s = this.length_s;
@@ -45,7 +47,7 @@ class MyComponent extends CGFobject {
 			}
 		}
 
-		else {
+		else if (temporaryTexture != this.scene.activeTexture) {
 			temporaryTexture.bind();
 			this.scene.activeTexture = temporaryTexture;
 		}
@@ -61,7 +63,7 @@ class MyComponent extends CGFobject {
 		}
 
 		for (var i = 0; i < this.children.length; i++)
-			this.children[i].display(temporaryTexture, temporary_s, temporary_t);
+			this.children[i].display(material, temporaryTexture, temporary_s, temporary_t);
 
 		this.scene.popMatrix();
 	};
