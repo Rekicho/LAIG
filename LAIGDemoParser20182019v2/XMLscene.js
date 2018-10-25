@@ -1,4 +1,5 @@
 var DEGREE_TO_RAD = Math.PI / 180;
+var FPS = 60;
 
 /**
  * XMLscene class, representing the scene that is to be rendered.
@@ -40,6 +41,10 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
         this.materialsIndex = 0;
+
+        this.animation = new LinearAnimation(this, 10, [[0,0,0],[1,0,0],[1,1,0]]);
+
+        this.setUpdatePeriod(1000/FPS);
     }
 
     /**
@@ -184,5 +189,15 @@ class XMLscene extends CGFscene {
 
         this.popMatrix();
         // ---- END Background, camera and axis setup
+    }
+
+    update(currTime){
+        this.lastTime = this.lastTime || 0;
+        var deltaTime = currTime - this.lastTime;
+        
+        if(this.lastTime != 0)
+            this.animation.update(deltaTime / 1000);
+
+		this.lastTime = currTime;
     }
 }

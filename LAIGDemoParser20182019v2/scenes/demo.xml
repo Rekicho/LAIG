@@ -1,5 +1,5 @@
 <yas>
-	<scene root="court" axis_length="3" />
+	<scene root="basketball" axis_length="3" />
 	<views default="front">
 		<perspective id="front" near="0.1" far="100.0" angle="45.0">
 			<from x="0.0" y="10.0" z="25.0" />
@@ -58,6 +58,7 @@
 		<texture id="nettexture" file="images/net.jpg" />
 		<texture id="chair1texture" file="images/chair1.jpg" />
 		<texture id="chair2texture" file="images/chair2.jpg" />
+		<!-- <texture id="curry" file="images/lebron.png" /> -->
 	</textures>
 	<materials>
 		<material id="defmaterial" shininess = "1">
@@ -226,7 +227,7 @@
 		<!-- Bola de Basket. -->
 		<component id="basketball">
 			<transformation>
-				<translate x="-8" y="3.7" z="2" />
+				<!-- <translate x="-8" y="3.7" z="2" /> -->
 				<scale x="0.25" y="0.25" z="0.25" />
 			</transformation>
 			<materials>
@@ -773,6 +774,18 @@
 				<componentref id="rightchairs" />
 			</children>
 		</component>
+		<!-- <component id="head">
+			<transformation>
+				<translate x="2" y="2" z="2" />
+			</transformation>
+			<materials>
+				<material id="white" />
+			</materials>
+			<texture id="curry" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="sphere" />
+			</children>
+		</component> -->
 		<!-- Campo de Basket -->
 		<component id="court">
 			<transformation>
@@ -789,6 +802,7 @@
 				<componentref id="scoreboard" />
 				<componentref id="basketball" />
 				<componentref id="allchairs" />
+				<!-- <componentref id="head"> -->
 			</children>
 		</component>
 	</components>

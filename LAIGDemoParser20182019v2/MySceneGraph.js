@@ -1566,6 +1566,12 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.root.display(this.scene.defaultMaterial, this.scene.defaultTexture, "none", 1.0, 1.0);
+        this.scene.pushMatrix();
+
+        this.scene.animation.animate();
+
+        this.root.display(this.scene.defaultMaterial, this.scene.defaultTexture, 1.0, 1.0);
+
+        this.scene.popMatrix();
     }
 }

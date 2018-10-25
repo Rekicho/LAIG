@@ -31,9 +31,9 @@ class MySphere extends CGFobject {
 				this.radius * Math.sin(angsl) * Math.sin(angst),
 				-this.radius * Math.cos(angst));
 
-				this.normals.push(this.radius * Math.cos(angsl) * Math.sin(angst),
-				this.radius * Math.sin(angsl) * Math.sin(angst),
-				-this.radius * Math.cos(angst));
+				this.normals.push(Math.cos(angsl) * Math.sin(angst),
+				Math.sin(angsl) * Math.sin(angst),
+				-Math.cos(angst));
 
 				this.texCoords.push(1 - (i / this.slices), 1 - (j / this.stacks));
 			}
