@@ -42,7 +42,7 @@ class XMLscene extends CGFscene {
 
         this.materialsIndex = 0;
 
-        this.animation = new LinearAnimation(this, 10, [[0,0,0],[1,0,0],[2,0,0],[2,2,0]]);
+        this.animation = new LinearAnimation(this, 10, [[0,0,0],[0,-10,-10],[10,10,10]]);
 
         this.setUpdatePeriod(1000/FPS);
     }

@@ -37,14 +37,24 @@ class LinearAnimation extends Animation {
         this.y = (this.controlPoints[this.pos + 1][1] -  this.controlPoints[this.pos][1]) * (this.timeinPos / this.timeinPoint[this.pos]) + this.controlPoints[this.pos][1];
         this.z = (this.controlPoints[this.pos + 1][2] -  this.controlPoints[this.pos][2]) * (this.timeinPos / this.timeinPoint[this.pos]) + this.controlPoints[this.pos][2];
 
-        this.angle = Math.atan((this.controlPoints[this.pos + 1][0] - this.controlPoints[this.pos][0]) / ((this.controlPoints[this.pos + 1][2] - this.controlPoints[this.pos][2])));
+        this.angle = Math.atan((this.controlPoints[this.pos + 1][0] - this.controlPoints[this.pos][0]) / (this.controlPoints[this.pos + 1][2] - this.controlPoints[this.pos][2]));
 
         if(this.controlPoints[this.pos + 1][0] - this.controlPoints[this.pos][0] == 0)
             this.angle = 0;
+
+        if(this.controlPoints[this.pos + 1][2] < this.controlPoints[this.pos][2])
+            this.angle += Math.PI;
     };
 
     apply(){
         this.scene.translate(this.x,this.y,this.z);
+
+        this.scene.pushMatrix();
+        this.scene.loadIdentity();
         this.scene.rotate(this.angle,0,1,0);
+        var rotateMatrix = this.scene.getMatrix();
+        this.scene.popMatrix();
+
+        this.scene.multMatrix(rotateMatrix);
     };
 }
