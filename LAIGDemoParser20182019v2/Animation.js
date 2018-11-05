@@ -7,5 +7,8 @@ class Animation {
 
     update(time){
         this.timePassed += time;
-    }
+        this.timePassed %= this.time;
+    };
+
+    apply(){};
 }

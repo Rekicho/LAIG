@@ -3,23 +3,48 @@ class LinearAnimation extends Animation {
         super(scene,time);
         this.controlPoints = controlPoints;
 
-        console.log(this.controlPoints);
+        this.x = this.controlPoints[0][0];
+        this.y = this.controlPoints[0][1];
+        this.z = this.controlPoints[0][2];
 
-        this.timePerPoint = time / (this.controlPoints.length - 1);
+        this.angle = 0;
+
+        var distance = 0;
+        this.timeinPoint = [];
+
+        for(var i = 0; i < this.controlPoints.length - 1; i++)
+            distance += Math.sqrt(Math.pow(this.controlPoints[i+1][0]-this.controlPoints[i][0],2)+Math.pow(this.controlPoints[i+1][1]-this.controlPoints[i][1],2)+Math.pow(this.controlPoints[i+1][2]-this.controlPoints[i][2],2));
+            
+
+        for(var i = 0; i < this.controlPoints.length - 1; i++)
+            this.timeinPoint.push(this.time * Math.sqrt(Math.pow(this.controlPoints[i+1][0]-this.controlPoints[i][0],2)+Math.pow(this.controlPoints[i+1][1]-this.controlPoints[i][1],2)+Math.pow(this.controlPoints[i+1][2]-this.controlPoints[i][2],2)) / distance);
+        
+        this.pos = 0;
+        this.timeinPos = 0;
     };
 
-    animate(){
-        this.timePassed %= this.time;
+    update(time){
+        super.update(time);
+        this.timeinPos += time;
 
-        var pos = Math.floor(this.timePassed / this.timePerPoint);
-        var timeInPoint = (this.timePassed % this.timePerPoint) / this.timePerPoint;
+        if(this.timeinPos > this.timeinPoint[this.pos]){
+            this.timeinPos -= this.timeinPoint[this.pos];
+            this.pos++;
+            this.pos %= this.timeinPoint.length;
+        }
 
-        var x = (this.controlPoints[pos + 1][0] -  this.controlPoints[pos][0]) * timeInPoint + this.controlPoints[pos][0];
-        var y = (this.controlPoints[pos + 1][1] -  this.controlPoints[pos][1]) * timeInPoint + this.controlPoints[pos][1];
-        var z = (this.controlPoints[pos + 1][2] -  this.controlPoints[pos][2]) * timeInPoint + this.controlPoints[pos][2];
-        
-        this.scene.translate(x,y,z);
+        this.x = (this.controlPoints[this.pos + 1][0] -  this.controlPoints[this.pos][0]) * (this.timeinPos / this.timeinPoint[this.pos]) + this.controlPoints[this.pos][0];
+        this.y = (this.controlPoints[this.pos + 1][1] -  this.controlPoints[this.pos][1]) * (this.timeinPos / this.timeinPoint[this.pos]) + this.controlPoints[this.pos][1];
+        this.z = (this.controlPoints[this.pos + 1][2] -  this.controlPoints[this.pos][2]) * (this.timeinPos / this.timeinPoint[this.pos]) + this.controlPoints[this.pos][2];
 
-        //TODO: weird rotation shit
-    }
+        this.angle = Math.atan((this.controlPoints[this.pos + 1][0] - this.controlPoints[this.pos][0]) / ((this.controlPoints[this.pos + 1][2] - this.controlPoints[this.pos][2])));
+
+        if(this.controlPoints[this.pos + 1][0] - this.controlPoints[this.pos][0] == 0)
+            this.angle = 0;
+    };
+
+    apply(){
+        this.scene.translate(this.x,this.y,this.z);
+        this.scene.rotate(this.angle,0,1,0);
+    };
 }

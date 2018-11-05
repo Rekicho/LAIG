@@ -1568,7 +1568,7 @@ class MySceneGraph {
     displayScene() {
         this.scene.pushMatrix();
 
-        this.scene.animation.animate();
+        this.scene.animation.apply();
 
         this.root.display(this.scene.defaultMaterial, this.scene.defaultTexture, 1.0, 1.0);
 
