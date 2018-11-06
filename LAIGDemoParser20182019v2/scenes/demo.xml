@@ -1,5 +1,5 @@
 <yas>
-	<scene root="scoreboard" axis_length="3" />
+	<scene root="court" axis_length="3" />
 	<views default="front">
 		<perspective id="front" near="0.1" far="100.0" angle="45.0">
 			<from x="0.0" y="10.0" z="25.0" />
@@ -111,6 +111,14 @@
 			<translate x="0" y="0" z="0.5" />
 		</transformation>
 	</transformations>
+	<animations>
+		<linear id="linear" span="10">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="1" yy="0" zz="0" />
+			<controlpoint xx="1" yy="1" zz="0" />
+		</linear>
+		<circular id="circular" span="10" center="10 10 10" radius="5" startang="40" rotang="20" />
+	</animations>
 	<primitives>
 		<primitive id="square">
 			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
@@ -481,7 +489,7 @@
 		<component id="scoreboard">
 			<transformation>
 				<scale x="1.5" y="1.5" z="1" />
-				<!-- <translate x="0" y="6" z="0" /> -->
+				<translate x="0" y="6" z="0" />
 			</transformation>
 			<materials>
 				<material id="scorematerial" />
@@ -633,7 +641,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="inherit" length_s="1.0" length_t="1.0"/>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="leg1" />
 				<componentref id="leg2" />

@@ -8,8 +8,9 @@ var LIGHTS_INDEX = 3;
 var TEXTURES_INDEX = 4;
 var MATERIALS_INDEX = 5;
 var TRANSFORMATIONS_INDEX = 6;
-var PRIMITIVES_INDEX = 7;
-var COMPONENTS_INDEX = 8;
+var ANIMATIONS_INDEX = 7;
+var PRIMITIVES_INDEX = 8;
+var COMPONENTS_INDEX = 9;
 
 /**
  * MySceneGraph class, representing the scene graph.
@@ -41,6 +42,7 @@ class MySceneGraph {
         this.textures = [];
         this.materials = [];
         this.transformations = [];
+        this.animations = [];
 
         this.primitives = [];
         this.components = [];
@@ -183,6 +185,18 @@ class MySceneGraph {
 
             //Parse scene block
             if ((error = this.parseTransformations(nodes[index])) != null)
+                return error;
+        }
+
+        // <animations>
+        if ((index = nodeNames.indexOf("animations")) == -1)
+            return "tag <animations> missing";
+        else {
+            if (index != ANIMATIONS_INDEX)
+                this.onXMLMinorError("tag <animations> out of order");
+
+            //Parse scene block
+            if ((error = this.parseAnimations(nodes[index])) != null)
                 return error;
         }
 
@@ -1097,13 +1111,130 @@ class MySceneGraph {
     }
 
     /**
+     * Parses the <animations> block.
+     */
+    parseAnimations(animationsNode) {
+        var children = animationsNode.children;
+        var error;
+
+        // Any number of transformations.
+        for (var i = 0; i < children.length; i++) {
+            switch (children[i].nodeName) {
+                case "linear": if ((error = this.parseLinearAnimation(children[i])) != null)
+                    return error;
+                    break;
+                case "circular": if ((error = this.parseCircularAnimation(children[i])) != null)
+                    return error;
+                    break;
+                default: this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                    continue;
+            }
+        }
+
+        this.log("Parsed animations");
+
+        console.log(this.animations);
+
+        return null;
+    }
+
+    parseLinearAnimation(linearanimationNode) {
+        var animationId = this.reader.getString(linearanimationNode, 'id');
+        if (animationId == null)
+            return "no ID defined for animation";
+
+        // Checks for repeated IDs.
+        if (this.animations[animationId] != null)
+            return "ID must be unique for each animations (conflict: ID = " + animationId + ")";
+
+        // span
+        var span = this.reader.getFloat(linearanimationNode, 'span');
+        if (!(span != null && !isNaN(span)))
+            return "unable to parse span of the animation for ID = " + animationId;
+
+        var children = linearanimationNode.children;
+
+        var controlPoints = [];
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeName != "controlpoint") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // xx
+            var xx = this.reader.getFloat(children[i], 'xx');
+            if (!(xx != null && !isNaN(xx)))
+                return "unable to parse xx-coordinate of control point for ID = " + animationId;
+
+            // y
+            var yy = this.reader.getFloat(children[i], 'yy');
+            if (!(yy != null && !isNaN(yy)))
+                return "unable to parse yy-coordinate of control point for ID = " + animationId;
+
+            // zz
+            var zz = this.reader.getFloat(children[i], 'zz');
+            if (!(zz != null && !isNaN(zz)))
+                return "unable to parse zz-coordinate of control point for ID = " + animationId;
+
+            controlPoints.push([xx, yy, zz]);
+        }
+
+        if (controlPoints.length < 2)
+            return "at least two control point must be defined for animation" + animationId;
+
+        this.animations[animationId] = new LinearAnimation(this.scene, span, controlPoints);
+
+        return null;
+    }
+
+    parseCircularAnimation(circularanimationNode) {
+        var animationId = this.reader.getString(circularanimationNode, 'id');
+        if (animationId == null)
+            return "no ID defined for animation";
+
+        // Checks for repeated IDs.
+        if (this.animations[animationId] != null)
+            return "ID must be unique for each animations (conflict: ID = " + animationId + ")";
+
+        // span
+        var span = this.reader.getFloat(circularanimationNode, 'span');
+        if (!(span != null && !isNaN(span)))
+            return "unable to parse span of the animation for ID = " + animationId;
+
+        // center
+        var center = this.reader.getVector3(circularanimationNode, 'center');
+        if (center == null)
+            return "unable to parse center of the animation for ID = " + animationId;
+
+        // radius
+        var radius = this.reader.getFloat(circularanimationNode, 'radius');
+        if (!(radius != null && !isNaN(radius)))
+            return "unable to parse radius of the animation for ID = " + animationId;
+
+        // startang
+        var startang = this.reader.getFloat(circularanimationNode, 'startang');
+        if (!(startang != null && !isNaN(startang)))
+            return "unable to parse startang of the animation for ID = " + animationId;
+
+        // rotang
+        var rotang = this.reader.getFloat(circularanimationNode, 'rotang');
+        if (!(rotang != null && !isNaN(rotang)))
+            return "unable to parse rotang of the animation for ID = " + animationId;
+
+        this.animations[animationId] = new CircularAnimation(this.scene, span, center, radius, startang, rotang);
+
+        return null;
+    }
+
+    /**
      * Parses the <primitives> block.
      */
     parsePrimitives(primitivesNode) {
 
         var children = primitivesNode.children;
 
-        if (primitivesNode.children == 0)
+        if (children.length == 0)
             return "at least one primitive must be defined";
 
         this.primitives = [];
@@ -1460,12 +1591,12 @@ class MySceneGraph {
                 return "texture " + textureId + " not defined (from component ID=" + componentId + ")";
 
             // length_s
-            var length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s');
+            var length_s = this.reader.getFloat(grandChildren[textureIndex], 'length_s', false);
             if (!(length_s != null && !isNaN(length_s) && length_s >= 0) && !(textureId == "inherit" || textureId == "none"))
                 return "unable to parse length_s of texture of compoment for ID = " + componentId;
 
             // length_t
-            var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t');
+            var length_t = this.reader.getFloat(grandChildren[textureIndex], 'length_t', false);
             if (!(length_t != null && !isNaN(length_t) && length_t >= 0) && !(textureId == "inherit" || textureId == "none"))
                 return "unable to parse length_t of texture of compoment for ID = " + componentId;
 
@@ -1566,12 +1697,6 @@ class MySceneGraph {
      * Displays the scene, processing each node, starting in the root node.
      */
     displayScene() {
-        this.scene.pushMatrix();
-
-        this.scene.animation.apply();
-
         this.root.display(this.scene.defaultMaterial, this.scene.defaultTexture, 1.0, 1.0);
-
-        this.scene.popMatrix();
     }
 }

@@ -25,6 +25,7 @@ class LinearAnimation extends Animation {
 
     update(time){
         super.update(time);
+        this.timePassed %= this.time;
         this.timeinPos += time;
 
         if(this.timeinPos > this.timeinPoint[this.pos]){
@@ -49,12 +50,12 @@ class LinearAnimation extends Animation {
     apply(){
         this.scene.translate(this.x,this.y,this.z);
 
-        this.scene.pushMatrix();
-        this.scene.loadIdentity();
+        //this.scene.pushMatrix();
+        //this.scene.loadIdentity();
         this.scene.rotate(this.angle,0,1,0);
-        var rotateMatrix = this.scene.getMatrix();
-        this.scene.popMatrix();
+        //var rotateMatrix = this.scene.getMatrix();
+        //this.scene.popMatrix();
 
-        this.scene.multMatrix(rotateMatrix);
+        //this.scene.multMatrix(rotateMatrix);
     };
 }

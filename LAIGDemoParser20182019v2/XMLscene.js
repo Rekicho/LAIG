@@ -41,10 +41,6 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
         this.materialsIndex = 0;
-
-        this.animation = new LinearAnimation(this, 10, [[0,0,0],[0,-10,-10],[10,10,10]]);
-
-        this.setUpdatePeriod(1000/FPS);
     }
 
     /**
@@ -125,6 +121,8 @@ class XMLscene extends CGFscene {
         this.activeTexture = null;
 
         this.sceneInited = true;
+
+        this.setUpdatePeriod(1000/FPS);
     }
 
     /**
@@ -193,10 +191,9 @@ class XMLscene extends CGFscene {
 
     update(currTime){
         this.lastTime = this.lastTime || 0;
-        var deltaTime = currTime - this.lastTime;
         
-        if(this.lastTime != 0)
-            this.animation.update(deltaTime / 1000);
+        //if(this.lastTime != 0)
+            //this.animation.update((currTime - this.lastTime) / 1000);
 
 		this.lastTime = currTime;
     }
