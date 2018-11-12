@@ -41,8 +41,6 @@ class XMLscene extends CGFscene {
         this.axis = new CGFaxis(this);
 
         this.materialsIndex = 0;
-
-        this.plane = new Plane(this,10,10);
     }
 
     /**
@@ -178,10 +176,6 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
-
-            // Displays the scene (MySceneGraph function).
-            //this.graph.displayScene();
-            this.plane.display();
         }
         else {
             // Draw axis
