@@ -13,12 +13,16 @@ class CircularAnimation extends Animation {
     update(time) {
         super.update(time);
 
-        this.currang = this.startang + (this.timePassed * this.velocity);
+        if (!this.finished) {
+            this.currang = this.startang + (this.timePassed * this.velocity);
+        }
     };
 
     apply() {
-        this.scene.translate(this.center[0], this.center[1], this.center[2]);
-        this.scene.rotate(this.currang, 0, 1, 0);
-        this.scene.translate(this.radius, 0, 0);
+        if (!this.finished) {
+            this.scene.translate(this.center[0], this.center[1], this.center[2]);
+            this.scene.rotate(this.currang, 0, 1, 0);
+            this.scene.translate(this.radius, 0, 0);
+        }
     };
 }

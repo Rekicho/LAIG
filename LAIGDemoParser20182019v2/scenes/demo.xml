@@ -237,6 +237,10 @@
 				<translate x="-8" y="3.7" z="2" />
 				<scale x="0.25" y="0.25" z="0.25" />
 			</transformation>
+			<animations>
+				<animationref id="linear" />
+				<animationref id="circular" />
+			</animations>
 			<materials>
 				<material id="defmaterial" />
 			</materials>

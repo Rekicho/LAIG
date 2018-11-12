@@ -5,10 +5,11 @@
  */
 
 class MyComponent extends CGFobject {
-	constructor(scene, transformation, materials, texture, length_s, length_t, componentRef, primitives) {
+	constructor(scene, transformation, animations, materials, texture, length_s, length_t, componentRef, primitives) {
 		super(scene);
 
 		this.transformation = transformation;
+		this.animations = animations;
 		this.materials = materials;
 		this.texture = texture;
 		this.length_s = length_s;
@@ -57,6 +58,9 @@ class MyComponent extends CGFobject {
 		if (this.transformation != null)
 			this.scene.multMatrix(this.transformation);
 
+		for (var i = 0; i < this.animations.length; i++)
+			this.animations[i].apply();
+
 		for (var i = 0; i < this.primitives.length; i++) {
 			this.primitives[i].changeTex(temporary_s, temporary_t);
 			this.primitives[i].display();
@@ -85,5 +89,18 @@ class MyComponent extends CGFobject {
 		}
 
 		return null;
+	};
+
+	//TODO: Same animation in different components
+	update(time) {
+		for (var i = 0; i < this.animations.length; i++)
+		{
+			this.animations[i].update(time);
+			if(!this.animations[i].finished)
+				break;
+		}
+
+		for (var i = 0; i < this.children.length; i++)
+			this.children[i].update(time);
 	};
 };

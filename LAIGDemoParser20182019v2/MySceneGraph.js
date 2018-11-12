@@ -1133,8 +1133,6 @@ class MySceneGraph {
 
         this.log("Parsed animations");
 
-        console.log(this.animations);
-
         return null;
     }
 
@@ -1498,6 +1496,7 @@ class MySceneGraph {
             var materialsIndex = nodeNames.indexOf("materials");
             var textureIndex = nodeNames.indexOf("texture");
             var childrenIndex = nodeNames.indexOf("children");
+            var animationsIndex = nodeNames.indexOf("animations");
 
             // Transformation
             if (transformationIndex == -1)
@@ -1505,7 +1504,7 @@ class MySceneGraph {
 
             var greatChildren = grandChildren[transformationIndex].children;
 
-            if (greatChildren.length < 0)
+            if (greatChildren.length == 0)
                 return "no transformations for component id=" + componentId;
 
             nodeNames = [];
@@ -1542,13 +1541,26 @@ class MySceneGraph {
 
             this.scene.loadIdentity();
 
+            //Animations
+            var animations = [];
+
+            if (animationsIndex != -1) {
+                var greatChildren = grandChildren[animationsIndex].children;
+
+                for (var j = 0; j < greatChildren.length; j++) {
+                    var animationId = this.reader.getString(greatChildren[j], 'id');
+
+                    animations.push(this.animations[animationId]);
+                }
+            }
+
             //Materials
             if (materialsIndex == -1)
                 return "no materials block for component id=" + componentId;
 
             greatChildren = grandChildren[materialsIndex].children;
 
-            if (greatChildren.length < 0)
+            if (greatChildren.length == 0)
                 return "no materials for component id=" + componentId;
 
             var materialId;
@@ -1558,7 +1570,7 @@ class MySceneGraph {
                 materialId = this.reader.getString(greatChildren[j], 'id');
 
                 if (materialId == null)
-                    return "no ID defined for materialId of component ID=" + componentId;
+                    return "no ID defined for material of component ID=" + componentId;
 
                 if (materialId == "inherit")
                     materials[j] = materialId;
@@ -1606,7 +1618,7 @@ class MySceneGraph {
 
             greatChildren = grandChildren[childrenIndex].children;
 
-            if (greatChildren.length < 0)
+            if (greatChildren.length == 0)
                 return "no children for component id=" + componentId;
 
             var componentRef = [];
@@ -1651,7 +1663,7 @@ class MySceneGraph {
                 children_primitives.push(this.primitives[primitiveRef[j]]);
             }
 
-            var component = new MyComponent(this.scene, transformation, materials, texture, length_s, length_t, componentRef, children_primitives);
+            var component = new MyComponent(this.scene, transformation, animations, materials, texture, length_s, length_t, componentRef, children_primitives);
 
             this.components[componentId] = component;
 

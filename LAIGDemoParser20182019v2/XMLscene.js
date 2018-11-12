@@ -192,8 +192,8 @@ class XMLscene extends CGFscene {
     update(currTime){
         this.lastTime = this.lastTime || 0;
         
-        //if(this.lastTime != 0)
-            //this.animation.update((currTime - this.lastTime) / 1000);
+        if(this.lastTime != 0)
+            this.graph.root.update((currTime - this.lastTime) / 1000);
 
 		this.lastTime = currTime;
     }
