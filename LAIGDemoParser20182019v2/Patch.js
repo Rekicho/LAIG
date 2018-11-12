@@ -1,8 +1,8 @@
 class Patch extends CGFobject {
-    constructor(scene, npointsU, npointsV, npartsU, npartsV, controlPoints) {
+    constructor(scene, npointsU, npointsV, npartsU, npartsV, controlpoints) {
         super(scene);
 
-        var nurbsSurface = new CGFnurbsSurface(npointsU - 1, npointsV - 1, controlPoints);
+        var nurbsSurface = new CGFnurbsSurface(npointsU - 1, npointsV - 1, controlpoints);
         this.nurbsObject = new CGFnurbsObject(scene, npartsU, npartsV, nurbsSurface);
     };
 
@@ -10,4 +10,5 @@ class Patch extends CGFobject {
         this.nurbsObject.display();
     };
 
+    changeTex(length_s, length_t) { };
 };

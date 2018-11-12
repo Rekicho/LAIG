@@ -176,6 +176,9 @@ class XMLscene extends CGFscene {
                     i++;
                 }
             }
+
+            // Displays the scene (MySceneGraph function).
+            this.graph.displayScene();
         }
         else {
             // Draw axis

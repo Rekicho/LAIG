@@ -1,5 +1,5 @@
 <yas>
-	<scene root="court" axis_length="3" />
+	<scene root="patch" axis_length="3" />
 	<views default="front">
 		<perspective id="front" near="0.1" far="100.0" angle="45.0">
 			<from x="0.0" y="10.0" z="25.0" />
@@ -134,6 +134,19 @@
 		</primitive >
 		<primitive id="torus">
 			<torus inner="0.25" outer="1" slices="20" loops="20" />
+		</primitive >
+		<primitive id="plane">
+			<plane npartsU="10" npartsV="10" />
+		</primitive >
+		<primitive id="patch">
+			<patch npointsU="3" npointsV="2" npartsU="10" npartsV="10">
+				<controlpoint xx="-1.5" yy="-1.5" zz="0" />
+				<controlpoint xx="-1.5" yy="1.5" zz="0" />
+				<controlpoint xx="0" yy="-1.5" zz="3" />
+				<controlpoint xx="0" yy="1.5" zz="3" />
+				<controlpoint xx="1.5" yy="-1.5" zz="0" />
+				<controlpoint xx="1.5" yy="1.5" zz="0" />
+			</patch>
 		</primitive >
 	</primitives >
 	<components>
@@ -801,6 +814,30 @@
 				<componentref id="scoreboard" />
 				<componentref id="basketball" />
 				<componentref id="allchairs" />
+			</children>
+		</component>
+		<component id="plane">
+			<transformation>
+				<scale x="10" y="10" z="10" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="plane" />
+			</children>
+		</component>
+		<component id="patch">
+			<transformation>
+				<scale x="10" y="10" z="10" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="patch" />
 			</children>
 		</component>
 	</components>

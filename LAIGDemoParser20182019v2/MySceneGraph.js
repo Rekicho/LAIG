@@ -1275,16 +1275,19 @@ class MySceneGraph {
                 case "triangle": if ((error = this.parseTriangle(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
-
                 case "cylinder": if ((error = this.parseCylinder(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
-
                 case "sphere": if ((error = this.parseSphere(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
-
                 case "torus": if ((error = this.parseTorus(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
+                case "plane": if ((error = this.parsePlane(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
+                case "patch": if ((error = this.parsePatch(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
 
@@ -1448,6 +1451,86 @@ class MySceneGraph {
             return "unable to parse loops of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MyTorus(this.scene, inner, outer, slices, loops);
+
+        return null;
+    }
+
+    parsePlane(planeNode, primitiveId) {
+        // npartsU
+        var npartsU = this.reader.getInteger(planeNode, 'npartsU');
+        if (!(npartsU != null && !isNaN(npartsU) && npartsU > 0))
+            return "unable to parse npartsU of the primitive for ID = " + primitiveId;
+
+        // npartsV
+        var npartsV = this.reader.getInteger(planeNode, 'npartsV');
+        if (!(npartsV != null && !isNaN(npartsV) && npartsV > 0))
+            return "unable to parse npartsV of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new Plane(this.scene, npartsU, npartsV);
+
+        return null;
+    }
+
+    parsePatch(patchNode, primitiveId) {
+        // npointsU
+        var npointsU = this.reader.getInteger(patchNode, 'npointsU');
+        if (!(npointsU != null && !isNaN(npointsU) && npointsU > 0))
+            return "unable to parse npointsU of the primitive for ID = " + primitiveId;
+
+        // npointsV
+        var npointsV = this.reader.getInteger(patchNode, 'npointsV');
+        if (!(npointsV != null && !isNaN(npointsV) && npointsV > 0))
+            return "unable to parse npointsV of the primitive for ID = " + primitiveId;
+
+        // npartsU
+        var npartsU = this.reader.getInteger(patchNode, 'npartsU');
+        if (!(npartsU != null && !isNaN(npartsU) && npartsU > 0))
+            return "unable to parse npartsU of the primitive for ID = " + primitiveId;
+
+        // npartsV
+        var npartsV = this.reader.getInteger(patchNode, 'npartsV');
+        if (!(npartsV != null && !isNaN(npartsV) && npartsV > 0))
+            return "unable to parse npartsV of the primitive for ID = " + primitiveId;
+
+        var children = patchNode.children;
+
+        if (children.length != npointsU * npointsV)
+            return "number of patch " + primitiveId + " control points should be " + (npointsU * npointsV) + " (npointsU * npointsV) but is " + children.length;
+
+
+        var controlpoints = [];
+        var points = [];
+
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeName != "controlpoint") {
+                this.onXMLMinorError("unknown tag <" + children[i].nodeName + ">");
+                continue;
+            }
+
+            // xx
+            var xx = this.reader.getFloat(children[i], 'xx');
+            if (!(xx != null && !isNaN(xx)))
+                return "unable to parse xx-coordinate of control point of patch for ID = " + primitiveId;
+
+            // yy
+            var yy = this.reader.getFloat(children[i], 'yy');
+            if (!(yy != null && !isNaN(yy)))
+                return "unable to parse yy-coordinate of control point of patch for ID = " + primitiveId;
+
+            // zz
+            var zz = this.reader.getFloat(children[i], 'zz');
+            if (!(zz != null && !isNaN(zz)))
+                return "unable to parse zz-coordinate of control point of patch for ID = " + primitiveId;
+
+            points.push([xx, yy, zz, 1]);
+
+            if ((i + 1) % npointsV == 0) {
+                controlpoints.push(points);
+                points = [];
+            }
+        }
+
+        this.primitives[primitiveId] = new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlpoints);
 
         return null;
     }
