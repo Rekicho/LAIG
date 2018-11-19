@@ -1220,7 +1220,7 @@ class MySceneGraph {
         if (!(rotang != null && !isNaN(rotang)))
             return "unable to parse rotang of the animation for ID = " + animationId;
 
-        this.animations[animationId] = new MyCircularAnimation(this.scene, span, center, radius, startang, rotang);
+        this.animations[animationId] = new MyCircularAnimation(this.scene, span, center, radius, startang * DEGREE_TO_RAD, rotang * DEGREE_TO_RAD);
 
         return null;
     }
@@ -1293,6 +1293,12 @@ class MySceneGraph {
                 case "vehicle": this.primitives[primitiveId] = new MyVehicle(this.scene);
                     break;
                 case "cylinder2": if ((error = this.parseCylinder2(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
+                case "terrain": if ((error = this.parseTerrain(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
+                case "water": if ((error = this.parseWater(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
 
@@ -1567,6 +1573,81 @@ class MySceneGraph {
             return "unable to parse stacks of the primitive for ID = " + primitiveId;
 
         this.primitives[primitiveId] = new MyCylinder2(this.scene, base, top, height, slices, stacks);
+
+        return null;
+    }
+
+    parseTerrain(terrainNode, primitiveId) {
+        // idtexture
+        var idtexture = this.reader.getString(terrainNode, 'idtexture');
+        if (idtexture == null)
+            return "unable to parse idtexture of the primitive for ID = " + primitiveId;
+
+        var texture = this.textures[idtexture];
+        if (texture == null)
+            return "texture " + idtexture + "not found";
+
+        // idheightmap
+        var idheightmap = this.reader.getString(terrainNode, 'idheightmap');
+        if (idheightmap == null)
+            return "unable to parse idheightmap of the primitive for ID = " + primitiveId;
+
+        var heightmap = this.textures[idheightmap];
+        if (heightmap == null)
+            return "texture " + idheightmap + "not found";
+
+        //parts
+        var parts = this.reader.getInteger(terrainNode, 'parts');
+        if (!(parts != null && !isNaN(parts) && parts > 0))
+            return "unable to parse parts of the primitive for ID = " + primitiveId;
+
+        // heightscale
+        var heightscale = this.reader.getFloat(terrainNode, 'heightscale');
+        if (!(heightscale != null && !isNaN(heightscale) && heightscale >= 0))
+            return "unable to parse heightscale of the primitive for ID = " + primitiveId;
+
+
+        this.primitives[primitiveId] = new MyTerrain(this.scene, texture, heightmap, parts, heightscale);
+
+        return null;
+    }
+
+    parseWater(waterNode, primitiveId) {
+        // idtexture
+        var idtexture = this.reader.getString(waterNode, 'idtexture');
+        if (idtexture == null)
+            return "unable to parse idtexture of the primitive for ID = " + primitiveId;
+
+        var texture = this.textures[idtexture];
+        if (texture == null)
+            return "texture " + idtexture + "not found";
+
+        // idwavemap
+        var idwavemap = this.reader.getString(waterNode, 'idheightmap');
+        if (idwavemap == null)
+            return "unable to parse idwavemap of the primitive for ID = " + primitiveId;
+
+        var wavemap = this.textures[idwavemap];
+        if (wavemap == null)
+            return "texture " + idwavemap + "not found";
+
+        //parts
+        var parts = this.reader.getInteger(waterNode, 'parts');
+        if (!(parts != null && !isNaN(parts) && parts > 0))
+            return "unable to parse parts of the primitive for ID = " + primitiveId;
+
+        // heightscale
+        var heightscale = this.reader.getFloat(waterNode, 'heightscale');
+        if (!(heightscale != null && !isNaN(heightscale) && heightscale >= 0))
+            return "unable to parse heightscale of the primitive for ID = " + primitiveId;
+
+        // texscale
+        var texscale = this.reader.getFloat(waterNode, 'texscale');
+        if (!(texscale != null && !isNaN(texscale) && texscale >= 0))
+            return "unable to parse texscale of the primitive for ID = " + primitiveId;
+
+
+        this.primitives[primitiveId] = new MyWater(this.scene, texture, heightmap, parts, heightscale, texscale);
 
         return null;
     }

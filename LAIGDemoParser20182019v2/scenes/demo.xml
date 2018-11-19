@@ -113,12 +113,11 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="linear" span="10">
+		<linear id="linear" span="2.5">
 			<controlpoint xx="0" yy="0" zz="0" />
-			<controlpoint xx="1" yy="0" zz="0" />
-			<controlpoint xx="1" yy="1" zz="0" />
+			<controlpoint xx="0" yy="10" zz="0" />
 		</linear>
-		<circular id="circular" span="10" center="10 10 10" radius="5" startang="40" rotang="20" />
+		<circular id="circular" span="10" center="0 0 0" radius="0" startang="0" rotang="1000000" />
 	</animations>
 	<primitives>
 		<primitive id="square">
@@ -155,6 +154,12 @@
 		<primitive id="cylinder2">
 			<cylinder2 base="0.5" top="0.3" height="1" slices="20" stacks="20" />
 		</primitive >
+		<!-- <primitive id="terrain">
+			<terrain idtexture="colors" idheightmap="colors" parts="10" heightscale="5" />
+		</primitive > -->
+		<!-- <primitive id="water">
+			<water idtexture="colors" idwavemap="colors" parts="10" heightscale="5" texscale="5" />
+		</primitive > -->
 	</primitives >
 	<components>
 		<component id="face1">
@@ -848,8 +853,8 @@
 				<scale x="1" y="1" z="1" />
 			</transformation>
 			<animations>
-				<animationref id="linear" />
 				<animationref id="circular" />
+				<animationref id="linear" />
 			</animations>
 			<materials>
 				<material id="inherit" />
@@ -871,5 +876,29 @@
 				<primitiveref id="cylinder2" />
 			</children>
 		</component>
+		<!-- <component id="terrain">
+			<transformation>
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="terrain" />
+			</children>
+		</component> -->
+		<!-- <component id="water">
+			<transformation>
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="water" />
+			</children>
+		</component> -->
 	</components>
 </yas>

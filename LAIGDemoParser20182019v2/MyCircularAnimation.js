@@ -4,7 +4,6 @@ class MyCircularAnimation extends MyAnimation {
         this.center = center;
         this.radius = radius;
         this.startang = startang;
-        this.rotang = rotang;
 
         this.velocity = rotang / this.time;
         this.currang = startang;
