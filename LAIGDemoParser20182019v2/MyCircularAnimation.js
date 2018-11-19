@@ -1,4 +1,4 @@
-class CircularAnimation extends Animation {
+class MyCircularAnimation extends MyAnimation {
     constructor(scene, time, center, radius, startang, rotang) {
         super(scene, time);
         this.center = center;
@@ -19,7 +19,7 @@ class CircularAnimation extends Animation {
     };
 
     apply() {
-        if (!this.finished) {
+        if (this.started && !this.finished) {
             this.scene.translate(this.center[0], this.center[1], this.center[2]);
             this.scene.rotate(this.currang, 0, 1, 0);
             this.scene.translate(this.radius, 0, 0);

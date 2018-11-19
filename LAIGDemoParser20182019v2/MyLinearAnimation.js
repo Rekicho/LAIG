@@ -1,4 +1,4 @@
-class LinearAnimation extends Animation {
+class MyLinearAnimation extends MyAnimation {
     constructor(scene, time, controlPoints) {
         super(scene, time);
         this.controlPoints = controlPoints;
@@ -50,9 +50,9 @@ class LinearAnimation extends Animation {
     };
 
     apply() {
-        if (!this.finished) {
+        if (this.started && !this.finished) {
         this.scene.translate(this.x, this.y, this.z);
-        //this.scene.rotate(this.angle, 0, 1, 0);
+        this.scene.rotate(this.angle, 0, 1, 0);
         }
     };
 }

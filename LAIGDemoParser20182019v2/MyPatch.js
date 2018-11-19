@@ -1,4 +1,4 @@
-class Patch extends CGFobject {
+class MyPatch extends CGFobject {
     constructor(scene, npointsU, npointsV, npartsU, npartsV, controlpoints) {
         super(scene);
 

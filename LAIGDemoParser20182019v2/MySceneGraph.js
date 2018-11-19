@@ -1181,7 +1181,7 @@ class MySceneGraph {
         if (controlPoints.length < 2)
             return "at least two control point must be defined for animation" + animationId;
 
-        this.animations[animationId] = new LinearAnimation(this.scene, span, controlPoints);
+        this.animations[animationId] = new MyLinearAnimation(this.scene, span, controlPoints);
 
         return null;
     }
@@ -1220,7 +1220,7 @@ class MySceneGraph {
         if (!(rotang != null && !isNaN(rotang)))
             return "unable to parse rotang of the animation for ID = " + animationId;
 
-        this.animations[animationId] = new CircularAnimation(this.scene, span, center, radius, startang, rotang);
+        this.animations[animationId] = new MyCircularAnimation(this.scene, span, center, radius, startang, rotang);
 
         return null;
     }
@@ -1288,6 +1288,11 @@ class MySceneGraph {
                     return error;
                     break;
                 case "patch": if ((error = this.parsePatch(grandChildren[0], primitiveId)) != null)
+                    return error;
+                    break;
+                case "vehicle": this.primitives[primitiveId] = new MyVehicle(this.scene);
+                    break;
+                case "cylinder2": if ((error = this.parseCylinder2(grandChildren[0], primitiveId)) != null)
                     return error;
                     break;
 
@@ -1466,7 +1471,7 @@ class MySceneGraph {
         if (!(npartsV != null && !isNaN(npartsV) && npartsV > 0))
             return "unable to parse npartsV of the primitive for ID = " + primitiveId;
 
-        this.primitives[primitiveId] = new Plane(this.scene, npartsU, npartsV);
+        this.primitives[primitiveId] = new MyPlane(this.scene, npartsU, npartsV);
 
         return null;
     }
@@ -1530,7 +1535,38 @@ class MySceneGraph {
             }
         }
 
-        this.primitives[primitiveId] = new Patch(this.scene, npointsU, npointsV, npartsU, npartsV, controlpoints);
+        this.primitives[primitiveId] = new MyPatch(this.scene, npointsU, npointsV, npartsU, npartsV, controlpoints);
+
+        return null;
+    }
+
+    parseCylinder2(cylinder2Node, primitiveId) {
+        // base
+        var base = this.reader.getFloat(cylinder2Node, 'base');
+        if (!(base != null && !isNaN(base) && base >= 0))
+            return "unable to parse base of the primitive for ID = " + primitiveId;
+
+        // top
+        var top = this.reader.getFloat(cylinder2Node, 'top');
+        if (!(top != null && !isNaN(top) && top >= 0))
+            return "unable to parse top of the primitive for ID = " + primitiveId;
+
+        // height
+        var height = this.reader.getFloat(cylinder2Node, 'height');
+        if (!(height != null && !isNaN(height) && height >= 0))
+            return "unable to parse height of the primitive for ID = " + primitiveId;
+
+        // slices
+        var slices = this.reader.getInteger(cylinder2Node, 'slices');
+        if (!(slices != null && !isNaN(slices) && slices > 0))
+            return "unable to parse slices of the primitive for ID = " + primitiveId;
+
+        // stacks
+        var stacks = this.reader.getInteger(cylinder2Node, 'stacks');
+        if (!(stacks != null && !isNaN(stacks) && stacks > 0))
+            return "unable to parse stacks of the primitive for ID = " + primitiveId;
+
+        this.primitives[primitiveId] = new MyCylinder2(this.scene, base, top, height, slices, stacks);
 
         return null;
     }
