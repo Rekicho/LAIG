@@ -117,7 +117,7 @@
 			<controlpoint xx="0" yy="0" zz="0" />
 			<controlpoint xx="0" yy="10" zz="0" />
 		</linear>
-		<circular id="circular" span="10" center="0 0 0" radius="0" startang="0" rotang="1000000" />
+		<circular id="circular" span="2.5" center="0 0 0" radius="0" startang="0" rotang="3600" />
 	</animations>
 	<primitives>
 		<primitive id="square">
