@@ -47,6 +47,8 @@ class MySceneGraph {
         this.primitives = [];
         this.components = [];
 
+        this.waters = [];
+
         // File reading 
         this.reader = new CGFXMLreader();
 
@@ -1585,7 +1587,7 @@ class MySceneGraph {
 
         var texture = this.textures[idtexture];
         if (texture == null)
-            return "texture " + idtexture + "not found";
+            return "texture " + idtexture + " not found";
 
         // idheightmap
         var idheightmap = this.reader.getString(terrainNode, 'idheightmap');
@@ -1594,7 +1596,7 @@ class MySceneGraph {
 
         var heightmap = this.textures[idheightmap];
         if (heightmap == null)
-            return "texture " + idheightmap + "not found";
+            return "texture " + idheightmap + " not found";
 
         //parts
         var parts = this.reader.getInteger(terrainNode, 'parts');
@@ -1620,16 +1622,16 @@ class MySceneGraph {
 
         var texture = this.textures[idtexture];
         if (texture == null)
-            return "texture " + idtexture + "not found";
+            return "texture " + idtexture + " not found";
 
         // idwavemap
-        var idwavemap = this.reader.getString(waterNode, 'idheightmap');
+        var idwavemap = this.reader.getString(waterNode, 'idwavemap');
         if (idwavemap == null)
             return "unable to parse idwavemap of the primitive for ID = " + primitiveId;
 
         var wavemap = this.textures[idwavemap];
         if (wavemap == null)
-            return "texture " + idwavemap + "not found";
+            return "texture " + idwavemap + " not found";
 
         //parts
         var parts = this.reader.getInteger(waterNode, 'parts');
@@ -1646,8 +1648,9 @@ class MySceneGraph {
         if (!(texscale != null && !isNaN(texscale) && texscale >= 0))
             return "unable to parse texscale of the primitive for ID = " + primitiveId;
 
-
-        this.primitives[primitiveId] = new MyWater(this.scene, texture, heightmap, parts, heightscale, texscale);
+        var water = new MyWater(this.scene, texture, wavemap, parts, heightscale, texscale);
+        this.primitives[primitiveId] = water;
+        this.waters.push(water);
 
         return null;
     }

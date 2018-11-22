@@ -193,7 +193,12 @@ class XMLscene extends CGFscene {
         this.lastTime = this.lastTime || 0;
         
         if(this.lastTime != 0)
+        {
             this.graph.root.update((currTime - this.lastTime) / 1000);
+
+            for(var i = 0; i < this.graph.waters.length; i++)
+                this.graph.waters[i].update((currTime - this.lastTime) / 1000);
+        }
 
 		this.lastTime = currTime;
     }

@@ -1,8 +1,8 @@
 <yas>
-	<scene root="vehicle" axis_length="3" />
+	<scene root="mapa" axis_length="3" />
 	<views default="front">
-		<perspective id="front" near="0.1" far="100.0" angle="45.0">
-			<from x="0.0" y="10.0" z="25.0" />
+		<perspective id="front" near="1" far="1000.0" angle="45.0">
+			<from x="0.0" y="25.0" z="100.0" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
 		<perspective id="back" near="0.1" far="100.0" angle="45.0">
@@ -59,6 +59,10 @@
 		<texture id="chair1texture" file="images/chair1.jpg" />
 		<texture id="chair2texture" file="images/chair2.jpg" />
 		<texture id="colors" file="images/colors.jpg" />
+		<texture id="terrain" file="images/terrain.jpg" />
+		<texture id="heightmap" file="images/heightmap.jpg" />
+		<texture id="water" file="images/water.jpg" />
+		<texture id="wavemap" file="images/wavemap.jpg" />
 	</textures>
 	<materials>
 		<material id="defmaterial" shininess = "1">
@@ -113,11 +117,14 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<linear id="linear" span="2.5">
-			<controlpoint xx="0" yy="0" zz="0" />
-			<controlpoint xx="0" yy="10" zz="0" />
+		<linear id="linear" span="5">
+			<controlpoint xx="-10" yy="0" zz="0" />
+			<controlpoint xx="0" yy="0" zz="-10" />
+			<controlpoint xx="10" yy="10" zz="-10" />
+			<controlpoint xx="20" yy="20" zz="-15" />
+			<controlpoint xx="25" yy="20" zz="-15" />
 		</linear>
-		<circular id="circular" span="2.5" center="0 0 0" radius="0" startang="0" rotang="3600" />
+		<circular id="circular" span="2.5" center="0 0 0" radius="0" startang="-90" rotang="-3600" />
 	</animations>
 	<primitives>
 		<primitive id="square">
@@ -154,12 +161,12 @@
 		<primitive id="cylinder2">
 			<cylinder2 base="0.5" top="0.3" height="1" slices="20" stacks="20" />
 		</primitive >
-		<!-- <primitive id="terrain">
-			<terrain idtexture="colors" idheightmap="colors" parts="10" heightscale="5" />
+		<primitive id="terrain">
+			<terrain idtexture="terrain" idheightmap="heightmap" parts="100" heightscale="20" />
 		</primitive > -->
-		<!-- <primitive id="water">
-			<water idtexture="colors" idwavemap="colors" parts="10" heightscale="5" texscale="5" />
-		</primitive > -->
+		<primitive id="water">
+			<water idtexture="water" idwavemap="wavemap" parts="100" heightscale="2.5" texscale="10" />
+		</primitive >
 	</primitives >
 	<components>
 		<component id="face1">
@@ -854,7 +861,7 @@
 			</transformation>
 			<animations>
 				<animationref id="circular" />
-				<animationref id="linear" />
+				<!-- <animationref id="linear" /> -->
 			</animations>
 			<materials>
 				<material id="inherit" />
@@ -876,9 +883,10 @@
 				<primitiveref id="cylinder2" />
 			</children>
 		</component>
-		<!-- <component id="terrain">
+		<component id="terrain">
 			<transformation>
-				<scale x="1" y="1" z="1" />
+				<rotate axis="y" angle="180" />
+				<scale x="75" y="1" z="75" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -887,10 +895,11 @@
 			<children>
 				<primitiveref id="terrain" />
 			</children>
-		</component> -->
-		<!-- <component id="water">
+		</component>
+		<component id="water">
 			<transformation>
-				<scale x="1" y="1" z="1" />
+				<translate x="1" y="5" z="1" />
+				<scale x="100" y="1" z="100" />
 			</transformation>
 			<materials>
 				<material id="inherit" />
@@ -899,6 +908,19 @@
 			<children>
 				<primitiveref id="water" />
 			</children>
-		</component> -->
+		</component>
+		<component id="mapa">
+			<transformation>
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="terrain" />
+				<componentref id="water" />
+			</children>
+		</component>
 	</components>
 </yas>
