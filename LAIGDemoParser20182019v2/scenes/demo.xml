@@ -1,16 +1,8 @@
 <yas>
 	<scene root="mapa" axis_length="3" />
-	<views default="front">
-		<perspective id="front" near="1" far="1000.0" angle="45.0">
-			<from x="0.0" y="35.0" z="75.0" />
-			<to x="0.0" y="0.0" z="0.0" />
-		</perspective>
-		<perspective id="back" near="0.1" far="100.0" angle="45.0">
-			<from x="0.0" y="35.0" z="-75.0" />
-			<to x="0.0" y="0.0" z="0.0" />
-		</perspective>
-		<perspective id="side" near="0.1" far="100.0" angle="45.0">
-			<from x="75.0" y="35.0" z="0.0" />
+	<views default="perspective">
+		<perspective id="perspective" near="1" far="1000.0" angle="45.0">
+			<from x="25.0" y="75.0" z="100.0" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
 		<ortho id="ortho" near="0.1" far="150.0" left="-50.0" right="50.0" top="30.0" bottom="-30.0">
