@@ -46,9 +46,7 @@ class MyComponent extends CGFobject {
 				this.scene.activeTexture.unbind();
 				this.scene.activeTexture = null;
 			}
-		}
-
-		else if (temporaryTexture != this.scene.activeTexture) {
+		} else if (temporaryTexture != this.scene.activeTexture) {
 			temporaryTexture.bind();
 			this.scene.activeTexture = temporaryTexture;
 		}
@@ -93,10 +91,9 @@ class MyComponent extends CGFobject {
 
 	//TODO: Same animation in different components
 	update(time) {
-		for (var i = 0; i < this.animations.length; i++)
-		{
+		for (var i = 0; i < this.animations.length; i++) {
 			this.animations[i].update(time);
-			if(!this.animations[i].finished)
+			if (!this.animations[i].finished)
 				break;
 		}
 

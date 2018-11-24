@@ -47,5 +47,5 @@ class MyCylinder2 extends CGFobject {
 		this.cylinder2.display();
 	};
 
-	changeTex(length_s, length_t) { };
+	changeTex(length_s, length_t) {};
 };

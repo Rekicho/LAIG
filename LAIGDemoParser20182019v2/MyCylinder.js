@@ -72,5 +72,5 @@ class MyCylinder extends CGFobject {
 		this.initGLBuffers();
 	};
 
-	changeTex(length_s, length_t) { };
+	changeTex(length_s, length_t) {};
 };

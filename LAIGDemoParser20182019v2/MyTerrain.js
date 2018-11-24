@@ -26,5 +26,5 @@ class MyTerrain extends CGFobject {
 		this.scene.setActiveShader(this.scene.defaultShader);
 	};
 
-	changeTex() { };
+	changeTex(length_s, length_t) { };
 };

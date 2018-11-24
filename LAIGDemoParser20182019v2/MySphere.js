@@ -28,12 +28,12 @@ class MySphere extends CGFobject {
 				var angsl = (2 * Math.PI) * i / this.slices;
 
 				this.vertices.push(this.radius * Math.cos(angsl) * Math.sin(angst),
-				this.radius * Math.sin(angsl) * Math.sin(angst),
-				-this.radius * Math.cos(angst));
+					this.radius * Math.sin(angsl) * Math.sin(angst),
+					-this.radius * Math.cos(angst));
 
 				this.normals.push(Math.cos(angsl) * Math.sin(angst),
-				Math.sin(angsl) * Math.sin(angst),
-				-Math.cos(angst));
+					Math.sin(angsl) * Math.sin(angst),
+					-Math.cos(angst));
 
 				this.texCoords.push(1 - (i / this.slices), 1 - (j / this.stacks));
 			}
@@ -52,5 +52,5 @@ class MySphere extends CGFobject {
 		this.initGLBuffers();
 	};
 
-	changeTex() { };
+	changeTex() {};
 };
