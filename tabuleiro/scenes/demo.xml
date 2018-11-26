@@ -1,0 +1,388 @@
+<yas>
+	<scene root="mapa" axis_length="3" />
+	<views default="perspective">
+		<perspective id="perspective" near="0.1" far="1000.0" angle="90.0">
+			<from x="0.0" y="5.0" z="0.0000000001" />
+			<to x="0.0" y="0.0" z="0.0" />
+		</perspective>
+		<ortho id="ortho" near="0.1" far="150.0" left="-50.0" right="50.0" top="30.0" bottom="-30.0">
+			<from x="15.0" y="25.0" z="15.0" />
+			<to x="0.0" y="0.0" z="0.0" />
+		</ortho>
+	</views>
+	<ambient>
+		<ambient r="1" g="1" b="1" a="1" />
+		<background r="0.529412" g="0.692237" b="0.921569" a="1.0" />
+	</ambient>
+	<lights>
+		<omni id="light0" enabled="0">
+			<location x="0" y="10" z="10" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="0" a="1" />
+		</omni>
+		<omni id="light1" enabled="0">
+			<location x="10.5" y="6" z="1" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="0.5" g="0.5" b="0.5" a="1" />
+		</omni>
+		<omni id="light2" enabled="0">
+			<location x="10.5" y="6" z="5" w="1" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0" g="1" b="1" a="1" />
+			<specular r="0" g="1" b="1" a="1" />
+		</omni>
+		<spot id="light3" enabled="0" angle="45" exponent="1">
+			<location x="-1" y="1" z="-1" w="1" />
+			<target x="0" y="0" z="0" />
+			<ambient r="0" g="0" b="0" a="1" />
+			<diffuse r="0" g="0" b="1" a="1" />
+			<specular r="0" g="0" b="1" a="1" />
+		</spot>
+	</lights>
+	<textures>
+		<texture id="colors" file="images/colors.jpg" />
+		<texture id="terrain" file="images/terrain.jpg" />
+		<texture id="heightmap" file="images/heightmap.jpg" />
+		<texture id="water" file="images/water.jpg" />
+		<texture id="wavemap" file="images/wavemap.jpg" />
+		<texture id="raceline" file="images/raceline.jpg" />
+	</textures>
+	<materials>
+		<material id="defmaterial" shininess = "1">
+			<emission r="0" g="0" b="0" a="1" />
+			<ambient r="0.6" g="0.6" b="0.6" a="1" />
+			<diffuse r="1" g="1" b="1" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
+		</material>
+	</materials>
+	<transformations>
+		<transformation id="transf1">
+			<scale x="1" y="1" z="1"/>
+		</transformation>
+		<transformation id="transf2">
+			<translate x="0" y="0" z="0.5" />
+		</transformation>
+	</transformations>
+	<animations>
+		<circular id="spin1" span="1" center="0 0 0" radius="0" startang="0" rotang="-360" />
+		<circular id="spin2" span="1" center="0 0 0" radius="0" startang="0" rotang="-720" />
+		<circular id="spin3" span="1" center="0 0 0" radius="0" startang="0" rotang="-1080" />
+		<circular id="spin4" span="1" center="0 0 0" radius="0" startang="0" rotang="-1440" />
+		<circular id="spin5" span="1" center="0 0 0" radius="0" startang="0" rotang="-1800" />
+		<linear id="subida" span="5">
+			<controlpoint xx="0" yy="0" zz="0" />
+			<controlpoint xx="0" yy="15" zz="0" />
+			<controlpoint xx="-32.5" yy="15" zz="0" />
+		</linear>
+		<linear id="linear" span="10">
+			<controlpoint xx="-43" yy="15" zz="5" />
+			<controlpoint xx="-39" yy="15" zz="5" />
+			<controlpoint xx="-30" yy="15" zz="-7.5" />
+			<controlpoint xx="-20" yy="15" zz="-7.5" />
+			<controlpoint xx="-11" yy="15" zz="16" />
+			<controlpoint xx="2" yy="15" zz="16" />
+			<controlpoint xx="10" yy="15" zz="5" />
+			<controlpoint xx="40" yy="15" zz="5" />
+		</linear>
+		<circular id="circular" span="2.5" center="-37.5 15 0" radius="6.50" startang="0" rotang="230" />
+		<linear id="final" span="2.5">
+			<controlpoint xx="40" yy="15" zz="5" />
+			<controlpoint xx="0" yy="0" zz="0" />
+		</linear>
+	</animations>
+	<primitives>
+		<primitive id="square">
+			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
+		</primitive >
+		<primitive id="cylinder">
+			<cylinder base="1" top="1" height="1" slices="20" stacks="20" />
+		</primitive >
+		<primitive id="triangle">
+			<triangle x1="0" y1="-0.5" z1="0" x2="0.5" y2="0.5" z2="0" x3="-0.5" y3="0.5" z3="0" />
+		</primitive >
+		<primitive id="sphere">
+			<sphere radius="1" slices="20" stacks="20" />
+		</primitive >
+		<primitive id="torus">
+			<torus inner="0.25" outer="1" slices="20" loops="20" />
+		</primitive >
+		<primitive id="plane">
+			<plane npartsU="10" npartsV="10" />
+		</primitive >
+		<primitive id="patch1">
+			<patch npointsU="3" npointsV="2" npartsU="10" npartsV="10">
+				<controlpoint xx="0" yy="-1.5" zz="-1.5" />
+				<controlpoint xx="0" yy="1.5" zz="-1.5" />
+				<controlpoint xx="1" yy="-1.5" zz="0" />
+				<controlpoint xx="1" yy="1.5" zz="0" />
+				<controlpoint xx="0" yy="-1.5" zz="1.5" />
+				<controlpoint xx="0" yy="1.5" zz="1.5" />
+			</patch>
+		</primitive >
+		<primitive id="patch2">
+			<patch npointsU="3" npointsV="2" npartsU="10" npartsV="10">
+				<controlpoint xx="0" yy="1.5" zz="-1.5" />
+				<controlpoint xx="0" yy="-1.5" zz="-1.5" />
+				<controlpoint xx="1" yy="1.5" zz="0" />
+				<controlpoint xx="1" yy="-1.5" zz="0" />
+				<controlpoint xx="0" yy="1.5" zz="1.5" />
+				<controlpoint xx="0" yy="-1.5" zz="1.5" />
+			</patch>
+		</primitive >
+		<primitive id="vehicle">
+			<vehicle />
+		</primitive >
+		<primitive id="cylinder2">
+			<cylinder2 base="3" top="3" height="2" slices="20" stacks="20" />
+		</primitive >
+		<primitive id="terrain">
+			<terrain idtexture="terrain" idheightmap="heightmap" parts="100" heightscale="15" />
+		</primitive > -->
+		<primitive id="water">
+			<water idtexture="water" idwavemap="wavemap" parts="100" heightscale="2.5" texscale="10" />
+		</primitive >
+	</primitives >
+	<components>
+		<!-- Lugar de PARTIDA -->
+		<component id="superficie1">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<scale x="0.5" y="0.5" z="15" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="cylinder" />
+			</children>
+		</component>
+		<component id="superficie2">
+			<transformation>
+				<translate x="0" y="0" z="15" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="superficie1" />
+			</children>
+		</component>
+		<component id="plane1">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<rotate axis="z" angle="90" />
+				<translate x="7.5" y="0.1" z="2.5" />
+				<scale x="15" y="1" z="4.5" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="raceline" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="plane" />
+			</children>
+		</component>
+		<component id="plane2">
+			<transformation>
+				<rotate axis="y" angle="180" />
+				<translate x="0" y="0.1" z="-15" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="raceline" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="plane1" />
+			</children>
+		</component>
+		<component id="partida">
+			<transformation>
+				<translate x="-35.0" y="40.0" z="0.0" />
+			</transformation>
+			<animations>
+				<animationref id="final" />
+			</animations>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="superficie1" />
+				<componentref id="superficie2" />
+				<componentref id="plane1" />
+				<componentref id="plane2" />
+			</children>
+		</component>
+		<!-- LUGAR DE CHEGADA -->
+		<component id="comppatch1">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<scale x="1" y="5" z="1" />
+				<translate x="0" y="1.5" z="2" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="raceline" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="patch1" />
+			</children>
+		</component>
+		<component id="comppatch2">
+			<transformation>
+				<rotate axis="x" angle="90" />
+				<scale x="1" y="5" z="1" />
+				<translate x="0" y="1.5" z="2" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="raceline" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="patch2" />
+			</children>
+		</component>
+		<component id="chegada">
+			<transformation>
+				<translate x="35.0" y="40.0" z="0.0" />
+			</transformation>
+			<animations>
+				<animationref id="circular" />
+			</animations>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="superficie1" />
+				<componentref id="superficie2" />
+				<componentref id="comppatch1" />
+				<componentref id="comppatch2" />
+			</children>
+		</component>
+		<!-- CheckPoints -->
+		<component id="checkpoint1">
+			<transformation>
+				<rotate axis="y" angle="90" />
+				<translate x="5" y="30" z="-25" />
+				<scale x="3" y="3" z="3" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="cylinder2" />
+			</children>
+		</component>
+		<component id="checkpoint2">
+			<transformation>
+				<translate x="20.0" y="0.0" z="25" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="checkpoint1" />
+			</children>
+		</component>
+		<component id="checkpoint3">
+			<transformation>
+				<translate x="20.0" y="0.0" z="-12.5" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="checkpoint2" />
+			</children>
+		</component>
+		<component id="checkpoints">
+			<transformation>
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="defmaterial" />
+			</materials>
+			<texture id="colors" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="checkpoint1" />
+				<componentref id="checkpoint2" />
+				<componentref id="checkpoint3" />
+			</children>
+		</component>
+		<component id="vehicle">
+			<transformation>
+				<translate x="0" y="14" z="2.5" />
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<animations>
+				<animationref id="spin1" />
+				<animationref id="spin2" />
+				<animationref id="spin3" />
+				<animationref id="spin4" />
+				<animationref id="spin5" />
+				<animationref id="subida" />
+				<animationref id="circular" />
+				<animationref id="linear" />
+				<animationref id="final" />
+			</animations>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="colors" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="vehicle" />
+			</children>
+		</component>
+		<component id="terrain">
+			<transformation>
+				<rotate axis="y" angle="180" />
+				<scale x="75" y="1" z="75" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="terrain" />
+			</children>
+		</component>
+		<component id="water">
+			<transformation>
+				<translate x="1" y="3" z="1" />
+				<scale x="100" y="1" z="100" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<primitiveref id="water" />
+			</children>
+		</component>
+		<component id="mapa">
+			<transformation>
+				<scale x="1" y="1" z="1" />
+			</transformation>
+			<materials>
+				<material id="inherit" />
+			</materials>
+			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<children>
+				<componentref id="terrain" />
+				<componentref id="water" />
+				<componentref id="vehicle" />
+				<componentref id="partida" />
+				<componentref id="chegada" />
+				<componentref id="checkpoints" />
+			</children>
+		</component>
+	</components>
+</yas>
