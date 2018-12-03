@@ -36,23 +36,35 @@ class MyGame extends CGFobject {
         this.difficulty = [1, 1];
 
         this.valid_moves = [];
+        this.getValidMoves();
     };
 
     getPrologRequest(requestString) {
         var requestPort = 8081;
         var request = new XMLHttpRequest();
         request.open('GET', 'http://localhost:' + requestPort + '/' + requestString, true);
-        
+
         var self = this;
 
-        request.onload = function (data) { console.log("Request successful. Reply: " + data.target.response); };
+        request.onload = function (data) { self.valid_moves = self.parseArray(data.target.response); };
         request.onerror = function () { console.log("Error waiting for response"); };
 
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.send();
     }
 
-    makeRequest() {
+    parseArray(string) {
+        var array = [];
+
+        for(var i = 2; i < string.length; i+=6)
+        {
+            array.push([string[i],string[i+2]]);
+        }        
+
+        return array;
+    }
+
+    getValidMoves() {
         // Get Parameter Values
         var requestString = "valid_moves";
 
@@ -60,30 +72,11 @@ class MyGame extends CGFobject {
         this.getPrologRequest(requestString);
     }
 
-    parseArray(string) {
-        var array = [];
-
-        array.push(string);
-
-        console.log(array);
-
-        return array;
-    }
-
-    /*//Handle the Reply
-    handleReply(game, data) {
-        console.log(data.target.response);
-        game.valid_moves = game.parseArray(data.target.response);
-        console.log(game.valid_moves);
-
-        for (var i = 0; i < game.valid_moves.length; i++)
-            game.initialBoard[game.valid_moves[i][0]][game.valid_moves[i][1]] = 'v';
-    }*/
-
     move() {
-        this.makeRequest();
-        console.log(this.valid_moves);
-        /*var x = Math.floor(Math.random() * 10);
+        for (var i = 0; i < this.valid_moves.length; i++)
+            this.initialBoard[this.valid_moves[i][0]][this.valid_moves[i][1]] = 'v';
+        
+        var x = Math.floor(Math.random() * 10);
         var y = Math.floor(Math.random() * 10);
 
         var pos = this.pos[this.nextPlayer];
@@ -97,7 +90,9 @@ class MyGame extends CGFobject {
         this.initialBoard[x][y] = this.players[this.nextPlayer];
 
         this.nextPlayer++;
-        this.nextPlayer %= 2;*/
+        this.nextPlayer %= 2;
+
+        this.getValidMoves();
     }
 
     display() {

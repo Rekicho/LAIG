@@ -13,7 +13,7 @@ class MyBoard extends CGFobject {
 		this.yuki = yuki;
 		this.mina = mina;
 
-		this.blue = new CGFtexture(this.scene, "images/addspotify.jpg")
+		this.blue = new CGFtexture(this.scene, "images/water.jpg")
 	};
 
 	display() {
@@ -24,6 +24,7 @@ class MyBoard extends CGFobject {
 				this.scene.pushMatrix();
 
 				switch (this.board[i][j]) {
+					case 'v':
 					case 't': this.tree.display();
 						break;
 					case 'y': this.scene.translate(0, 1.75, 0);
