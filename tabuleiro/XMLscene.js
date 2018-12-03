@@ -42,7 +42,7 @@ class XMLscene extends CGFscene {
 
 		this.materialsIndex = 0;
 
-		this.board = new MyBoard(this, 10, 10);
+		this.game = new MyGame(this);
 	}
 
 	/**
@@ -180,7 +180,7 @@ class XMLscene extends CGFscene {
 
 			// Displays the scene (MySceneGraph function).
 			//this.graph.displayScene();
-			this.board.display();
+			this.game.display();
 		} else {
 			// Draw axis
 			this.axis.display();
@@ -192,8 +192,15 @@ class XMLscene extends CGFscene {
 
 	update(currTime) {
 		this.lastTime = this.lastTime || 0;
+		this.count = this.count || 0;
 
 		if (this.lastTime != 0) {
+			this.count += currTime - this.lastTime;
+
+			if (this.count > 1000) {
+				this.game.move();
+				this.count = 0;
+			}
 			this.graph.root.update((currTime - this.lastTime) / 1000);
 
 			for (var i = 0; i < this.graph.waters.length; i++)

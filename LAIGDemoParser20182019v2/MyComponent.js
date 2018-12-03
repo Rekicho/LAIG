@@ -88,8 +88,7 @@ class MyComponent extends CGFobject {
 
 		return null;
 	};
-
-	//TODO: Same animation in different components
+	
 	update(time) {
 		for (var i = 0; i < this.animations.length; i++) {
 			this.animations[i].update(time);
