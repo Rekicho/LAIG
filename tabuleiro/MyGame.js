@@ -21,22 +21,16 @@ class MyGame extends CGFobject {
 
         this.board = new MyBoard(this.scene, this.initialBoard, square, tree, texture, yuki, mina);
 
-        this.wins = [0, 0];
+        //this.wins = [0, 0];
         this.treesEaten = [0, 0];
         this.players = ['y', 'm'];
 
-        this.yuki = [0, 0/*-1, -1*/];
-        this.mina = [0, 0/*-1, -1*/];
-
-        this.pos = [this.yuki, this.mina];
-
-        this.beforeMina = null;
+        this.beforeMina = 'm'; //nothing on start
         this.nextPlayer = 0;
         this.wonAs = null;
-        this.difficulty = [1, 1];
+        //this.difficulty = [1, 1];
 
-        this.valid_moves = [];
-        this.getValidMoves();
+        this.moving = false;
     };
 
     getPrologRequest(requestString) {
@@ -46,53 +40,72 @@ class MyGame extends CGFobject {
 
         var self = this;
 
-        request.onload = function (data) { self.valid_moves = self.parseArray(data.target.response); };
-        request.onerror = function () { console.log("Error waiting for response"); };
+        request.onload = function (data) { 
+            self.parseResponse(data.target.response);
+            self.moving = false; 
+        };
+
+        request.onerror = function () { console.log("Error waiting for response");};
 
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.send();
     }
 
-    parseArray(string) {
-        var array = [];
+    parseResponse(string) {
+        var index = 2;
 
-        for(var i = 2; i < string.length; i+=6)
-        {
-            array.push([string[i],string[i+2]]);
-        }        
+        for (var i = 0; i < this.initialBoard.length; i++){
 
-        return array;
+            for (var j = 0; j < this.initialBoard[i].length; j++){
+                if(string[index] == 'm' && this.initialBoard[i][j] != 'm')
+                    this.beforeMina = this.initialBoard[i][j];
+
+                this.initialBoard[i][j] = string[index];
+                index += 2;
+            }
+
+            index += 2;
+        }
+
+        if(this.players[this.nextPlayer] == 'y')
+            this.treesEaten[this.nextPlayer]++;
+
+        this.nextPlayer++;
+        this.nextPlayer %= 2;
     }
 
-    getValidMoves() {
+    randomMove() {
         // Get Parameter Values
-        var requestString = "valid_moves";
+        var requestString = "randomMove([";
+
+        for(var i = 0; i < this.initialBoard.length; i++){
+            requestString += "[";
+
+            for(var j = 0; j < this.initialBoard[i].length; j++){
+                requestString += this.initialBoard[i][j];
+
+                if(j != this.initialBoard[i].length - 1)
+                    requestString += ",";
+            }
+
+            requestString += "]";
+
+            if(i != this.initialBoard.length - 1)
+                    requestString += ",";
+        }
+
+        requestString += "]," + this.players[this.nextPlayer] + "," + this.beforeMina + ")";
 
         // Make Request
         this.getPrologRequest(requestString);
     }
 
     move() {
-        for (var i = 0; i < this.valid_moves.length; i++)
-            this.initialBoard[this.valid_moves[i][0]][this.valid_moves[i][1]] = 'v';
-        
-        var x = Math.floor(Math.random() * 10);
-        var y = Math.floor(Math.random() * 10);
+        if(this.moving)
+            return;
 
-        var pos = this.pos[this.nextPlayer];
-
-        if (this.players[this.nextPlayer] == 'm')
-            this.initialBoard[pos[0]][pos[1]] = 't';
-
-        else this.initialBoard[pos[0]][pos[1]] = ' ';
-
-        this.pos[this.nextPlayer] = [x, y];
-        this.initialBoard[x][y] = this.players[this.nextPlayer];
-
-        this.nextPlayer++;
-        this.nextPlayer %= 2;
-
-        this.getValidMoves();
+        this.moving = true;
+        this.randomMove();
     }
 
     display() {

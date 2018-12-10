@@ -104,10 +104,11 @@ print_header_line(_).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Require your Prolog Files here
-parse_input(valid_moves, Moves):- 
-	board(Board),
-    nextPlayer(Player),
-	valid_moves(Board,Player,Moves).
+parse_input(randomMove(Board,Player,Before), NewBoard):-
+	randomMove(Board, Player, NewBoard, Before).
+
+parse_input(valid_moves(Board,Player), Moves):-
+	valid_moves(Board, Player, Moves).
 
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).

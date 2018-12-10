@@ -1,25 +1,23 @@
+mina(Board, X, Y):-
+    getPeca(Line, Col, Board, m),
+    X is Line - 1,
+    Y is Col - 1.
+
+mina(_, -1, -1).
+
 %Executes a Mina move
-moveMina(Line,Col,Board,NewBoard):-
-    mina(X,Y),
-    beforeMina(Before),
+moveMina(Line,Col,Board,NewBoard, Before):-
+    mina(Board,OldX,OldY),
     (
-        (X < 0,
-        Y < 0,
-        getPeca(Line,Col,Board,After),
+        (OldX < 0,
+        OldY < 0,
         setPeca(Line,Col,m,Board,NewBoard));
 
-        (OldX is X + 1,
-        OldY is Y + 1,
-        setPeca(OldX,OldY,Before,Board,Next),
-        getPeca(Line,Col,Board,After),
+        (OldLine is OldX + 1,
+        OldCol is OldY + 1,
+        setPeca(OldLine,OldCol,Before,Board,Next),
         setPeca(Line,Col,m,Next,NewBoard))
-    ),
-    retract(mina(X,Y)),
-    retract(beforeMina(Before)),
-    NewX is Line - 1,
-    NewY is Col - 1,
-    assert(mina(NewX,NewY)),
-    assert(beforeMina(After)).
+    ).
 
 %Checks if a Mina move is valid
 valid_move_mina(Board, X, Y, Moves, NewMoves, DX, DY):-
@@ -28,7 +26,7 @@ valid_move_mina(Board, X, Y, Moves, NewMoves, DX, DY):-
         X < 10,
         Y > -1,
         Y < 10,
-        yuki(YX,YY),
+        yuki(Board, YX,YY),
         (
             (X =:= YX,
             Y =:= YY,
@@ -52,7 +50,7 @@ checkSeen(_,[],ValidMoves,ValidMoves).
 %Only restriction is she is not seen by Yuki
 checkSeen(Board,[Head|Tail],ListOfMoves,ValidMoves):-
     [X,Y] = Head,
-    yuki(YX,YY),
+    yuki(Board, YX,YY),
     (
         (X =:= YX,
         Y =:= YY,
@@ -67,7 +65,7 @@ checkSeen(Board,[Head|Tail],ListOfMoves,ValidMoves):-
 
 %Gets all Mina valid moves
 valid_moves_mina(Board, ListOfMoves):-
-    mina(X,Y),
+    mina(Board, X,Y),
     (
         (X =:= -1,
         Y =:= -1,
@@ -86,16 +84,4 @@ valid_moves_mina(Board, ListOfMoves):-
         valid_move_mina(Board, NextX, LastY, Moves5, Moves6, 1, -1),
         valid_move_mina(Board, NextX, Y, Moves6, Moves7, 1, 0),
         valid_move_mina(Board, NextX, NextY, Moves7, ListOfMoves, 1, 1))
-    ).
-
-%In case both players won as Yuki, solves the tie according to who ate more trees
-solve_Mina_tie(T1,T2,Winner):-
-    (
-        (T1 > T2,
-        Winner = p1);
-
-        (T1 < T2,
-        Winner = p2);
-
-        (Winner = t)
     ).

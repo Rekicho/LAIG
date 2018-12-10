@@ -2,12 +2,21 @@
 :- use_module(library(random)).
 
 :- reconsult('lists.pl').
-:- reconsult('setup.pl').
-:- reconsult('display.pl').
-:- reconsult('io.pl').
 :- reconsult('yuki.pl').
 :- reconsult('mina.pl').
-:- reconsult('ai.pl').
+
+allMoves([
+            [0,0],[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[0,7],[0,8],[0,9],
+            [1,0],[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],
+            [2,0],[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,8],[2,9],
+            [3,0],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],
+            [4,0],[4,1],[4,2],[4,3],[4,4],[4,5],[4,6],[4,7],[4,8],[4,9],
+            [5,0],[5,1],[5,2],[5,3],[5,4],[5,5],[5,6],[5,7],[5,8],[5,9],
+            [6,0],[6,1],[6,2],[6,3],[6,4],[6,5],[6,6],[6,7],[6,8],[6,9],
+            [7,0],[7,1],[7,2],[7,3],[7,4],[7,5],[7,6],[7,7],[7,8],[7,9],
+            [8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,6],[8,7],[8,8],[8,9],
+            [9,0],[9,1],[9,2],[9,3],[9,4],[9,5],[9,6],[9,7],[9,8],[9,9]
+        ]).
 
 not( X ) :- X, !, fail.
 not( _ ).
@@ -146,265 +155,33 @@ canSee(X,Y,MX,MY,Board):-
         (not(checkTrees(X,Y,MX,MY,Board,DX,DY)))
     ).
 
-%Checks if a move if valid
-%If it is, the move is executed
-move(Move,Board,NewBoard):-
-    [X,Y] = Move,
-    players(P1,P2),
-    nextPlayer(Player),
-    valid_moves(Board, Player, Moves),
-    member(Move,Moves),
-    (
-        (Player=p1,
-        Name = P1);
-    
-        (Player=p2,
-        Name = P2)
-    ),
-    Line is X + 1,
-    Col is Y + 1,
-    (
-        (Name = y,
-        moveYuki(Player,Line,Col,Board,NewBoard));
-
-        (Name = m,
-        moveMina(Line,Col,Board,NewBoard))
-    ),
-    retract(nextPlayer(Player)),
-    (
-        (Player=p1,
-        assert(nextPlayer(p2)));
-
-        (Player=p2,
-        assert(nextPlayer(p1)))
-    ).
-
 %Gets all Player valid moves
 valid_moves(Board, Player, ListOfMoves):-
-    players(P1,P2),
     (
-        (Player = p1,
-        Name = P1);
-
-        (Player = p2,
-        Name = P2)
-    ),
-    (
-        (Name=y,
+        (Player=y,
         valid_moves_yuki(Board, ListOfMoves),
         !);
 
-        (Name=m,
+        (Player=m,
         valid_moves_mina(Board, ListOfMoves),
         !)
     ).
 
-%Loops until user inputs a valid move
-player_move(Moves, Board, NewBoard):-
-    repeat,
-        display_moves(Moves),
-        getInput(Line,Col),
-        checkInput(Line,Col),
-        move([Line,Col], Board, NewBoard),
-        !.
-
-%Checks if a game is over and returns the game winner
-game_over(Board,Winner):-
-    nextPlayer(Player),
-    valid_moves(Board,Player,Moves),
-    length(Moves,L),
-    L =:= 0,
-    retract(wonAs(_)),
+move(Board, Player, Move, NewBoard, Before):-
+    [X,Y] = Move,
+    valid_moves(Board, Player, Moves),
+    member(Move,Moves),
+    Line is X + 1,
+    Col is Y + 1,
     (
-        (Player = p1,
-        wins(W1,W2),
-        NewWin is W2 + 1,
-        retract(wins(W1,W2)),
-        assert(wins(W1,NewWin)),
-        players(_,P2),
-        assert(wonAs(P2)),
-        Winner = p2);
+        (Player = y,
+        moveYuki(Line,Col,Board,NewBoard));
 
-        (Player = p2,
-        wins(W1,W2),
-        NewWin is W1 + 1,
-        retract(wins(W1,W2)),
-        assert(wins(NewWin,W2)),
-        players(P1,_),
-        assert(wonAs(P1)),
-        Winner = p1)
+        (Player = m,
+        moveMina(Line,Col,Board,NewBoard, Before))
     ).
 
-%In case both players won a game, solves the tie by looking with what character they won and how many trees they ate
-solve_tie(Winner):-
-    treesEaten(T1,T2),
-    wonAs(Name),
-    (
-        (Name = y,
-        solve_Yuki_tie(T1,T2,Winner));
-
-        (Name = m,
-        solve_Mina_tie(T1,T2,Winner))
-    ).
-
-%When a game is over, checks if the match is over and returns it's winner
-match_over(Winner):-
-    wins(W1,W2),
-    Wins is W1 + W2,
-    Wins =:= 2,
-    (
-        (
-            W1 > W2,
-            Winner = p1
-        );
-
-        (
-            W1 < W2,
-            Winner = p2
-        );
-
-        (solve_tie(Winner))
-    ).
-
-%Checks if the current player is human or computer
-player_or_ai(Player, Difficulty):-
-    difficulty(D1,D2),
-    (
-        (Player = p1,
-        !,
-        Difficulty is D1);
-
-        (Player = p2,
-        !,
-        Difficulty is D2)
-    ).
-
-%Computer chooses the best move according to difficulty and executes it 
-ai_move(Moves,Difficulty,Board,NewBoard):-
-    display_moves(Moves),
-    choose_move(Board, Difficulty, Move),
-    display_AI_move(Move),
-    move(Move, Board, NewBoard).
-
-%Game loop
-game:-
-    display_separator,
-    board(Board),
-    nextPlayer(Player),
-    display_game(Board,Player),
-    valid_moves(Board,Player,Moves),
-    player_or_ai(Player, Difficulty),
-    (
-        (Difficulty =:= -1,
-        !,
-        player_move(Moves,Board,NewBoard));
-
-        ai_move(Moves,Difficulty,Board,NewBoard)
-    ),
-    retract(board(Board)),
-    assert(board(NewBoard)),
-    (
-        (game_over(NewBoard,Winner),
-        display_game_winner(Winner),
-        wins(W1,W2),
-        format('~nWins: ~d-~d~n',[W1,W2]),
-        treesEaten(T1,T2),
-        format('Trees eaten: ~d-~d~n~n',[T1,T2]),
-        display_board(0,NewBoard),
-        (
-            (match_over(MatchWinner),
-            display_match_winner(MatchWinner));
-
-            (change_game,
-            game)
-        ));
-
-        (game)
-    ).
-
-%Starts the game, displaying the main menu
-play:-
-    prompt(_, ''),
-    display_main_menu,
-    getOption(Option),
-    (
-        (Option =:= 0);
-
-        (Option =:= 1,
-        new_game_menu);
-
-        (Option =:= 2,
-        (
-            (match_over(_),
-            write('\n\nSaved game is over\n\n'),
-            play);
-
-            (true)
-        ),
-        game);
-
-        (play)
-    ).
-
-new_game_menu:-
-    cls,
-    display_new_game_menu,
-    getOption(Option),
-    (
-        (Option =:= 0,
-        cls);
-
-        (Option =:= 1,
-        setup(-1,-1),
-        game);
-
-        (Option =:= 2,
-        pvAI_menu);
-
-        (Option =:= 3,
-        aivAI_menu);
-
-        (new_game_menu)
-    ).
-
-pvAI_menu:-
-    cls,
-    display_PvAI_menu,
-    getOption(Option),
-    (
-        (Option =:= 0,
-        cls);
-
-        (Option =:= 1,
-        setup(-1,1),
-        game);
-
-        (Option =:= 2,
-        setup(-1,3),
-        game);
-
-        (pvAI_menu)
-    ).
-
-aivAI_menu:-
-    cls,
-    display_AIvAI_menu,
-    getOption(Option),
-    (
-        (Option =:= 0,
-        cls);
-
-        (Option =:= 1,
-        setup(1,1),
-        game);
-
-        (Option =:= 2,
-        setup(1,3),
-        game);
-
-        (Option =:= 3,
-        setup(3,3),
-        game);
-
-        (aivAI_menu)
-    ).
+randomMove(Board, Player, NewBoard, Before):-
+    valid_moves(Board, Player, Moves),
+    random_member(Move, Moves),
+    move(Board, Player, Move, NewBoard, Before).
