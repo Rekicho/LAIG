@@ -107,7 +107,7 @@ print_header_line(_).
 parse_input(randomMove(Board,Player,Before), NewBoard):-
 	randomMove(Board, Player, NewBoard, Before).
 
-parse_input(valid_moves(Board,Player), Moves):-
+parse_input(validMoves(Board,Player), Moves):-
 	valid_moves(Board, Player, Moves).
 
 parse_input(handshake, handshake).

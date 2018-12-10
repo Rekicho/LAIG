@@ -19,7 +19,13 @@ class MyGame extends CGFobject {
         ['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
         ['t', 't', 't', 't', 't', 't', 't', 't', 't', 't']];
 
-        this.board = new MyBoard(this.scene, this.initialBoard, square, tree, texture, yuki, mina);
+        this.valid = [];
+
+        for(var i = 0; i < this.initialBoard.length; i++)
+            for(var j = 0; j < this.initialBoard[i].length; j++)
+                this.valid.push(false);
+
+        this.board = new MyBoard(this.scene, this.initialBoard, square, tree, texture, yuki, mina, this.valid);
 
         //this.wins = [0, 0];
         this.treesEaten = [0, 0];
@@ -31,6 +37,7 @@ class MyGame extends CGFobject {
         //this.difficulty = [1, 1];
 
         this.moving = false;
+        this.finished = false;
     };
 
     getPrologRequest(requestString) {
@@ -40,24 +47,57 @@ class MyGame extends CGFobject {
 
         var self = this;
 
-        request.onload = function (data) { 
-            self.parseResponse(data.target.response);
-            self.moving = false; 
-        };
+        if (requestString[0] == 'v') { 
+            request.onload = function (data) {
+                self.parseValid(data.target.response);
+                if(!self.finished)
+                    self.randomMove();
+            };
+        }
 
-        request.onerror = function () { console.log("Error waiting for response");};
+        else {
+            request.onload = function (data) {
+                self.parseMove(data.target.response);
+                self.moving = false;
+            };
+        }
+
+        request.onerror = function () { console.log("Error waiting for response"); };
 
         request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         request.send();
     }
 
-    parseResponse(string) {
+    parseValid(string) {
+        if(string == "[]"){
+            this.finished = true;
+            return;
+        }
+
+        var valid_moves = [];
+
+        for(var i = 2; i < string.length; i+=6){
+            valid_moves.push([string[i],string[i+2]]);
+        }
+
+        for(var i = 0; i < this.initialBoard.length; i++)
+            for(var j = 0; j < this.initialBoard[i].length; j++)
+                this.valid[i][j] = false;
+
+
+        for (var i = 0; i < this.valid_moves.length; i++)
+            this.valid[this.valid_moves[i][0]][this.valid_moves[i][1]] = true;
+
+        
+    }
+
+    parseMove(string) {
         var index = 2;
 
-        for (var i = 0; i < this.initialBoard.length; i++){
+        for (var i = 0; i < this.initialBoard.length; i++) {
 
-            for (var j = 0; j < this.initialBoard[i].length; j++){
-                if(string[index] == 'm' && this.initialBoard[i][j] != 'm')
+            for (var j = 0; j < this.initialBoard[i].length; j++) {
+                if (string[index] == 'm' && this.initialBoard[i][j] != 'm')
                     this.beforeMina = this.initialBoard[i][j];
 
                 this.initialBoard[i][j] = string[index];
@@ -67,7 +107,7 @@ class MyGame extends CGFobject {
             index += 2;
         }
 
-        if(this.players[this.nextPlayer] == 'y')
+        if (this.players[this.nextPlayer] == 'y')
             this.treesEaten[this.nextPlayer]++;
 
         this.nextPlayer++;
@@ -78,20 +118,20 @@ class MyGame extends CGFobject {
         // Get Parameter Values
         var requestString = "randomMove([";
 
-        for(var i = 0; i < this.initialBoard.length; i++){
+        for (var i = 0; i < this.initialBoard.length; i++) {
             requestString += "[";
 
-            for(var j = 0; j < this.initialBoard[i].length; j++){
+            for (var j = 0; j < this.initialBoard[i].length; j++) {
                 requestString += this.initialBoard[i][j];
 
-                if(j != this.initialBoard[i].length - 1)
+                if (j != this.initialBoard[i].length - 1)
                     requestString += ",";
             }
 
             requestString += "]";
 
-            if(i != this.initialBoard.length - 1)
-                    requestString += ",";
+            if (i != this.initialBoard.length - 1)
+                requestString += ",";
         }
 
         requestString += "]," + this.players[this.nextPlayer] + "," + this.beforeMina + ")";
@@ -100,12 +140,38 @@ class MyGame extends CGFobject {
         this.getPrologRequest(requestString);
     }
 
+    validMoves() {
+        // Get Parameter Values
+        var requestString = "validMoves([";
+
+        for (var i = 0; i < this.initialBoard.length; i++) {
+            requestString += "[";
+
+            for (var j = 0; j < this.initialBoard[i].length; j++) {
+                requestString += this.initialBoard[i][j];
+
+                if (j != this.initialBoard[i].length - 1)
+                    requestString += ",";
+            }
+
+            requestString += "]";
+
+            if (i != this.initialBoard.length - 1)
+                requestString += ",";
+        }
+
+        requestString += "]," + this.players[this.nextPlayer] + ")";
+
+        // Make Request
+        this.getPrologRequest(requestString);
+    }
+
     move() {
-        if(this.moving)
+        if (this.finished || this.moving)
             return;
 
         this.moving = true;
-        this.randomMove();
+        this.validMoves();
     }
 
     display() {

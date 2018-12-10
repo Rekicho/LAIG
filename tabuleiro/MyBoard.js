@@ -1,5 +1,5 @@
 class MyBoard extends CGFobject {
-	constructor(scene, board, square, tree, texture, yuki, mina) {
+	constructor(scene, board, square, tree, texture, yuki, mina, valid) {
 		super(scene);
 
 		this.board = board;
@@ -12,6 +12,7 @@ class MyBoard extends CGFobject {
 		this.texture = texture;
 		this.yuki = yuki;
 		this.mina = mina;
+		this.valid = valid;
 
 		this.blue = new CGFtexture(this.scene, "images/water.jpg")
 	};
@@ -24,7 +25,6 @@ class MyBoard extends CGFobject {
 				this.scene.pushMatrix();
 
 				switch (this.board[i][j]) {
-					case 'v':
 					case 't': this.tree.display();
 						break;
 					case 'y': this.scene.translate(0, 1.75, 0);
@@ -37,11 +37,11 @@ class MyBoard extends CGFobject {
 				}
 
 				this.scene.popMatrix();
-				switch (this.board[i][j]) {
-					case 'v': this.blue.bind();
-						break;
-					default: this.texture.bind();
-				}
+
+				if(this.valid[i][j])
+					this.blue.bind();
+
+				else this.texture.bind();
 
 				this.square.display();
 				this.scene.translate(1, 0, 0);
