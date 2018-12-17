@@ -110,6 +110,9 @@ parse_input(randomMove(Board,Player,Before), NewBoard):-
 parse_input(validMoves(Board,Player), Moves):-
 	valid_moves(Board, Player, Moves).
 
+parse_input(move(Board,Player,Move,Before), NewBoard):-
+	move(Board,Player,Move,NewBoard,Before).
+
 parse_input(handshake, handshake).
 parse_input(test(C,N), Res) :- test(C,Res,N).
 parse_input(quit, goodbye).

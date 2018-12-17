@@ -2,7 +2,6 @@ class MyGame extends CGFobject {
     constructor(scene) {
         super(scene);
 
-        var square = new MyPlane(this.scene, 1, 1);
         var tree = new MyTree(this.scene);
         var texture = new CGFtexture(this.scene, "images/snow.jpg");
         var yuki = new MyVehicle(this.scene);
@@ -19,13 +18,29 @@ class MyGame extends CGFobject {
         ['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
         ['t', 't', 't', 't', 't', 't', 't', 't', 't', 't']];
 
+        var boardObjs = [];
+
+        for (var i = 0; i < 10; i++) {
+            let temp = [];
+
+            for (var j = 0; j < 10; j++)
+                temp.push(new MyPlane(this.scene, 1, 1));
+
+            boardObjs.push(temp);
+        }
+
         this.valid = [];
 
-        for(var i = 0; i < this.initialBoard.length; i++)
-            for(var j = 0; j < this.initialBoard[i].length; j++)
-                this.valid.push(false);
+        for (var i = 0; i < this.initialBoard.length; i++) {
+            let temp = [];
 
-        this.board = new MyBoard(this.scene, this.initialBoard, square, tree, texture, yuki, mina, this.valid);
+            for (var j = 0; j < this.initialBoard[i].length; j++)
+                temp.push(true);
+
+            this.valid.push(temp);
+        }
+
+        this.board = new MyBoard(this.scene, this.initialBoard, boardObjs, tree, texture, yuki, mina, this.valid);
 
         //this.wins = [0, 0];
         this.treesEaten = [0, 0];
@@ -47,17 +62,16 @@ class MyGame extends CGFobject {
 
         var self = this;
 
-        if (requestString[0] == 'v') { 
+        if (requestString[0] == 'v') {
             request.onload = function (data) {
                 self.parseValid(data.target.response);
-                if(!self.finished)
-                    self.randomMove();
             };
         }
 
         else {
             request.onload = function (data) {
                 self.parseMove(data.target.response);
+                self.validMoves();
                 self.moving = false;
             };
         }
@@ -69,26 +83,22 @@ class MyGame extends CGFobject {
     }
 
     parseValid(string) {
-        if(string == "[]"){
+        if (string == "[]") {
             this.finished = true;
             return;
         }
 
         var valid_moves = [];
 
-        for(var i = 2; i < string.length; i+=6){
-            valid_moves.push([string[i],string[i+2]]);
+        for (var i = 2; i < string.length; i += 6) {
+            valid_moves.push([string[i], string[i + 2]]);
         }
 
-        for(var i = 0; i < this.initialBoard.length; i++)
-            for(var j = 0; j < this.initialBoard[i].length; j++)
-                this.valid[i][j] = false;
+
+        for (var i = 0; i < valid_moves.length; i++)
+            this.valid[valid_moves[i][0]][valid_moves[i][1]] = true;
 
 
-        for (var i = 0; i < this.valid_moves.length; i++)
-            this.valid[this.valid_moves[i][0]][this.valid_moves[i][1]] = true;
-
-        
     }
 
     parseMove(string) {
@@ -112,9 +122,18 @@ class MyGame extends CGFobject {
 
         this.nextPlayer++;
         this.nextPlayer %= 2;
+
+        for (var i = 0; i < this.initialBoard.length; i++)
+            for (var j = 0; j < this.initialBoard[i].length; j++)
+                this.valid[i][j] = false;
     }
 
     randomMove() {
+        if (this.finished || this.moving)
+            return;
+
+        this.moving = true;
+
         // Get Parameter Values
         var requestString = "randomMove([";
 
@@ -170,11 +189,43 @@ class MyGame extends CGFobject {
         if (this.finished || this.moving)
             return;
 
+        if(this.board.pickValid[0] == -1 || this.board.pickValid[1] == -1)
+            return;
+
         this.moving = true;
-        this.validMoves();
+
+        // Get Parameter Values
+        var requestString = "move([";
+
+        for (var i = 0; i < this.initialBoard.length; i++) {
+            requestString += "[";
+
+            for (var j = 0; j < this.initialBoard[i].length; j++) {
+                requestString += this.initialBoard[i][j];
+
+                if (j != this.initialBoard[i].length - 1)
+                    requestString += ",";
+            }
+
+            requestString += "]";
+
+            if (i != this.initialBoard.length - 1)
+                requestString += ",";
+        }
+
+        let move = "[" + this.board.pickValid[0] + "," + this.board.pickValid[1] + "]";
+
+        requestString += "]," + this.players[this.nextPlayer] + "," + move + "," + this.beforeMina + ")";
+        
+        // Make Request
+        this.getPrologRequest(requestString);        
     }
 
     display() {
         this.board.display();
-    };
+    }
+
+    pick(id) {
+        this.board.pick(id);
+    }
 }

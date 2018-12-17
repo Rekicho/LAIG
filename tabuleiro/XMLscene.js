@@ -17,7 +17,6 @@ class XMLscene extends CGFscene {
 
 		this.currCamera;
 		this.cameraList = {};
-		this.lastCamera;
 	}
 
 	/**
@@ -104,6 +103,8 @@ class XMLscene extends CGFscene {
 		this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 		this.initLights();
 
+		// Add game options.
+		// this.interface.addGameOptions();
 		// Adds lights group.
 		this.interface.addLightsGroup(this.graph.lights);
 		// Adds cameras group.
@@ -125,6 +126,23 @@ class XMLscene extends CGFscene {
 		this.sceneInited = true;
 
 		this.setUpdatePeriod(1000 / FPS);
+
+		this.setPickEnabled(true);
+	}
+
+	logPicking() {
+		if (this.pickMode == false) {
+			if (this.pickResults != null && this.pickResults.length > 0) {
+				for (var i = 0; i < this.pickResults.length; i++) {
+					var obj = this.pickResults[i][0];
+					if (obj) {
+						var customId = this.pickResults[i][1];
+						this.game.pick(customId);
+					}
+				}
+				this.pickResults.splice(0, this.pickResults.length);
+			}
+		}
 	}
 
 	/**
@@ -147,18 +165,8 @@ class XMLscene extends CGFscene {
 		this.pushMatrix();
 
 		if (this.sceneInited) {
-			if (this.currCamera != this.lastCamera) {
-				var cam;
-				for (var key in this.cameraList) {
-					if (this.cameraList[key] == this.currCamera) {
-						cam = key;
-					}
-				}
-				this.camera = this.graph.cameras[cam];
-				this.interface.setActiveCamera(this.graph.cameras[cam]);
-
-				this.lastCamera = this.currCamera;
-			}
+			this.logPicking();
+			this.clearPickRegistration();
 
 			// Draw axis
 			this.axis.display();
@@ -190,6 +198,17 @@ class XMLscene extends CGFscene {
 		// ---- END Background, camera and axis setup
 	}
 
+	changeCamera() {
+		var cam;
+		for (var key in this.cameraList) {
+			if (this.cameraList[key] == this.currCamera) {
+				cam = key;
+			}
+		}
+		this.camera = this.graph.cameras[cam];
+		this.interface.setActiveCamera(this.graph.cameras[cam]);
+	}
+
 	update(currTime) {
 		this.lastTime = this.lastTime || 0;
 		this.count = this.count || 0;
@@ -197,8 +216,13 @@ class XMLscene extends CGFscene {
 		if (this.lastTime != 0) {
 			this.count += currTime - this.lastTime;
 
-			if (this.count > 1000) {
-				this.game.move();
+			if (this.count > 5000) {
+				if(this.game.players[this.game.nextPlayer] == 'y')
+					this.game.move();
+
+				if(this.game.players[this.game.nextPlayer] == "m")
+					this.game.randomMove();
+
 				this.count = 0;
 			}
 			this.graph.root.update((currTime - this.lastTime) / 1000);

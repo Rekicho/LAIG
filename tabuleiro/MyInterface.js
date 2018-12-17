@@ -40,10 +40,16 @@ class MyInterface extends CGFinterface {
 				group.add(this.scene.lightValues, key);
 			}
 		}
+
+		group.close();
 	}
 
 	addCamerasGroup(cameras) {
-		this.gui.add(this.scene, "currCamera", cameras)
+		var group = this.gui.add(this.scene, "currCamera", cameras);
+		var self = this;
+		group.onFinishChange(function(){
+			self.scene.changeCamera();
+		})
 	}
 
 	initKeys() {
