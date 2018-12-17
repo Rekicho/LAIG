@@ -72,6 +72,7 @@ class MyGame extends CGFobject {
             request.onload = function (data) {
                 self.parseMove(data.target.response);
                 self.validMoves();
+                self.board.pickValid = [-1,-1];
                 self.moving = false;
             };
         }
@@ -112,7 +113,6 @@ class MyGame extends CGFobject {
 
                 this.initialBoard[i][j] = string[index];
                 index += 2;
-                self.board.pickValid = [-1,-1];
             }
 
             index += 2;
