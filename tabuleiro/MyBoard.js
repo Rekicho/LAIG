@@ -18,7 +18,7 @@ class MyBoard extends CGFobject {
 		this.selectedTexture = new CGFtexture(this.scene, "images/adspotify.jpg");
 
 		this.picked = 0;
-		this.pickValid = [];
+		this.pickValid = [-1,-1];
 	};
 
 	display() {

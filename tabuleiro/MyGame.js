@@ -112,6 +112,7 @@ class MyGame extends CGFobject {
 
                 this.initialBoard[i][j] = string[index];
                 index += 2;
+                self.board.pickValid = [-1,-1];
             }
 
             index += 2;
