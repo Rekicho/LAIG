@@ -211,20 +211,12 @@ class XMLscene extends CGFscene {
 
 	update(currTime) {
 		this.lastTime = this.lastTime || 0;
-		this.count = this.count || 0;
 
 		if (this.lastTime != 0) {
-			this.count += currTime - this.lastTime;
 
-			if (this.count > 5000) {
-				if(this.game.players[this.game.nextPlayer] == 'y')
-					this.game.move();
-
-				if(this.game.players[this.game.nextPlayer] == "m")
-					this.game.randomMove();
-
-				this.count = 0;
-			}
+			this.game.update((currTime - this.lastTime) / 1000);
+			this.game.move();
+			
 			this.graph.root.update((currTime - this.lastTime) / 1000);
 
 			for (var i = 0; i < this.graph.waters.length; i++)
