@@ -2,12 +2,12 @@
 	<scene root="root" axis_length="3" />
 	<views default="game">
 		<perspective id="game" near="0.1" far="1000.0" angle="90.0">
-			<from x="0" y="5.0" z="5.0" />
+			<from x="0.0" y="5.0" z="5.0" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
 	</views>
 	<ambient>
-		<ambient r="1" g="1" b="1" a="1" />
+		<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
 		<background r="0.01" g="0.0" b="0.1" a="1.0" />
 	</ambient>
 	<lights>
@@ -17,31 +17,14 @@
 			<diffuse r="1" g="1" b="1" a="1" />
 			<specular r="1" g="1" b="0" a="1" />
 		</omni>
-		<omni id="light1" enabled="0">
-			<location x="10.5" y="6" z="1" w="1" />
-			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="0.5" g="0.5" b="0.5" a="1" />
-		</omni>
-		<omni id="light2" enabled="0">
-			<location x="10.5" y="6" z="5" w="1" />
-			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="0" g="1" b="1" a="1" />
-			<specular r="0" g="1" b="1" a="1" />
-		</omni>
-		<spot id="light3" enabled="0" angle="45" exponent="1">
-			<location x="-1" y="1" z="-1" w="1" />
-			<target x="0" y="0" z="0" />
-			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="0" g="0" b="1" a="1" />
-			<specular r="0" g="0" b="1" a="1" />
-		</spot>
 	</lights>
 	<textures>
+		<texture id="tileTexture" file="images/snow.jpg" />
+		<texture id="treeTexture" file="images/snow.jpg" />
+		<texture id="trunkTexture" file="images/trunk.jpg" />
 		<texture id="colorstex" file="images/colors.jpg" />
 		<texture id="snowtex" file="images/mountain.jpg" />
 		<texture id="mountainmap" file="images/mountainheight.jpg" />
-		<texture id="icetex" file="images/ice.jpg" />
 		<texture id="benchtex" file="images/bench.jpg" />
 	</textures>
 	<materials>
@@ -85,31 +68,6 @@
 		</transformation>
 	</transformations>
 	<animations>
-		<circular id="spin1" span="1" center="0 0 0" radius="0" startang="0" rotang="-360" />
-		<circular id="spin2" span="1" center="0 0 0" radius="0" startang="0" rotang="-720" />
-		<circular id="spin3" span="1" center="0 0 0" radius="0" startang="0" rotang="-1080" />
-		<circular id="spin4" span="1" center="0 0 0" radius="0" startang="0" rotang="-1440" />
-		<circular id="spin5" span="1" center="0 0 0" radius="0" startang="0" rotang="-1800" />
-		<linear id="subida" span="5">
-			<controlpoint xx="0" yy="0" zz="0" />
-			<controlpoint xx="0" yy="15" zz="0" />
-			<controlpoint xx="-32.5" yy="15" zz="0" />
-		</linear>
-		<linear id="linear" span="10">
-			<controlpoint xx="-43" yy="15" zz="5" />
-			<controlpoint xx="-39" yy="15" zz="5" />
-			<controlpoint xx="-30" yy="15" zz="-7.5" />
-			<controlpoint xx="-20" yy="15" zz="-7.5" />
-			<controlpoint xx="-11" yy="15" zz="16" />
-			<controlpoint xx="2" yy="15" zz="16" />
-			<controlpoint xx="10" yy="15" zz="5" />
-			<controlpoint xx="40" yy="15" zz="5" />
-		</linear>
-		<circular id="circular" span="2.5" center="-37.5 15 0" radius="6.50" startang="0" rotang="230" />
-		<linear id="final" span="2.5">
-			<controlpoint xx="40" yy="15" zz="5" />
-			<controlpoint xx="0" yy="0" zz="0" />
-		</linear>
 	</animations>
 	<primitives>
 		<primitive id="square">
@@ -133,7 +91,6 @@
 		<primitive id="terrain">
 			<terrain idtexture="snowtex" idheightmap="mountainmap" parts="100" heightscale="3" />
 		</primitive >
-
 	</primitives >
 	<components>
 		<component id="face1">
@@ -230,7 +187,6 @@
 				<componentref id="face6" />
 			</children>
 		</component>
-
 		<component id="terrain1">
 			<transformation>
 				<scale x="10" y="1.25" z="10" />
@@ -243,7 +199,6 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
-
 		<component id="terrain2">
 			<transformation>
 				<translate x="10" y="0.05" z="10" />
@@ -257,7 +212,6 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
-
 		<component id="terrain3">
 			<transformation>
 				<translate x="10" y="0.05" z="-10" />
@@ -271,7 +225,6 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
-
 		<component id="terrain4">
 			<transformation>
 				<translate x="20" y="0" z="0" />
@@ -285,21 +238,6 @@
 				<primitiveref id="terrain" />
 			</children>
 		</component>
-
-		<component id="terrain5">
-			<transformation>
-				<translate x="10" y="0" z="0" />
-				<scale x="10" y="1" z="10" />
-			</transformation>
-			<materials>
-				<material id="defmaterial" />
-			</materials>
-			<texture id="icetex" length_s="1.0" length_t="1.0"/>
-			<children>
-				<primitiveref id="plane" />
-			</children>
-		</component>
-
 		<component id="all_terrains">
 			<transformation>
 				<transformationref id="transf1" />
@@ -313,10 +251,8 @@
 				<componentref id="terrain2" />
 				<componentref id="terrain3" />
 				<componentref id="terrain4" />
-				<componentref id="terrain5" />
 			</children>
 		</component>
-
 		<!-- FENCE POLE -->
 		<component id="fence_pole">
 			<transformation>
@@ -331,7 +267,6 @@
 				<primitiveref id="cylinder" />
 			</children>
 		</component>
-
 		<!-- FENCE SPHERE -->
 		<component id="fence_sphere">
 			<transformation>
@@ -767,7 +702,6 @@
 				<componentref id="bench_5" />
 			</children>
 		</component>
-
 		<!-- Lamp pole + light -->
 		<component id="lamp_pole">
 			<transformation>
@@ -782,7 +716,6 @@
 				<primitiveref id="cylinder" />
 			</children>
 		</component>
-
 		<component id="lamp_light">
 			<transformation>
 				<translate x="0" y="2" z="0" />
@@ -872,7 +805,6 @@
 				<componentref id="lamp_4" />
 			</children>
 		</component>
-
 		<!-- HOUSE -->
 		<component id="house_structure_1">
 			<transformation>
@@ -1068,6 +1000,5 @@
 				<componentref id="house" />
 			</children>
 		</component>
-
 	</components>
 </yas>

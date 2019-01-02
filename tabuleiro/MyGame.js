@@ -2,12 +2,6 @@ class MyGame extends CGFobject {
 	constructor(scene) {
 		super(scene);
 
-		var tree = new MyTree(this.scene);
-		var texture = new CGFtexture(this.scene, "images/snow.jpg");
-
-		var yuki = new MyYuki(scene);
-		var mina = new MyMina(scene);
-
 		this.initialBoard = [
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
@@ -21,17 +15,6 @@ class MyGame extends CGFobject {
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't']
 		];
 
-		var boardObjs = [];
-
-		for (var i = 0; i < 10; i++) {
-			let temp = [];
-
-			for (var j = 0; j < 10; j++)
-				temp.push(new MyPlane(this.scene, 1, 1));
-
-			boardObjs.push(temp);
-		}
-
 		this.valid = [];
 
 		for (var i = 0; i < this.initialBoard.length; i++) {
@@ -43,7 +26,7 @@ class MyGame extends CGFobject {
 			this.valid.push(temp);
 		}
 
-		this.board = new MyBoard(this.scene, this.initialBoard, boardObjs, tree, texture, yuki, mina, this.valid);
+		this.board = new MyBoard(this.scene, this.initialBoard, this.valid);
 
 		this.wins = [0, 0];
 		this.treesEaten = [0, 0];
@@ -288,7 +271,9 @@ class MyGame extends CGFobject {
 		this.animationTime = 0;
 
 		this.board.changeGame();
+	}
 
-		//this.validMoves();
+	changeGraphTextures(){
+		this.board.changeGraphTextures();
 	}
 }

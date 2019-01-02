@@ -9,7 +9,7 @@ class XMLscene extends CGFscene {
 	 * @constructor
 	 * @param {MyInterface} myinterface 
 	 */
-	constructor(myinterface) {
+	constructor(myinterface, numGraphs) {
 		super();
 
 		this.interface = myinterface;
@@ -17,6 +17,14 @@ class XMLscene extends CGFscene {
 
 		this.currCamera;
 		this.cameraList = {};
+
+		this.materialsIndex = 0;
+
+		this.graphs = [];
+
+		this.graphList = {};
+		this.numGraphs = numGraphs;
+		this.loadedGraphs = 0;
 	}
 
 	/**
@@ -38,10 +46,6 @@ class XMLscene extends CGFscene {
 		this.gl.depthFunc(this.gl.LEQUAL);
 
 		this.axis = new CGFaxis(this);
-
-		this.materialsIndex = 0;
-
-		this.game = new MyGame(this);
 	}
 
 	/**
@@ -92,19 +96,39 @@ class XMLscene extends CGFscene {
 		}
 	}
 
+	onGraphLoaded(filename, graph) {
+		if (this.loadedGraphs == 0){
+			this.graph = graph;
+			this.selectedScene = 0;
+		}
 
-	/* Handler called when the graph is finally loaded. 
+		this.graphList[filename] = graph;
+		this.graphs.push(graph);
+		this.loadedGraphs++;
+
+		if (this.loadedGraphs == this.numGraphs)
+			this.onAllGraphLoaded();
+	}
+
+
+	/* Handler called when all graphs are finally loaded. 
 	 * As loading is asynchronous, this may be called already after the application has started the run loop
 	 */
-	onGraphLoaded() {
+	onAllGraphLoaded() {
+		// Adds graph group.
+		var i = 0;
+		for (var key in this.graphList) {
+			this.graphList[key] = i;
+			i++;
+		}
+		this.interface.addGraphGroup(this.graphList);
+
 		this.axis = new CGFaxis(this, this.graph.axis_length);
 
 		this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
 		this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 		this.initLights();
 
-		// Add game options.
-		// this.interface.addGameOptions();
 		// Adds lights group.
 		this.interface.addLightsGroup(this.graph.lights);
 		// Adds cameras group.
@@ -115,13 +139,14 @@ class XMLscene extends CGFscene {
 			this.cameraList[key] = i;
 			i++;
 		}
-		this.lastCamera = this.currCamera;
 		this.interface.addCamerasGroup(this.cameraList);
 
 		this.defaultMaterial = new CGFappearance(this);
 		this.defaultTexture = new CGFtexture(this);
 
 		this.activeTexture = null;
+
+		this.game = new MyGame(this);
 
 		this.sceneInited = true;
 
@@ -137,7 +162,8 @@ class XMLscene extends CGFscene {
 					var obj = this.pickResults[i][0];
 					if (obj) {
 						var customId = this.pickResults[i][1];
-						this.game.pick(customId);
+						if (customId > 0)
+							this.game.pick(customId);
 					}
 				}
 				this.pickResults.splice(0, this.pickResults.length);
@@ -187,8 +213,9 @@ class XMLscene extends CGFscene {
 			}
 
 			// Displays the scene (MySceneGraph function).
-			//this.graph.displayScene();
 			this.game.display();
+			this.registerForPick(-1);
+			this.graph.displayScene();
 		} else {
 			// Draw axis
 			this.axis.display();
@@ -196,6 +223,11 @@ class XMLscene extends CGFscene {
 
 		this.popMatrix();
 		// ---- END Background, camera and axis setup
+	}
+
+	changeGraph() {
+		this.graph = this.graphs[this.selectedScene];
+		this.game.changeGraphTextures();
 	}
 
 	changeCamera() {
@@ -216,7 +248,7 @@ class XMLscene extends CGFscene {
 
 			this.game.update((currTime - this.lastTime) / 1000);
 			this.game.move();
-			
+
 			this.graph.root.update((currTime - this.lastTime) / 1000);
 
 			for (var i = 0; i < this.graph.waters.length; i++)

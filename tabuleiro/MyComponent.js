@@ -70,26 +70,25 @@ class MyComponent extends CGFobject {
 		this.scene.popMatrix();
 	};
 
-	buildChildren() {
+	buildChildren(graph) {
 		if (this.children != 0)
 			return null;
 
 		var error;
 
 		for (var i = 0; i < this.componentRef.length; i++) {
-			if (!(this.componentRef[i] in this.scene.graph.components)) {
+			if (!(this.componentRef[i] in graph.components)) {
 				console.error("component with id=" + this.componentRef[i] + " not found.");
 				return "";
 			}
-			this.children.push(this.scene.graph.components[this.componentRef[i]]);
-			if ((error = this.children[i].buildChildren()) != null)
+			this.children.push(graph.components[this.componentRef[i]]);
+			if ((error = this.children[i].buildChildren(graph)) != null)
 				return error;
 		}
 
 		return null;
 	};
 
-	//TODO: Same animation in different components
 	update(time) {
 		for (var i = 0; i < this.animations.length; i++) {
 			this.animations[i].update(time);

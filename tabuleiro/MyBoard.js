@@ -1,19 +1,21 @@
 class MyBoard extends CGFobject {
-	constructor(scene, board, boardObjs, tree, texture, yuki, mina, valid) {
+	constructor(scene, board, valid) {
 		super(scene);
 
 		this.board = board;
-		this.boardObjs = boardObjs;
 
 		this.lines = this.board.length;
 		this.columns = this.board[0].length;
 
-		this.tree = tree;
-		this.texture = texture;
-		this.yuki = yuki;
-		this.mina = mina;
+		this.tree = new MyTree(this.scene);
+		this.tile = new MyPlane(this.scene, 1, 1);
+
+		this.yuki = new MyYuki(scene);
+		this.mina = new MyMina(scene);
+
 		this.valid = valid;
 
+		this.tileTexture = scene.graph.textures["tileTexture"] || new CGFtexture(this.scene, "images/snow.jpg");
 		this.possibleTexture = new CGFtexture(this.scene, "images/possible.jpg");
 		this.selectedTexture = new CGFtexture(this.scene, "images/selected.jpg");
 
@@ -27,8 +29,8 @@ class MyBoard extends CGFobject {
 		this.animationTime = 0;
 		this.treePositions = [];
 		this.animationTrees = [];
-		
-		for (var i = 0; i < this.lines; i++){
+
+		for (var i = 0; i < this.lines; i++) {
 			this.treePositions.push(new Array(this.columns).fill(0));
 			this.animationTrees.push(new Array(this.columns).fill(0));
 		}
@@ -39,7 +41,7 @@ class MyBoard extends CGFobject {
 		this.scene.translate(-this.columns / 2 + 0.5, 0, -this.lines / 2 + 0.5);
 		for (var i = 0; i < this.lines; i++) {
 			for (var j = 0; j < this.columns; j++) {
-				this.scene.registerForPick((i * this.columns) + j + 1, this.boardObjs[i][j]);
+				this.scene.registerForPick((i * this.columns) + j + 1, this.tile);
 				this.scene.pushMatrix();
 
 				if (this.animationTime != 1 && this.animationPlayer == this.board[i][j]) {
@@ -50,6 +52,7 @@ class MyBoard extends CGFobject {
 				switch (this.board[i][j]) {
 					case 'y':
 						this.yuki.display();
+						break;
 					case 'm':
 						this.mina.display();
 				}
@@ -66,9 +69,9 @@ class MyBoard extends CGFobject {
 						this.selectedTexture.bind();
 						this.pickValid = [i, j];
 					} else this.possibleTexture.bind();
-				} else this.texture.bind();
+				} else this.tileTexture.bind();
 
-				this.boardObjs[i][j].display();
+				this.tile.display();
 				this.scene.translate(1, 0, 0);
 			}
 			this.scene.translate(-this.columns, 0, 1);
@@ -125,10 +128,15 @@ class MyBoard extends CGFobject {
 		this.animationTime = 0;
 		this.treePositions = [];
 		this.animationTrees = [];
-		
-		for (var i = 0; i < this.lines; i++){
+
+		for (var i = 0; i < this.lines; i++) {
 			this.treePositions.push(new Array(this.columns).fill(0));
 			this.animationTrees.push(new Array(this.columns).fill(0));
 		}
+	}
+
+	changeGraphTextures() {
+		this.tileTexture = this.scene.graph.textures["tileTexture"] || new CGFtexture(this.scene, "images/snow.jpg");
+		this.tree.changeGraphTextures();
 	}
 }

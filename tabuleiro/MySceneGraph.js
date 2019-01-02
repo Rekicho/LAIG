@@ -20,11 +20,11 @@ class MySceneGraph {
 	 * @constructor
 	 */
 	constructor(filename, scene) {
+		this.filename = filename;
 		this.loadedOk = null;
 
 		// Establish bidirectional references between scene and graph.
 		this.scene = scene;
-		scene.graph = this;
 
 		this.idRoot = null; // The id of the root element.
 		this.root = null;
@@ -80,7 +80,7 @@ class MySceneGraph {
 		this.loadedOk = true;
 
 		// As the graph loaded ok, signal the scene so that any additional initialization depending on the graph can take place
-		this.scene.onGraphLoaded();
+		this.scene.onGraphLoaded(this.filename, this);
 	}
 
 	/**
@@ -1902,7 +1902,7 @@ class MySceneGraph {
 				this.root = component;
 		}
 
-		if ((error = this.root.buildChildren() != null))
+		if ((error = this.root.buildChildren(this) != null))
 			return error;
 
 		this.log("Parsed components");
