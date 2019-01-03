@@ -153,8 +153,9 @@ class XMLscene extends CGFscene {
 		this.gameTypeList["Computer vs Computer"] = 2;
 
 		this.gameType = 1;
+		this.timeout = 10;
 
-		this.game = new MyGame(this, this.yuki, this.mina, this.gameType);
+		this.game = new MyGame(this, this.yuki, this.mina, this.gameType, this.timeout);
 		
 		this.newGame = false;
 		this.interface.addGameSettings(this.gameTypeList);

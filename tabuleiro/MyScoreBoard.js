@@ -19,6 +19,7 @@ class MyScoreBoard extends CGFobject {
 		this.games = [0,0];
 		this.players = [this.yukiSign, this.minaSign];
 		this.playing = 0;
+		this.timer = [0,0,0,0];
 	}
 
 	display() {
@@ -26,7 +27,7 @@ class MyScoreBoard extends CGFobject {
 
 			//Trees
 			this.digits[this.trees[0][0]].bind();
-			this.scene.translate(-7.5,2,-5);
+			this.scene.translate(-8.25,2,-5);
 			this.scene.rotate(Math.PI/4,1,0,0);
 			this.scene.rotate(Math.PI,0,1,0);
 			this.board.display();
@@ -49,7 +50,7 @@ class MyScoreBoard extends CGFobject {
 
 			//Playing
 			this.players[this.playing].bind();
-			this.scene.translate(-2.5,0,0);
+			this.scene.translate(-3.25,0,0);
 			this.board.display();
 
 			this.p.bind();
@@ -59,6 +60,34 @@ class MyScoreBoard extends CGFobject {
 			this.digits[this.playing+1].bind();
 			this.scene.translate(-1,0,0);
 			this.board.display();
+
+			//Timer
+			this.scene.pushMatrix();
+
+				this.digits[this.timer[0]].bind();
+				this.scene.translate(2.75,0,1);
+				this.board.display();
+
+				this.digits[this.timer[1]].bind();
+				this.scene.translate(-1,0,0);
+				this.board.display();
+
+				this.twoPoints.bind();
+				this.scene.translate(-0.75,0,0);
+				this.scene.pushMatrix();
+				this.scene.scale(0.5,1,1);
+				this.board.display();
+				this.scene.popMatrix();
+
+				this.digits[this.timer[2]].bind();
+				this.scene.translate(-0.75,0,0);
+				this.board.display();
+
+				this.digits[this.timer[3]].bind();
+				this.scene.translate(-1,0,0);
+				this.board.display();
+
+			this.scene.popMatrix();
 
 
 			//Games & Players
@@ -103,5 +132,12 @@ class MyScoreBoard extends CGFobject {
 
 	setPlaying(playing) {
 		this.playing = playing;
+	}
+
+	setTimer(timer) {
+		this.timer[0] = Math.floor(timer / 600);
+		this.timer[1] = Math.floor((timer % 600) / 60);
+		this.timer[2] = Math.floor(((timer % 600) % 60) / 10);
+		this.timer[3] = Math.floor(((timer % 600) % 60) % 10);
 	}
 }

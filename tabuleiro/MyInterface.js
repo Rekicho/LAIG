@@ -41,7 +41,7 @@ class MyInterface extends CGFinterface {
 		// this.gui.add(this.scene, "undo");
 		this.gui.add(this.scene, "newGame").onFinishChange(function(){
 			if(self.scene.newGame){
-				self.scene.game = new MyGame(self.scene, self.scene.yuki, self.scene.mina, self.scene.gameType);
+				self.scene.game = new MyGame(self.scene, self.scene.yuki, self.scene.mina, self.scene.gameType, self.scene.timeout);
 				self.scene.newGame = false;
 			}
 		});

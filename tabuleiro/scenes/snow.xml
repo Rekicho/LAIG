@@ -2,7 +2,7 @@
 	<scene root="root" axis_length="3" />
 	<views default="game">
 		<perspective id="game" near="0.1" far="1000.0" angle="90.0">
-			<from x="0.0" y="7.5" z="2.5" />
+			<from x="0.0" y="7" z="3" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
 	</views>

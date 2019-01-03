@@ -1,5 +1,5 @@
 class MyGame extends CGFobject {
-	constructor(scene, yuki, mina, gameType) {
+	constructor(scene, yuki, mina, gameType, timeout) {
 		super(scene);
 
 		this.initialBoard = [
@@ -54,6 +54,9 @@ class MyGame extends CGFobject {
 		this.animationTime = 0;
 
 		this.scoreboard = new MyScoreBoard(scene);
+
+		this.timer = 0;
+		this.timeout = timeout;
 	};
 
 	getPrologRequest(requestString) {
@@ -91,10 +94,10 @@ class MyGame extends CGFobject {
 			this.wins[(this.nextPlayer + 1) % 2]++;
 			this.scoreboard.setGames(this.wins);
 
-			if (this.wins[0] + this.wins[1] >= 2) {
-				this.finished = true;
-				this.endGame();
-			} else this.changeGame();
+			if (this.wins[0] + this.wins[1] >= 2)
+				this.endGame(false);
+
+			else this.changeGame();
 
 			return;
 		}
@@ -108,6 +111,8 @@ class MyGame extends CGFobject {
 
 		for (var i = 0; i < valid_moves.length; i++)
 			this.valid[valid_moves[i][0]][valid_moves[i][1]] = true;
+
+		this.timer = 0;
 	}
 
 	parseMove(string) {
@@ -146,9 +151,9 @@ class MyGame extends CGFobject {
 
 		this.board.setAnimationTrees(animationTrees);
 
-		if (this.players[this.nextPlayer] == 'y'){
+		if (this.players[this.nextPlayer] == 'y') {
 			this.treesEaten[this.nextPlayer]++;
-			this.scoreboard.setTrees(this.nextPlayer,this.treesEaten[this.nextPlayer]);
+			this.scoreboard.setTrees(this.nextPlayer, this.treesEaten[this.nextPlayer]);
 		}
 
 		this.nextPlayer++;
@@ -231,7 +236,7 @@ class MyGame extends CGFobject {
 	}
 
 	display() {
-		this.board.display(this.ai[this.nextPlayer],this.players[this.nextPlayer]);
+		this.board.display(this.ai[this.nextPlayer], this.players[this.nextPlayer]);
 		this.scoreboard.display();
 	}
 
@@ -240,6 +245,15 @@ class MyGame extends CGFobject {
 	}
 
 	update(deltaTime) {
+		if (!this.finished && (!this.moving || this.ai[this.nextPlayer])) {
+			this.timer += deltaTime;
+
+			if (this.timer >= this.timeout)
+				this.endGame(true);
+
+			else this.scoreboard.setTimer(this.timeout - this.timer);
+		}
+
 		if (!this.animating)
 			return;
 
@@ -297,6 +311,8 @@ class MyGame extends CGFobject {
 		this.animating = false;
 		this.animationTime = 0;
 
+		this.timer = 0;
+
 		this.board.changeGame();
 		this.validMoves();
 	}
@@ -316,7 +332,15 @@ class MyGame extends CGFobject {
 		}
 	}
 
-	endGame() {
+	endGame(timeout) {
+		this.finished = true;
+
+		if(timeout) {
+			alert("Player " + (((this.nextPlayer + 1) % 2) + 1) + " won the match because Player " + (this.nextPlayer + 1) + " didn't play in time!");
+
+			return;
+		}
+
 		this.checkWinner();
 
 		if (this.wins[0] > this.wins[1]) {
