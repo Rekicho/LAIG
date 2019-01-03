@@ -129,8 +129,6 @@ class XMLscene extends CGFscene {
 		this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 		this.initLights();
 
-		// Adds lights group.
-		this.interface.addLightsGroup(this.graph.lights);
 		// Adds cameras group.
 		var i = 0;
 		for (var key in this.graph.cameras) {
@@ -146,7 +144,20 @@ class XMLscene extends CGFscene {
 
 		this.activeTexture = null;
 
-		this.game = new MyGame(this);
+		this.yuki = new MyYuki(this);
+		this.mina = new MyMina(this);
+
+		this.gameTypeList = {};
+		this.gameTypeList["Player vs Player"] = 0;
+		this.gameTypeList["Player vs Computer"] = 1;
+		this.gameTypeList["Computer vs Computer"] = 2;
+
+		this.gameType = 1;
+
+		this.game = new MyGame(this, this.yuki, this.mina, this.gameType);
+		
+		this.newGame = false;
+		this.interface.addGameSettings(this.gameTypeList);
 
 		this.sceneInited = true;
 
@@ -227,6 +238,11 @@ class XMLscene extends CGFscene {
 
 	changeGraph() {
 		this.graph = this.graphs[this.selectedScene];
+
+		this.setGlobalAmbientLight(this.graph.ambient[0], this.graph.ambient[1], this.graph.ambient[2], this.graph.ambient[3]);
+		this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
+		this.initLights();
+
 		this.game.changeGraphTextures();
 	}
 

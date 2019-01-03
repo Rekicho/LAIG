@@ -2,7 +2,7 @@
 	<scene root="root" axis_length="3" />
 	<views default="game">
 		<perspective id="game" near="0.1" far="1000.0" angle="90.0">
-			<from x="0.0" y="5.0" z="5.0" />
+			<from x="0.0" y="7.5" z="2.5" />
 			<to x="0.0" y="0.0" z="0.0" />
 		</perspective>
 	</views>
@@ -15,17 +15,16 @@
 			<location x="0" y="10" z="10" w="1" />
 			<ambient r="0" g="0" b="0" a="1" />
 			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="0" a="1" />
+			<specular r="1" g="1" b="1" a="1" />
 		</omni>
 	</lights>
 	<textures>
 		<texture id="tileTexture" file="images/snow.jpg" />
-		<texture id="treeTexture" file="images/snow.jpg" />
+		<texture id="treeTexture" file="images/christmasTree.jpg" />
 		<texture id="trunkTexture" file="images/trunk.jpg" />
 		<texture id="colorstex" file="images/colors.jpg" />
 		<texture id="snowtex" file="images/mountain.jpg" />
 		<texture id="mountainmap" file="images/mountainheight.jpg" />
-		<texture id="benchtex" file="images/bench.jpg" />
 	</textures>
 	<materials>
 		<material id="defmaterial" shininess = "1">
@@ -525,7 +524,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -538,7 +537,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -551,7 +550,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -564,7 +563,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -576,7 +575,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="bench_leg_1" />
 				<componentref id="bench_leg_2" />
@@ -592,7 +591,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>
@@ -605,7 +604,7 @@
 			<materials>
 				<material id="inherit" />
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
 				<componentref id="cube" />
 			</children>

@@ -1,5 +1,6 @@
 yuki(Board, X, Y):-
     getPeca(Line, Col, Board, y),
+	!,
     X is Line - 1,
     Y is Col - 1.
 

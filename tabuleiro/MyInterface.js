@@ -33,23 +33,18 @@ class MyInterface extends CGFinterface {
 		});
 	}
 
-	/**
-	 * Adds a folder containing the IDs of the lights passed as parameter.
-	 * @param {array} lights
-	 */
-	addLightsGroup(lights) {
+	addGameSettings(gameTypeList) {
+		var self = this;
 
-		var group = this.gui.addFolder("Lights");
-		group.open();
+		this.gui.add(this.scene, "gameType", gameTypeList);
 
-		for (var key in lights) {
-			if (lights.hasOwnProperty(key)) {
-				this.scene.lightValues[key] = lights[key][0];
-				group.add(this.scene.lightValues, key);
+		// this.gui.add(this.scene, "undo");
+		this.gui.add(this.scene, "newGame").onFinishChange(function(){
+			if(self.scene.newGame){
+				self.scene.game = new MyGame(self.scene, self.scene.yuki, self.scene.mina, self.scene.gameType);
+				self.scene.newGame = false;
 			}
-		}
-
-		group.close();
+		});
 	}
 
 	addCamerasGroup(cameras) {

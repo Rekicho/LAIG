@@ -1,5 +1,6 @@
 mina(Board, X, Y):-
     getPeca(Line, Col, Board, m),
+	!,
     X is Line - 1,
     Y is Col - 1.
 

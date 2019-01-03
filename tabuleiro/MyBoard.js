@@ -1,5 +1,5 @@
 class MyBoard extends CGFobject {
-	constructor(scene, board, valid) {
+	constructor(scene, board, valid, yuki, mina) {
 		super(scene);
 
 		this.board = board;
@@ -10,13 +10,14 @@ class MyBoard extends CGFobject {
 		this.tree = new MyTree(this.scene);
 		this.tile = new MyPlane(this.scene, 1, 1);
 
-		this.yuki = new MyYuki(scene);
-		this.mina = new MyMina(scene);
+		this.yuki = yuki;
+		this.mina = mina;
 
 		this.valid = valid;
 
 		this.tileTexture = scene.graph.textures["tileTexture"] || new CGFtexture(this.scene, "images/snow.jpg");
-		this.possibleTexture = new CGFtexture(this.scene, "images/possible.jpg");
+		this.yukiPossibleTexture = new CGFtexture(this.scene, "images/yukiPossible.jpg");
+		this.minaPossibleTexture = new CGFtexture(this.scene, "images/minaPossible.jpg");
 		this.selectedTexture = new CGFtexture(this.scene, "images/selected.jpg");
 
 		this.picked = 0;
@@ -36,7 +37,7 @@ class MyBoard extends CGFobject {
 		}
 	};
 
-	display() {
+	display(ai, player) {
 		this.scene.pushMatrix();
 		this.scene.translate(-this.columns / 2 + 0.5, 0, -this.lines / 2 + 0.5);
 		for (var i = 0; i < this.lines; i++) {
@@ -64,11 +65,16 @@ class MyBoard extends CGFobject {
 				this.tree.display();
 				this.scene.popMatrix();
 
-				if (this.valid[i][j]) {
+				if (this.valid[i][j] && !ai) {
 					if (this.picked == (i * this.columns) + j + 1) {
 						this.selectedTexture.bind();
 						this.pickValid = [i, j];
-					} else this.possibleTexture.bind();
+					} else {
+						if(player == 'y')
+							this.yukiPossibleTexture.bind();
+
+						else this.minaPossibleTexture.bind();
+					}
 				} else this.tileTexture.bind();
 
 				this.tile.display();

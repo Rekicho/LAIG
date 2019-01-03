@@ -1,5 +1,5 @@
 class MyGame extends CGFobject {
-	constructor(scene) {
+	constructor(scene, yuki, mina, gameType) {
 		super(scene);
 
 		this.initialBoard = [
@@ -26,7 +26,7 @@ class MyGame extends CGFobject {
 			this.valid.push(temp);
 		}
 
-		this.board = new MyBoard(this.scene, this.initialBoard, this.valid);
+		this.board = new MyBoard(this.scene, this.initialBoard, this.valid, yuki, mina);
 
 		this.wins = [0, 0];
 		this.treesEaten = [0, 0];
@@ -35,12 +35,25 @@ class MyGame extends CGFobject {
 		this.beforeMina = 'm'; //nothing on start
 		this.nextPlayer = 0;
 		this.wonAs = null;
-		this.ai = [false, true];
+
+		switch (parseInt(gameType)) {
+			case 0:
+				this.ai = [false, false];
+				break;
+			case 1:
+				this.ai = [false, true];
+				break;
+			case 2:
+				this.ai = [true, true];
+				break;
+		}
 
 		this.moving = false;
 		this.animating = false;
 		this.finished = false;
 		this.animationTime = 0;
+
+		this.scoreboard = new MyScoreBoard(scene);
 	};
 
 	getPrologRequest(requestString) {
@@ -76,11 +89,12 @@ class MyGame extends CGFobject {
 	parseValid(string) {
 		if (string == "[]") {
 			this.wins[(this.nextPlayer + 1) % 2]++;
+			this.scoreboard.setGames(this.wins);
 
-			if (this.wins[0] + this.wins[1] == 2)
+			if (this.wins[0] + this.wins[1] >= 2) {
 				this.finished = true;
-
-			else this.changeGame();
+				this.endGame();
+			} else this.changeGame();
 
 			return;
 		}
@@ -132,11 +146,14 @@ class MyGame extends CGFobject {
 
 		this.board.setAnimationTrees(animationTrees);
 
-		if (this.players[this.nextPlayer] == 'y')
+		if (this.players[this.nextPlayer] == 'y'){
 			this.treesEaten[this.nextPlayer]++;
+			this.scoreboard.setTrees(this.nextPlayer,this.treesEaten[this.nextPlayer]);
+		}
 
 		this.nextPlayer++;
 		this.nextPlayer %= 2;
+		this.scoreboard.setPlaying(this.nextPlayer);
 
 		for (var i = 0; i < this.initialBoard.length; i++)
 			for (var j = 0; j < this.initialBoard[i].length; j++)
@@ -214,7 +231,8 @@ class MyGame extends CGFobject {
 	}
 
 	display() {
-		this.board.display();
+		this.board.display(this.ai[this.nextPlayer],this.players[this.nextPlayer]);
+		this.scoreboard.display();
 	}
 
 	pick(id) {
@@ -226,6 +244,9 @@ class MyGame extends CGFobject {
 			return;
 
 		this.animationTime += deltaTime;
+
+		// if(this.animationTime < 1)
+		// 	this.scene.interface.activeCamera.rotate(CGFcameraAxis.Y, Math.PI * deltaTime);
 
 		if (this.animationTime >= 1) {
 			this.animating = false;
@@ -244,7 +265,7 @@ class MyGame extends CGFobject {
 				}
 	}
 
-	changeGame() {
+	checkWinner() {
 		this.wonAs = this.players[(this.nextPlayer + 1) % 2];
 
 		var wonAsString;
@@ -255,11 +276,17 @@ class MyGame extends CGFobject {
 		else wonAsString = "Mina";
 
 		alert("Player " + (((this.nextPlayer + 1) % 2) + 1) + " won playing as " + wonAsString + "!");
+	}
+
+	changeGame() {
+		this.checkWinner();
 
 		this.players = ['m', 'y'];
+		this.scoreboard.changePlayers();
 
 		this.beforeMina = 'm'; //nothing on start
 		this.nextPlayer = 1;
+		this.scoreboard.setPlaying(this.nextPlayer);
 
 		for (var i = 0; i < this.initialBoard.length; i++) {
 			for (var j = 0; j < this.initialBoard[i].length; j++) {
@@ -271,9 +298,35 @@ class MyGame extends CGFobject {
 		this.animationTime = 0;
 
 		this.board.changeGame();
+		this.validMoves();
 	}
 
-	changeGraphTextures(){
+	solveTie() {
+		if (this.treesEaten[0] == this.treesEaten[1])
+			alert("The match was a tie!");
+
+		else if (this.wonAs == 'y') {
+			if (this.treesEaten[0] > this.treesEaten[1])
+				alert("Player 2 won the match!");
+			else alert("Player 1 won the match!");
+		} else {
+			if (this.treesEaten[0] > this.treesEaten[1])
+				alert("Player 1 won the match!");
+			else alert("Player 2 won the match!");
+		}
+	}
+
+	endGame() {
+		this.checkWinner();
+
+		if (this.wins[0] > this.wins[1]) {
+			alert("Player 1 won the match!");
+		} else if (this.wins[0] < this.wins[1]) {
+			alert("Player 2 won the match!");
+		} else this.solveTie();
+	}
+
+	changeGraphTextures() {
 		this.board.changeGraphTextures();
 	}
 }
