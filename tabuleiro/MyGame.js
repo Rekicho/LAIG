@@ -1,6 +1,8 @@
 class MyGame extends CGFobject {
-	constructor(scene, yuki, mina, gameType, timeout) {
+	constructor(scene, yuki, mina, gameType, difficulty) {
 		super(scene);
+
+		gameType = 0;
 
 		this.initialBoard = [
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
@@ -15,6 +17,9 @@ class MyGame extends CGFobject {
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't']
 		];
 
+		this.boardsList = [];
+		this.boardsList.push(JSON.parse(JSON.stringify(this.initialBoard)));
+
 		this.valid = [];
 
 		for (var i = 0; i < this.initialBoard.length; i++) {
@@ -26,7 +31,7 @@ class MyGame extends CGFobject {
 			this.valid.push(temp);
 		}
 
-		this.board = new MyBoard(this.scene, this.initialBoard, this.valid, yuki, mina);
+		this.board = new MyBoard(this.scene, this.initialBoard, this.valid, yuki, mina, difficulty);
 
 		this.wins = [0, 0];
 		this.treesEaten = [0, 0];
@@ -36,15 +41,18 @@ class MyGame extends CGFobject {
 		this.nextPlayer = 0;
 		this.wonAs = null;
 
+		this.beforeMinaList = [];
+		this.beforeMinaList.push(this.beforeMina);
+
 		switch (parseInt(gameType)) {
-			case 0:
-				this.ai = [false, false];
+			case 2:
+				this.ai = [true, true];
 				break;
 			case 1:
 				this.ai = [false, true];
 				break;
-			case 2:
-				this.ai = [true, true];
+			default:
+				this.ai = [false, false];
 				break;
 		}
 
@@ -56,7 +64,20 @@ class MyGame extends CGFobject {
 		this.scoreboard = new MyScoreBoard(scene);
 
 		this.timer = 0;
-		this.timeout = timeout;
+
+		this.difficulty = parseInt(difficulty);
+
+		switch (this.difficulty) {
+			case 2:
+				this.timeout = 10;
+				break;
+			case 1:
+				this.timeout = 30;
+				break;
+			default:
+				this.timeout = 60;
+				break;
+		}
 	};
 
 	getPrologRequest(requestString) {
@@ -65,19 +86,23 @@ class MyGame extends CGFobject {
 		request.open('GET', 'http://localhost:' + requestPort + '/' + requestString, true);
 
 		var self = this;
+		this.undo = false;
 
 		if (requestString[0] == 'v') {
 			request.onload = function (data) {
-				self.parseValid(data.target.response);
+				if (!self.undo)
+					self.parseValid(data.target.response);
 			};
 		} else {
 			request.onload = function (data) {
-				self.parseMove(data.target.response);
-				self.animating = true;
-				self.animationTime = 0;
-				self.validMoves();
-				self.board.pickValid = [-1, -1];
-				self.moving = false;
+				if (!self.undo) {
+					self.parseMove(data.target.response);
+					self.animating = true;
+					self.animationTime = 0;
+					self.validMoves();
+					self.board.pickValid = [-1, -1];
+					self.moving = false;
+				}
 			};
 		}
 
@@ -163,6 +188,9 @@ class MyGame extends CGFobject {
 		for (var i = 0; i < this.initialBoard.length; i++)
 			for (var j = 0; j < this.initialBoard[i].length; j++)
 				this.valid[i][j] = false;
+
+		this.boardsList.push(JSON.parse(JSON.stringify(this.initialBoard)));
+		this.beforeMinaList.push(this.beforeMina);
 	}
 
 	boardToString() {
@@ -236,12 +264,13 @@ class MyGame extends CGFobject {
 	}
 
 	display() {
-		this.board.display(this.ai[this.nextPlayer], this.players[this.nextPlayer]);
 		this.scoreboard.display();
+		this.board.display(this.ai[this.nextPlayer], this.players[this.nextPlayer]);
 	}
 
 	pick(id) {
-		this.board.pick(id);
+		if (!this.finished)
+			this.board.pick(id);
 	}
 
 	update(deltaTime) {
@@ -318,39 +347,85 @@ class MyGame extends CGFobject {
 	}
 
 	solveTie() {
-		if (this.treesEaten[0] == this.treesEaten[1])
+		if (this.treesEaten[0] == this.treesEaten[1]) {
+			this.scoreboard.setWinner('t');
 			alert("The match was a tie!");
-
-		else if (this.wonAs == 'y') {
-			if (this.treesEaten[0] > this.treesEaten[1])
+		} else if (this.wonAs == 'y') {
+			if (this.treesEaten[0] > this.treesEaten[1]) {
+				this.scoreboard.setWinner(1);
 				alert("Player 2 won the match!");
-			else alert("Player 1 won the match!");
-		} else {
-			if (this.treesEaten[0] > this.treesEaten[1])
+			} else {
+				this.scoreboard.setWinner(0);
 				alert("Player 1 won the match!");
-			else alert("Player 2 won the match!");
+			}
+		} else {
+			if (this.treesEaten[0] > this.treesEaten[1]) {
+				this.scoreboard.setWinner(0);
+				alert("Player 1 won the match!");
+			} else {
+				this.scoreboard.setWinner(1);
+				alert("Player 2 won the match!");
+			}
 		}
 	}
 
 	endGame(timeout) {
 		this.finished = true;
 
-		if(timeout) {
+		if (timeout) {
 			alert("Player " + (((this.nextPlayer + 1) % 2) + 1) + " won the match because Player " + (this.nextPlayer + 1) + " didn't play in time!");
-
+			this.scoreboard.setTimer(0);
+			this.scoreboard.setWinner((this.nextPlayer + 1) % 2);
 			return;
 		}
 
 		this.checkWinner();
 
 		if (this.wins[0] > this.wins[1]) {
+			this.scoreboard.setWinner(0);
 			alert("Player 1 won the match!");
 		} else if (this.wins[0] < this.wins[1]) {
+			this.scoreboard.setWinner(1);
 			alert("Player 2 won the match!");
 		} else this.solveTie();
 	}
 
 	changeGraphTextures() {
 		this.board.changeGraphTextures();
+	}
+
+	undoMove() {
+		if(this.boardsList.length < 2)
+			return;
+
+		console.log(this.boardsList);
+
+		this.undo = true;
+
+		this.nextPlayer--;
+		if (this.nextPlayer < 0)
+			this.nextPlayer = 1;
+
+		if (this.players[this.nextPlayer] == 'y') {
+			this.treesEaten[this.nextPlayer]--;
+			this.scoreboard.setTrees(this.nextPlayer, this.treesEaten[this.nextPlayer]);
+		}
+
+		this.scoreboard.setPlaying(this.nextPlayer);
+
+		for (var i = 0; i < this.initialBoard.length; i++)
+			for (var j = 0; j < this.initialBoard[i].length; j++)
+				this.valid[i][j] = false;
+
+		this.initialBoard = JSON.parse(JSON.stringify(this.boardsList[this.boardsList.length - 2]));
+		this.board.board = this.initialBoard;
+		this.boardsList.pop();
+
+		this.beforeMina = this.beforeMinaList[this.beforeMinaList.length - 2];
+		this.beforeMinaList.pop();
+		
+		this.board.undo();
+		this.timer = 0;
+		this.validMoves();
 	}
 }

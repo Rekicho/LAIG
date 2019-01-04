@@ -3,119 +3,155 @@ class MyScoreBoard extends CGFobject {
 		super(scene);
 
 		this.board = new MyPlane(scene, 1, 1);
-		this.tree = new CGFtexture(scene,"images/tree.png");
-		this.gamePad = new CGFtexture(scene,"images/gamepad.jpg");
-		this.yukiSign = new CGFtexture(scene,"images/yukiSign.jpg");
-		this.minaSign = new CGFtexture(scene,"images/minaSign.jpg");
-		this.p = new CGFtexture(scene,"images/P.jpg");
+		this.tree = new CGFtexture(scene, "images/tree.png");
+		this.gamePad = new CGFtexture(scene, "images/gamepad.jpg");
+		this.yukiSign = new CGFtexture(scene, "images/yukiSign.jpg");
+		this.minaSign = new CGFtexture(scene, "images/minaSign.jpg");
+		this.p = new CGFtexture(scene, "images/P.jpg");
+		this.trophy = new CGFtexture(scene, "images/trophy.png");
+		this.tie = new CGFtexture(scene, "images/tie.png");
 
 		this.digits = [];
-		for(var i = 0; i < 10; i++)
-			this.digits.push(new CGFtexture(scene,"images/digit" + i + ".png"));
+		for (var i = 0; i < 10; i++)
+			this.digits.push(new CGFtexture(scene, "images/digit" + i + ".png"));
 
-		this.twoPoints = new CGFtexture(scene,"images/twoPoints.png");
+		this.twoPoints = new CGFtexture(scene, "images/twoPoints.png");
 
-		this.trees = [[0,0],[0,0]];
-		this.games = [0,0];
+		this.trees = [
+			[0, 0],
+			[0, 0]
+		];
+		this.games = [0, 0];
 		this.players = [this.yukiSign, this.minaSign];
 		this.playing = 0;
-		this.timer = [0,0,0,0];
+		this.timer = [0, 0, 0, 0];
 	}
 
 	display() {
 		this.scene.pushMatrix();
 
-			//Trees
-			this.digits[this.trees[0][0]].bind();
-			this.scene.translate(-8.25,2,-5);
-			this.scene.rotate(Math.PI/4,1,0,0);
-			this.scene.rotate(Math.PI,0,1,0);
-			this.board.display();
+		//Trees
+		this.digits[this.trees[0][0]].bind();
+		this.scene.translate(-8.25, 2, -5);
+		this.scene.rotate(Math.PI / 4, 1, 0, 0);
+		this.scene.rotate(Math.PI, 0, 1, 0);
+		this.board.display();
 
-			this.digits[this.trees[0][1]].bind();
-			this.scene.translate(-1,0,0);
-			this.board.display();
+		this.digits[this.trees[0][1]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			this.tree.bind();
-			this.scene.translate(-1,0,0);
-			this.board.display();
+		this.tree.bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			this.digits[this.trees[1][0]].bind();
-			this.scene.translate(-1,0,0);
-			this.board.display();
+		this.digits[this.trees[1][0]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			this.digits[this.trees[1][1]].bind();
-			this.scene.translate(-1,0,0);
-			this.board.display();
+		this.digits[this.trees[1][1]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			//Playing
+		//Winner
+		if (this.winner) {
+			if (this.winner == 't') {
+				this.tie.bind();
+				this.scene.translate(-3.25, 0, 0);
+				this.board.display();
+
+				this.tie.bind();
+				this.scene.translate(-1, 0, 0);
+				this.board.display();
+
+				this.tie.bind();
+				this.scene.translate(-1, 0, 0);
+				this.board.display();
+			} else {
+				this.trophy.bind();
+				this.scene.translate(-3.25, 0, 0);
+				this.board.display();
+
+				this.p.bind();
+				this.scene.translate(-1, 0, 0);
+				this.board.display();
+
+				this.digits[this.winner + 1].bind();
+				this.scene.translate(-1, 0, 0);
+				this.board.display();
+			}
+		}
+
+		//Playing
+		else {
 			this.players[this.playing].bind();
-			this.scene.translate(-3.25,0,0);
+			this.scene.translate(-3.25, 0, 0);
 			this.board.display();
 
 			this.p.bind();
-			this.scene.translate(-1,0,0);
+			this.scene.translate(-1, 0, 0);
 			this.board.display();
 
-			this.digits[this.playing+1].bind();
-			this.scene.translate(-1,0,0);
+			this.digits[this.playing + 1].bind();
+			this.scene.translate(-1, 0, 0);
 			this.board.display();
+		}
 
-			//Timer
-			this.scene.pushMatrix();
+		//Timer
+		this.scene.pushMatrix();
 
-				this.digits[this.timer[0]].bind();
-				this.scene.translate(2.75,0,1);
-				this.board.display();
+		this.digits[this.timer[0]].bind();
+		this.scene.translate(2.75, 0, 1);
+		this.board.display();
 
-				this.digits[this.timer[1]].bind();
-				this.scene.translate(-1,0,0);
-				this.board.display();
+		this.digits[this.timer[1]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-				this.twoPoints.bind();
-				this.scene.translate(-0.75,0,0);
-				this.scene.pushMatrix();
-				this.scene.scale(0.5,1,1);
-				this.board.display();
-				this.scene.popMatrix();
+		this.twoPoints.bind();
+		this.scene.translate(-0.75, 0, 0);
+		this.scene.pushMatrix();
+		this.scene.scale(0.5, 1, 1);
+		this.board.display();
+		this.scene.popMatrix();
 
-				this.digits[this.timer[2]].bind();
-				this.scene.translate(-0.75,0,0);
-				this.board.display();
+		this.digits[this.timer[2]].bind();
+		this.scene.translate(-0.75, 0, 0);
+		this.board.display();
 
-				this.digits[this.timer[3]].bind();
-				this.scene.translate(-1,0,0);
-				this.board.display();
+		this.digits[this.timer[3]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			this.scene.popMatrix();
+		this.scene.popMatrix();
 
 
-			//Games & Players
-			this.digits[this.games[0]].bind();
-			this.scene.translate(-2.5,0,0);
-			this.board.display();
+		//Games & Players
+		this.digits[this.games[0]].bind();
+		this.scene.translate(-2.5, 0, 0);
+		this.board.display();
 
-			this.players[0].bind();
-			this.scene.translate(0,0,1);
-			this.board.display();
+		this.players[0].bind();
+		this.scene.translate(0, 0, 1);
+		this.board.display();
 
-			this.gamePad.bind();
-			this.scene.translate(-1,0,-1);
-			this.board.display();
+		this.gamePad.bind();
+		this.scene.translate(-1, 0, -1);
+		this.board.display();
 
-			this.digits[this.games[1]].bind();
-			this.scene.translate(-1,0,0);
-			this.board.display();
+		this.digits[this.games[1]].bind();
+		this.scene.translate(-1, 0, 0);
+		this.board.display();
 
-			this.players[1].bind();
-			this.scene.translate(0,0,1);
-			this.board.display();
+		this.players[1].bind();
+		this.scene.translate(0, 0, 1);
+		this.board.display();
 
 		this.scene.popMatrix();
 	}
 
-	setTrees(player,trees){
-		this.trees[player][0] = Math.floor(trees/10);
+	setTrees(player, trees) {
+		this.trees[player][0] = Math.floor(trees / 10);
 		this.trees[player][1] = trees % 10;
 	}
 
@@ -139,5 +175,9 @@ class MyScoreBoard extends CGFobject {
 		this.timer[1] = Math.floor((timer % 600) / 60);
 		this.timer[2] = Math.floor(((timer % 600) % 60) / 10);
 		this.timer[3] = Math.floor(((timer % 600) % 60) % 10);
+	}
+
+	setWinner(winner) {
+		this.winner = winner;
 	}
 }

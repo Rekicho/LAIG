@@ -8,7 +8,7 @@
 	</views>
 	<ambient>
 		<ambient r="0.5" g="0.5" b="0.5" a="1.0" />
-		<background r="0.01" g="0.0" b="0.1" a="1.0" />
+		<background r="0.1" g="0.1" b="0.15" a="1.0" />
 	</ambient>
 	<lights>
 		<omni id="light0" enabled="0">
@@ -22,40 +22,50 @@
 		<texture id="tileTexture" file="images/snow.jpg" />
 		<texture id="treeTexture" file="images/christmasTree.jpg" />
 		<texture id="trunkTexture" file="images/trunk.jpg" />
-		<texture id="colorstex" file="images/colors.jpg" />
-		<texture id="snowtex" file="images/mountain.jpg" />
 		<texture id="mountainmap" file="images/mountainheight.jpg" />
+		<texture id="benchtex" file="images/bench.jpg"/>
+		<texture id="windowtex" file="images/window.jpg"/>
+		<texture id="doortex" file="images/door.jpg"/>
+		<texture id="granitetex" file="images/granite.jpg"/>
+		<texture id="housetex" file="images/house.jpg"/>
+		<texture id="pillartex" file="images/pillar.jpg"/>
 	</textures>
 	<materials>
-		<material id="defmaterial" shininess = "1">
-			<emission r="0" g="0" b="0" a="1" />
-			<ambient r="1" g="1" b="1" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+		<material id="defmaterial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="1" g="1" b="1" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="1" g="1" b="1" a="1"/>
 		</material>
-		<material id="blackmaterial" shininess = "1">
-			<emission r="0" g="0" b="0" a="1" />
-			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+		<material id="graymaterial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="0.5" g="0.5" b="0.5" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="0.5" g="0.5" b="0.5" a="1"/>
 		</material>
-		<material id="brownmaterial" shininess = "1">
-			<emission r="0" g="0" b="0" a="1" />
-			<ambient r="0.2" g="0.1" b="0" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+		<material id="bluematerial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="0" g="0.1" b="0.3" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="1" g="1" b="1" a="1"/>
 		</material>
-		<material id="lampmaterial" shininess = "1">
-			<emission r="0" g="0" b="0" a="1" />
-			<ambient r="1" g="1" b="0.5" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+		<material id="brownmaterial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="0.2" g="0.1" b="0" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="1" g="1" b="1" a="1"/>
 		</material>
-		<material id="lamppolematerial" shininess = "1">
-			<emission r="0" g="0" b="0" a="1" />
-			<ambient r="0.1" g="0.1" b="0.1" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+		<material id="lampmaterial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="1" g="1" b="0.5" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="1" g="1" b="1" a="1"/>
+		</material>
+		<material id="lamppolematerial" shininess="1">
+			<emission r="0" g="0" b="0" a="1"/>
+			<ambient r="0.1" g="0.1" b="0.1" a="1"/>
+			<diffuse r="1" g="1" b="1" a="1"/>
+			<specular r="1" g="1" b="1" a="1"/>
 		</material>
 	</materials>
 	<transformations>
@@ -63,940 +73,938 @@
 			<scale x="1" y="1" z="1"/>
 		</transformation>
 		<transformation id="transf2">
-			<translate x="0" y="0" z="0.5" />
+			<translate x="0" y="0" z="0.5"/>
 		</transformation>
 	</transformations>
 	<animations>
 	</animations>
 	<primitives>
 		<primitive id="square">
-			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5" />
-		</primitive >
+			<rectangle x1="-0.5" y1="-0.5" x2="0.5" y2="0.5"/>
+		</primitive>
 		<primitive id="cylinder">
-			<cylinder base="0.5" top="0.5" height="1" slices="20" stacks="20" />
-		</primitive >
+			<cylinder base="0.5" top="0.5" height="1" slices="20" stacks="20"/>
+		</primitive>
 		<primitive id="triangle1">
-			<triangle x1="-2" y1="3" z1="-2" x2="0" y2="3.8" z2="-2" x3="2" y3="3" z3="-2" />
-		</primitive >
+			<triangle x1="-2" y1="3" z1="-2" x2="0" y2="3.8" z2="-2" x3="2" y3="3" z3="-2"/>
+		</primitive>
 		<primitive id="triangle2">
-			<triangle x1="2" y1="3" z1="2" x2="0" y2="3.8" z2="2" x3="-2" y3="3" z3="2" />
-		</primitive >
+			<triangle x1="2" y1="3" z1="2" x2="0" y2="3.8" z2="2" x3="-2" y3="3" z3="2"/>
+		</primitive>
 		<primitive id="sphere">
-			<sphere radius="0.5" slices="20" stacks="20" />
-		</primitive >
+			<sphere radius="0.5" slices="20" stacks="20"/>
+		</primitive>
 		<primitive id="plane">
-			<plane npartsU="5" npartsV="5" />
-		</primitive >
+			<plane npartsU="5" npartsV="5"/>
+		</primitive>
 		<primitive id="terrain">
-			<terrain idtexture="snowtex" idheightmap="mountainmap" parts="100" heightscale="3" />
-		</primitive >
-	</primitives >
+			<terrain idtexture="tileTexture" idheightmap="mountainmap" parts="100" heightscale="3"/>
+		</primitive>
+	</primitives>
 	<components>
 		<component id="face1">
 			<transformation>
-				<translate x="0" y="0" z="0.5" />
+				<translate x="0" y="0" z="0.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="face2">
 			<transformation>
-				<translate x="0" y="0" z="-0.5" />
-				<rotate axis="y" angle="180" />
+				<translate x="0" y="0" z="-0.5"/>
+				<rotate axis="y" angle="180"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="face3">
 			<transformation>
-				<translate x="0" y="0.5" z="0" />
-				<rotate axis="x" angle="-90" />
+				<translate x="0" y="0.5" z="0"/>
+				<rotate axis="x" angle="-90"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="face4">
 			<transformation>
-				<translate x="0" y="-0.5" z="0" />
-				<rotate axis="x" angle="90" />
+				<translate x="0" y="-0.5" z="0"/>
+				<rotate axis="x" angle="90"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="face5">
 			<transformation>
-				<translate x="0.5" y="0" z="0" />
-				<rotate axis="y" angle="90" />
+				<translate x="0.5" y="0" z="0"/>
+				<rotate axis="y" angle="90"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="face6">
 			<transformation>
-				<translate x="-0.5" y="0" z="0" />
-				<rotate axis="y" angle="-90" />
+				<translate x="-0.5" y="0" z="0"/>
+				<rotate axis="y" angle="-90"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="square" />
+				<primitiveref id="square"/>
 			</children>
 		</component>
 		<component id="cube">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="face1" />
-				<componentref id="face2" />
-				<componentref id="face3" />
-				<componentref id="face4" />
-				<componentref id="face5" />
-				<componentref id="face6" />
+				<componentref id="face1"/>
+				<componentref id="face2"/>
+				<componentref id="face3"/>
+				<componentref id="face4"/>
+				<componentref id="face5"/>
+				<componentref id="face6"/>
 			</children>
 		</component>
 		<component id="terrain1">
 			<transformation>
-				<scale x="10" y="1.25" z="10" />
+				<scale x="10" y="1.25" z="10"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="terrain"/>
 			</children>
 		</component>
 		<component id="terrain2">
 			<transformation>
-				<translate x="10" y="0.05" z="10" />
-				<scale x="30" y="0.01" z="10" />
+				<translate x="10" y="0.05" z="10"/>
+				<scale x="30" y="0.01" z="10"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="terrain"/>
 			</children>
 		</component>
 		<component id="terrain3">
 			<transformation>
-				<translate x="10" y="0.05" z="-10" />
-				<scale x="30" y="0.01" z="10" />
+				<translate x="10" y="0.05" z="-10"/>
+				<scale x="30" y="0.01" z="10"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="terrain"/>
 			</children>
 		</component>
 		<component id="terrain4">
 			<transformation>
-				<translate x="20" y="0" z="0" />
-				<scale x="10" y="2.5" z="10" />
+				<translate x="20" y="0" z="0"/>
+				<scale x="10" y="2.5" z="10"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="terrain" />
+				<primitiveref id="terrain"/>
 			</children>
 		</component>
 		<component id="all_terrains">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="terrain1" />
-				<componentref id="terrain2" />
-				<componentref id="terrain3" />
-				<componentref id="terrain4" />
+				<componentref id="terrain1"/>
+				<componentref id="terrain2"/>
+				<componentref id="terrain3"/>
+				<componentref id="terrain4"/>
 			</children>
 		</component>
-		<!-- FENCE POLE -->
+		<!--  FENCE POLE  -->
 		<component id="fence_pole">
 			<transformation>
-				<rotate axis="x" angle="-90" />
-				<scale x="0.1" y="0.1" z="0.5" />
+				<rotate axis="x" angle="-90"/>
+				<scale x="0.1" y="0.1" z="0.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
-		<!-- FENCE SPHERE -->
+		<!--  FENCE SPHERE  -->
 		<component id="fence_sphere">
 			<transformation>
-				<translate x="0" y="0.5" z="0" />
-				<scale x="0.15" y="0.15" z="0.15" />
+				<translate x="0" y="0.5" z="0"/>
+				<scale x="0.15" y="0.15" z="0.15"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="sphere" />
+				<primitiveref id="sphere"/>
 			</children>
 		</component>
-		<!-- FENCES -->
+		<!--  FENCES  -->
 		<component id="fence_1">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_pole" />
-				<componentref id="fence_sphere" />
+				<componentref id="fence_pole"/>
+				<componentref id="fence_sphere"/>
 			</children>
 		</component>
 		<component id="fence_2">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_1" />
+				<componentref id="fence_1"/>
 			</children>
 		</component>
 		<component id="fence_3">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_2" />
+				<componentref id="fence_2"/>
 			</children>
 		</component>
 		<component id="fence_4">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_3" />
+				<componentref id="fence_3"/>
 			</children>
 		</component>
 		<component id="fence_5">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_4" />
+				<componentref id="fence_4"/>
 			</children>
 		</component>
-		<!-- FENCE CONNECTORS -->
+		<!--  FENCE CONNECTORS  -->
 		<component id="fence_connector_1">
 			<transformation>
-				<translate x="-2" y="0.35" z="0" />
-				<rotate axis="y" angle="90" />
-				<scale x="0.1" y="0.15" z="2" />
+				<translate x="-2" y="0.35" z="0"/>
+				<rotate axis="y" angle="90"/>
+				<scale x="0.1" y="0.15" z="2"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="fence_connector_2">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_connector_1" />
+				<componentref id="fence_connector_1"/>
 			</children>
 		</component>
 		<component id="fence_connector_3">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_connector_2" />
+				<componentref id="fence_connector_2"/>
 			</children>
 		</component>
 		<component id="fence_connector_4">
 			<transformation>
-				<translate x="-2" y="0" z="0" />
+				<translate x="-2" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_connector_3" />
+				<componentref id="fence_connector_3"/>
 			</children>
 		</component>
-
-		<!-- FULL FENCE -->
+		<!--  FULL FENCE  -->
 		<component id="full_fence">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="fence_1" />
-				<componentref id="fence_2" />
-				<componentref id="fence_3" />
-				<componentref id="fence_4" />
-				<componentref id="fence_5" />
-				<componentref id="fence_connector_1" />
-				<componentref id="fence_connector_2" />
-				<componentref id="fence_connector_3" />
-				<componentref id="fence_connector_4" />
+				<componentref id="fence_1"/>
+				<componentref id="fence_2"/>
+				<componentref id="fence_3"/>
+				<componentref id="fence_4"/>
+				<componentref id="fence_5"/>
+				<componentref id="fence_connector_1"/>
+				<componentref id="fence_connector_2"/>
+				<componentref id="fence_connector_3"/>
+				<componentref id="fence_connector_4"/>
 			</children>
 		</component>
-		<!-- ALL FENCES 1 -->
+		<!--  ALL FENCES 1  -->
 		<component id="all_fences_1">
 			<transformation>
-				<translate x="4" y="0" z="5" />
+				<translate x="4" y="0" z="5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCE 2 -->
+		<!--  ALL FENCE 2  -->
 		<component id="all_fences_2">
 			<transformation>
-				<translate x="4" y="0" z="-5" />
+				<translate x="4" y="0" z="-5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCE 3 -->
+		<!--  ALL FENCE 3  -->
 		<component id="all_fences_3">
 			<transformation>
-				<translate x="24" y="0" z="5" />
+				<translate x="24" y="0" z="5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCE 4 -->
+		<!--  ALL FENCE 4  -->
 		<component id="all_fences_4">
 			<transformation>
-				<translate x="24" y="0" z="-5" />
+				<translate x="24" y="0" z="-5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCE 5 -->
+		<!--  ALL FENCE 5  -->
 		<component id="all_fences_5">
 			<transformation>
-				<rotate axis="y" angle="90" />
-				<translate x="4" y="0" z="5" />
+				<rotate axis="y" angle="90"/>
+				<translate x="4" y="0" z="5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCE 6 -->
+		<!--  ALL FENCE 6  -->
 		<component id="all_fences_6">
 			<transformation>
-				<translate x="10" y="0" z="0" />
-				<rotate axis="y" angle="90" />
-				<translate x="4" y="0" z="5" />
+				<translate x="10" y="0" z="0"/>
+				<rotate axis="y" angle="90"/>
+				<translate x="4" y="0" z="5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="full_fence" />
+				<componentref id="full_fence"/>
 			</children>
 		</component>
-		<!-- ALL FENCES -->
+		<!--  ALL FENCES  -->
 		<component id="all_fences">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="brownmaterial" />
+				<material id="brownmaterial"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="all_fences_1" />
-				<componentref id="all_fences_2" />
-				<componentref id="all_fences_3" />
-				<componentref id="all_fences_4" />
-				<componentref id="all_fences_5" />
-				<componentref id="all_fences_6" />
+				<componentref id="all_fences_1"/>
+				<componentref id="all_fences_2"/>
+				<componentref id="all_fences_3"/>
+				<componentref id="all_fences_4"/>
+				<componentref id="all_fences_5"/>
+				<componentref id="all_fences_6"/>
 			</children>
 		</component>
-
-		<!-- BENCH LEGS -->
+		<!--  BENCH LEGS  -->
 		<component id="bench_leg_1">
 			<transformation>
-				<translate x="0" y="0.2" z="0" />
+				<translate x="0" y="0.2" z="0"/>
 				<scale x="0.1" y="0.4" z="0.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench_leg_2">
 			<transformation>
-				<translate x="1.25" y="0.2" z="0" />
+				<translate x="1.25" y="0.2" z="0"/>
 				<scale x="0.1" y="0.4" z="0.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench_leg_3">
 			<transformation>
-				<translate x="0" y="0.45" z="-0.3" />
+				<translate x="0" y="0.45" z="-0.3"/>
 				<scale x="0.1" y="0.9" z="0.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench_leg_4">
 			<transformation>
-				<translate x="1.25" y="0.45" z="-0.3" />
+				<translate x="1.25" y="0.45" z="-0.3"/>
 				<scale x="0.1" y="0.9" z="0.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench_legs">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench_leg_1" />
-				<componentref id="bench_leg_2" />
-				<componentref id="bench_leg_3" />
-				<componentref id="bench_leg_4" />
+				<componentref id="bench_leg_1"/>
+				<componentref id="bench_leg_2"/>
+				<componentref id="bench_leg_3"/>
+				<componentref id="bench_leg_4"/>
 			</children>
 		</component>
 		<component id="bench_sit">
 			<transformation>
-				<translate x="0.625" y="0.4" z="-0.15" />
+				<translate x="0.625" y="0.4" z="-0.15"/>
 				<scale x="1.4" y="0.1" z="0.4"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench_back">
 			<transformation>
-				<translate x="0.625" y="0.75" z="-0.3" />
+				<translate x="0.625" y="0.75" z="-0.3"/>
 				<scale x="1.4" y="0.25" z="0.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="bench">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="benchtex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench_legs" />
-				<componentref id="bench_back" />
-				<componentref id="bench_sit" />
+				<componentref id="bench_legs"/>
+				<componentref id="bench_back"/>
+				<componentref id="bench_sit"/>
 			</children>
 		</component>
 		<component id="bench_1">
 			<transformation>
-				<translate x="6" y="0" z="-8" />
+				<translate x="6" y="0" z="-8"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench" />
+				<componentref id="bench"/>
 			</children>
 		</component>
 		<component id="bench_2">
 			<transformation>
-				<translate x="9.5" y="0" z="-8" />
+				<translate x="9.5" y="0" z="-8"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench" />
+				<componentref id="bench"/>
 			</children>
 		</component>
 		<component id="bench_3">
 			<transformation>
-				<translate x="13" y="0" z="-8" />
+				<translate x="13" y="0" z="-8"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench" />
+				<componentref id="bench"/>
 			</children>
 		</component>
 		<component id="bench_4">
 			<transformation>
-				<rotate axis="y" angle="180" />
-				<translate x="-3.5" y="0" z="-8" />
+				<rotate axis="y" angle="180"/>
+				<translate x="-3.5" y="0" z="-8"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench" />
+				<componentref id="bench"/>
 			</children>
 		</component>
 		<component id="bench_5">
 			<transformation>
-				<rotate axis="y" angle="180" />
-				<translate x="-18" y="0" z="-8" />
+				<rotate axis="y" angle="180"/>
+				<translate x="-18" y="0" z="-8"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench" />
+				<componentref id="bench"/>
 			</children>
 		</component>
 		<component id="all_benches">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="brownmaterial" />
+				<material id="brownmaterial"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="bench_1" />
-				<componentref id="bench_2" />
-				<componentref id="bench_3" />
-				<componentref id="bench_4" />
-				<componentref id="bench_5" />
+				<componentref id="bench_1"/>
+				<componentref id="bench_2"/>
+				<componentref id="bench_3"/>
+				<componentref id="bench_4"/>
+				<componentref id="bench_5"/>
 			</children>
 		</component>
-		<!-- Lamp pole + light -->
+		<!--  Lamp pole + light  -->
 		<component id="lamp_pole">
 			<transformation>
-				<rotate axis="x" angle="-90" />
+				<rotate axis="x" angle="-90"/>
 				<scale x="0.1" y="0.1" z="2"/>
 			</transformation>
 			<materials>
-				<material id="lamppolematerial" />
+				<material id="lamppolematerial"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="lamp_light">
 			<transformation>
-				<translate x="0" y="2" z="0" />
+				<translate x="0" y="2" z="0"/>
 				<scale x="0.3" y="0.3" z="0.3"/>
 			</transformation>
 			<materials>
-				<material id="lampmaterial" />
+				<material id="lampmaterial"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="sphere" />
+				<primitiveref id="sphere"/>
 			</children>
 		</component>
 		<component id="lamp">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp_pole" />
-				<componentref id="lamp_light" />
+				<componentref id="lamp_pole"/>
+				<componentref id="lamp_light"/>
 			</children>
 		</component>
 		<component id="lamp_1">
 			<transformation>
-				<translate x="5" y="0" z="-8.5" />
+				<translate x="5" y="0" z="-8.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp" />
+				<componentref id="lamp"/>
 			</children>
 		</component>
 		<component id="lamp_2">
 			<transformation>
-				<translate x="15" y="0" z="-8.5" />
+				<translate x="15" y="0" z="-8.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp" />
+				<componentref id="lamp"/>
 			</children>
 		</component>
 		<component id="lamp_3">
 			<transformation>
-				<translate x="15" y="0" z="8.5" />
+				<translate x="15" y="0" z="8.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp" />
+				<componentref id="lamp"/>
 			</children>
 		</component>
 		<component id="lamp_4">
 			<transformation>
-				<translate x="5" y="0" z="8.5" />
+				<translate x="5" y="0" z="8.5"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp" />
+				<componentref id="lamp"/>
 			</children>
 		</component>
 		<component id="all_lamps">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="lamp_1" />
-				<componentref id="lamp_2" />
-				<componentref id="lamp_3" />
-				<componentref id="lamp_4" />
+				<componentref id="lamp_1"/>
+				<componentref id="lamp_2"/>
+				<componentref id="lamp_3"/>
+				<componentref id="lamp_4"/>
 			</children>
 		</component>
-		<!-- HOUSE -->
+		<!--  HOUSE  -->
 		<component id="house_structure_1">
 			<transformation>
-				<translate x="0" y="1.5" z="0" />
+				<translate x="0" y="1.5" z="0"/>
 				<scale x="4" y="3" z="4"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="house_structure_2">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="triangle1" />
+				<primitiveref id="triangle1"/>
 			</children>
 		</component>
 		<component id="house_structure_3">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="inherit" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="triangle2" />
+				<primitiveref id="triangle2"/>
 			</children>
 		</component>
 		<component id="house_structure_4">
 			<transformation>
-				<translate x="0" y="0.125" z="-2.65" />
+				<translate x="0" y="0.125" z="-2.65"/>
 				<scale x="4" y="0.25" z="1.25"/>
 			</transformation>
 			<materials>
-				<material id="blackmaterial" />
+				<material id="graymaterial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="granitetex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="house_structure_5">
 			<transformation>
-				<translate x="1.25" y="0.1" z="-2.5" />
-				<rotate axis="x" angle="-90" />
+				<translate x="1.25" y="0.1" z="-2.5"/>
+				<rotate axis="x" angle="-90"/>
 				<scale x="0.3" y="0.3" z="3.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="graymaterial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="pillartex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="house_structure_6">
 			<transformation>
-				<translate x="-1.25" y="0.1" z="-2.5" />
-				<rotate axis="x" angle="-90" />
+				<translate x="-1.25" y="0.1" z="-2.5"/>
+				<rotate axis="x" angle="-90"/>
 				<scale x="0.3" y="0.3" z="3.1"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="graymaterial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="pillartex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="all_house_structure_1">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="brownmaterial" />
+				<material id="brownmaterial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="housetex" length_s="0.5" length_t="1.0"/>
 			<children>
-				<componentref id="house_structure_1" />
-				<componentref id="house_structure_2" />
-				<componentref id="house_structure_3" />
+				<componentref id="house_structure_1"/>
+				<componentref id="house_structure_2"/>
+				<componentref id="house_structure_3"/>
 			</children>
 		</component>
 		<component id="all_house_structure_2">
 			<transformation>
-				<transformationref id="transf1" />
+				<transformationref id="transf1"/>
 			</transformation>
 			<materials>
-				<material id="lamppolematerial" />
+				<material id="lamppolematerial"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="house_structure_4" />
-				<componentref id="house_structure_5" />
-				<componentref id="house_structure_6" />
+				<componentref id="house_structure_4"/>
+				<componentref id="house_structure_5"/>
+				<componentref id="house_structure_6"/>
 			</children>
 		</component>
 		<component id="house_window">
 			<transformation>
-				<translate x="1" y="2" z="-2.02" />
+				<translate x="1" y="2" z="-2.02"/>
 				<scale x="0.7" y="0.7" z="0.01"/>
 			</transformation>
 			<materials>
-				<material id="lampmaterial" />
+				<material id="bluematerial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="windowtex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<primitiveref id="cylinder" />
+				<primitiveref id="cylinder"/>
 			</children>
 		</component>
 		<component id="house_door">
 			<transformation>
-				<translate x="-0.5" y="1" z="-2.02" />
+				<translate x="-0.5" y="1" z="-2.02"/>
 				<scale x="1" y="2" z="0.2"/>
 			</transformation>
 			<materials>
-				<material id="blackmaterial" />
+				<material id="graymaterial"/>
 			</materials>
-			<texture id="none" length_s="1.0" length_t="1.0"/>
+			<texture id="doortex" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="house_roof_1">
 			<transformation>
-				<rotate axis="z" angle="22.5" />
-				<translate x="0.1" y="3.5" z="-0.4" />
+				<rotate axis="z" angle="22.5"/>
+				<translate x="0.1" y="3.5" z="-0.4"/>
 				<scale x="2.75" y="0.1" z="5.5"/>
 			</transformation>
 			<materials>
-				<material id="defmaterial" />
+				<material id="defmaterial"/>
 			</materials>
-			<texture id="snowtex" length_s="1.0" length_t="1.0"/>
+			<texture id="tileTexture" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="house_roof_2">
 			<transformation>
-				<rotate axis="z" angle="-22.5" />
-				<translate x="-0.1" y="3.5" z="-0.4" />
+				<rotate axis="z" angle="-22.5"/>
+				<translate x="-0.1" y="3.5" z="-0.4"/>
 				<scale x="2.75" y="0.1" z="5.5"/>
 			</transformation>
 			<materials>
-				<material id="defmaterial" />
+				<material id="defmaterial"/>
 			</materials>
-			<texture id="snowtex" length_s="1.0" length_t="1.0"/>
+			<texture id="tileTexture" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="cube" />
+				<componentref id="cube"/>
 			</children>
 		</component>
 		<component id="house">
 			<transformation>
-				<translate x="10" y="0" z="11" />
+				<translate x="10" y="0" z="11"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="all_house_structure_1" />
-				<componentref id="all_house_structure_2" />
-				<componentref id="house_window" />
-				<componentref id="house_door" />
-				<componentref id="house_roof_1" />
-				<componentref id="house_roof_2" />
+				<componentref id="all_house_structure_1"/>
+				<componentref id="all_house_structure_2"/>
+				<componentref id="house_window"/>
+				<componentref id="house_door"/>
+				<componentref id="house_roof_1"/>
+				<componentref id="house_roof_2"/>
 			</children>
 		</component>
-		<!-- ALL MAP -->
+		<!--  ALL MAP  -->
 		<component id="root">
 			<transformation>
-				<translate x="-10" y="0" z="0" />
+				<translate x="-10" y="0" z="0"/>
 			</transformation>
 			<materials>
-				<material id="inherit" />
+				<material id="inherit"/>
 			</materials>
 			<texture id="none" length_s="1.0" length_t="1.0"/>
 			<children>
-				<componentref id="all_terrains" />
-				<componentref id="all_fences" />
-				<componentref id="all_benches" />
-				<componentref id="all_lamps" />
-				<componentref id="house" />
+				<componentref id="all_terrains"/>
+				<componentref id="all_fences"/>
+				<componentref id="all_benches"/>
+				<componentref id="all_lamps"/>
+				<componentref id="house"/>
 			</children>
 		</component>
 	</components>

@@ -1,5 +1,5 @@
 class MyBoard extends CGFobject {
-	constructor(scene, board, valid, yuki, mina) {
+	constructor(scene, board, valid, yuki, mina, difficulty) {
 		super(scene);
 
 		this.board = board;
@@ -35,6 +35,11 @@ class MyBoard extends CGFobject {
 			this.treePositions.push(new Array(this.columns).fill(0));
 			this.animationTrees.push(new Array(this.columns).fill(0));
 		}
+
+		if(difficulty == 2)
+			this.hard = true;
+
+		else this.hard = false;
 	};
 
 	display(ai, player) {
@@ -60,10 +65,12 @@ class MyBoard extends CGFobject {
 
 				this.scene.popMatrix();
 
-				this.scene.pushMatrix();
-				this.scene.translate(0, this.treePositions[i][j] + (this.animationTime * this.animationTrees[i][j]), 0);
-				this.tree.display();
-				this.scene.popMatrix();
+				if(!this.hard){
+					this.scene.pushMatrix();
+					this.scene.translate(0, this.treePositions[i][j] + (this.animationTime * this.animationTrees[i][j]), 0);
+					this.tree.display();
+					this.scene.popMatrix();
+				}
 
 				if (this.valid[i][j] && !ai) {
 					if (this.picked == (i * this.columns) + j + 1) {
@@ -144,5 +151,29 @@ class MyBoard extends CGFobject {
 	changeGraphTextures() {
 		this.tileTexture = this.scene.graph.textures["tileTexture"] || new CGFtexture(this.scene, "images/snow.jpg");
 		this.tree.changeGraphTextures();
+	}
+
+	undo() {
+		this.picked = 0;
+		this.pickValid = [-1, -1];
+
+		this.animationPlayer = ' ';
+		this.animationX = 0;
+		this.animationZ = 0;
+		this.animationAngle = 0;
+		this.animationTime = 0;
+		this.animationTrees = [];
+
+		for (var i = 0; i < this.lines; i++) {
+			this.animationTrees.push(new Array(this.columns).fill(0));
+		}
+
+		for (var i = 0; i < this.lines; i++)
+			for (var j = 0; j < this.columns; j++){
+				if(this.board[i][j] == 't')
+					this.treePositions[i][j] = 0;
+
+				else this.treePositions[i][j] = -1.5;
+			}
 	}
 }

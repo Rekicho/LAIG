@@ -33,26 +33,27 @@ class MyInterface extends CGFinterface {
 		});
 	}
 
-	addGameSettings(gameTypeList) {
+	addGameSettings(gameTypeList, gameDifficultyList) {
 		var self = this;
 
-		this.gui.add(this.scene, "gameType", gameTypeList);
+		var group = this.gui.addFolder("Game Options");
 
-		// this.gui.add(this.scene, "undo");
-		this.gui.add(this.scene, "newGame").onFinishChange(function(){
+		group.add(this.scene, "gameType", gameTypeList);
+		group.add(this.scene, "gameDifficulty", gameDifficultyList);
+
+		group.add(this.scene, "newGame").onFinishChange(function(){
 			if(self.scene.newGame){
-				self.scene.game = new MyGame(self.scene, self.scene.yuki, self.scene.mina, self.scene.gameType, self.scene.timeout);
+				self.scene.restartGame();
 				self.scene.newGame = false;
 			}
 		});
-	}
 
-	addCamerasGroup(cameras) {
-		var group = this.gui.add(this.scene, "currCamera", cameras);
-		var self = this;
-		group.onFinishChange(function(){
-			self.scene.changeCamera();
-		})
+		this.gui.add(this.scene, "undo").onFinishChange(function(){
+			if(self.scene.undo){
+				self.scene.game.undoMove();
+				self.scene.undo = false;
+			}
+		});
 	}
 
 	initKeys() {

@@ -16,7 +16,6 @@ class XMLscene extends CGFscene {
 		this.lightValues = {};
 
 		this.currCamera;
-		this.cameraList = {};
 
 		this.materialsIndex = 0;
 
@@ -97,9 +96,11 @@ class XMLscene extends CGFscene {
 	}
 
 	onGraphLoaded(filename, graph) {
-		if (this.loadedGraphs == 0){
+		filename = filename.substring(0,filename.length - 4);
+
+		if (filename == "forest"){
 			this.graph = graph;
-			this.selectedScene = 0;
+			this.selectedScene = this.loadedGraphs;
 		}
 
 		this.graphList[filename] = graph;
@@ -129,16 +130,6 @@ class XMLscene extends CGFscene {
 		this.gl.clearColor(this.graph.background[0], this.graph.background[1], this.graph.background[2], this.graph.background[3]);
 		this.initLights();
 
-		// Adds cameras group.
-		var i = 0;
-		for (var key in this.graph.cameras) {
-			if (key == this.graph.defaultCamera)
-				this.currCamera = i;
-			this.cameraList[key] = i;
-			i++;
-		}
-		this.interface.addCamerasGroup(this.cameraList);
-
 		this.defaultMaterial = new CGFappearance(this);
 		this.defaultTexture = new CGFtexture(this);
 
@@ -152,13 +143,19 @@ class XMLscene extends CGFscene {
 		this.gameTypeList["Player vs Computer"] = 1;
 		this.gameTypeList["Computer vs Computer"] = 2;
 
-		this.gameType = 1;
-		this.timeout = 10;
+		this.gameDifficultyList = {};
+		this.gameDifficultyList["Easy"] = 0;
+		this.gameDifficultyList["Medium"] = 1;
+		this.gameDifficultyList["Hard"] = 2;
 
-		this.game = new MyGame(this, this.yuki, this.mina, this.gameType, this.timeout);
+		this.gameType = 1;
+		this.gameDifficulty = 0;
+
+		this.game = new MyGame(this, this.yuki, this.mina, this.gameType, this.gameDifficulty);
 		
 		this.newGame = false;
-		this.interface.addGameSettings(this.gameTypeList);
+		this.undo = false;
+		this.interface.addGameSettings(this.gameTypeList,this.gameDifficultyList);
 
 		this.sceneInited = true;
 
@@ -247,17 +244,6 @@ class XMLscene extends CGFscene {
 		this.game.changeGraphTextures();
 	}
 
-	changeCamera() {
-		var cam;
-		for (var key in this.cameraList) {
-			if (this.cameraList[key] == this.currCamera) {
-				cam = key;
-			}
-		}
-		this.camera = this.graph.cameras[cam];
-		this.interface.setActiveCamera(this.graph.cameras[cam]);
-	}
-
 	update(currTime) {
 		this.lastTime = this.lastTime || 0;
 
@@ -273,5 +259,9 @@ class XMLscene extends CGFscene {
 		}
 
 		this.lastTime = currTime;
+	}
+
+	restartGame() {
+		this.game = new MyGame(this, this.yuki, this.mina, this.gameType, this.gameDifficulty);
 	}
 }

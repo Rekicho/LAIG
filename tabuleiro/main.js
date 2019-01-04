@@ -17,7 +17,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
         // Standard application, scene and interface setup
         var app = new CGFapplication(document.body);
         var myInterface = new MyInterface();
-        var myScene = new XMLscene(myInterface, 2);
+        var myScene = new XMLscene(myInterface, 3);
 
         app.init();
 
@@ -26,6 +26,7 @@ serialInclude(['../lib/CGF.js', 'XMLscene.js', 'MySceneGraph.js', 'MyInterface.j
 
         myInterface.setActiveCamera(myScene.camera);
 
+		new MySceneGraph("forest.xml", myScene);
 		new MySceneGraph("snow.xml", myScene);
 		new MySceneGraph("beach.xml", myScene);
 
