@@ -404,7 +404,7 @@ class MyGame extends CGFobject {
 	}
 
 	undoMove() {
-		if (this.finished || this.boardsList.length < 2)
+		if (this.finished || this.boardsList.length < 2 || (this.ai[0] && this.ai[1]))
 			return;
 
 		this.undo = true;
@@ -443,6 +443,9 @@ class MyGame extends CGFobject {
 
 		this.timer = 0;
 
-		this.validMoves();
+		if(this.ai[this.nextPlayer] && this.boardsList.length >= 2)
+			this.undoMove();
+
+		else this.validMoves();
 	}
 }

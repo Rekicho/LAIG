@@ -23,7 +23,6 @@ class MySceneGraph {
 		this.filename = filename;
 		this.loadedOk = null;
 
-		// Establish bidirectional references between scene and graph.
 		this.scene = scene;
 
 		this.idRoot = null; // The id of the root element.
