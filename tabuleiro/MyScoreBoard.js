@@ -27,7 +27,7 @@ class MyScoreBoard extends CGFobject {
 		this.timer = [0, 0, 0, 0];
 	}
 
-	display() {
+	displaySide() {
 		this.scene.pushMatrix();
 
 		//Trees
@@ -146,6 +146,18 @@ class MyScoreBoard extends CGFobject {
 		this.players[1].bind();
 		this.scene.translate(0, 0, 1);
 		this.board.display();
+
+		this.scene.popMatrix();
+	}
+
+	display() {
+		this.scene.pushMatrix();
+
+		this.displaySide();
+
+		this.scene.rotate(Math.PI, 0, 1, 0);
+
+		this.displaySide();
 
 		this.scene.popMatrix();
 	}

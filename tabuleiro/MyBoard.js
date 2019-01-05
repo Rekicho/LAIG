@@ -157,11 +157,6 @@ class MyBoard extends CGFobject {
 		this.picked = 0;
 		this.pickValid = [-1, -1];
 
-		this.animationPlayer = ' ';
-		this.animationX = 0;
-		this.animationZ = 0;
-		this.animationAngle = 0;
-		this.animationTime = 0;
 		this.animationTrees = [];
 
 		for (var i = 0; i < this.lines; i++) {

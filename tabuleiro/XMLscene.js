@@ -262,6 +262,7 @@ class XMLscene extends CGFscene {
 	}
 
 	restartGame() {
+		this.interface.activeCamera.setPosition([0,7,3]);
 		this.game = new MyGame(this, this.yuki, this.mina, this.gameType, this.gameDifficulty);
 	}
 }

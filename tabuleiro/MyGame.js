@@ -2,8 +2,6 @@ class MyGame extends CGFobject {
 	constructor(scene, yuki, mina, gameType, difficulty) {
 		super(scene);
 
-		gameType = 0;
-
 		this.initialBoard = [
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
 			['t', 't', 't', 't', 't', 't', 't', 't', 't', 't'],
@@ -286,10 +284,13 @@ class MyGame extends CGFobject {
 		if (!this.animating)
 			return;
 
+		var oldTime = this.animationTime;
 		this.animationTime += deltaTime;
 
-		// if(this.animationTime < 1)
-		// 	this.scene.interface.activeCamera.rotate(CGFcameraAxis.Y, Math.PI * deltaTime);
+		if(this.animationTime < 1)
+			this.scene.interface.activeCamera.orbit(CGFcameraAxis.Z, Math.PI * deltaTime);
+
+		else this.scene.interface.activeCamera.orbit(CGFcameraAxis.Z, Math.PI * (1 - oldTime));		
 
 		if (this.animationTime >= 1) {
 			this.animating = false;
@@ -342,7 +343,11 @@ class MyGame extends CGFobject {
 
 		this.timer = 0;
 
+		this.boardsList = [];
+		this.beforeMinaList = [];
+
 		this.board.changeGame();
+		this.scene.interface.activeCamera.setPosition([0,7,-3]);
 		this.validMoves();
 	}
 
@@ -373,6 +378,10 @@ class MyGame extends CGFobject {
 		this.finished = true;
 
 		if (timeout) {
+			for (var i = 0; i < this.initialBoard.length; i++)
+				for (var j = 0; j < this.initialBoard[i].length; j++)
+					this.valid[i][j] = false;
+
 			alert("Player " + (((this.nextPlayer + 1) % 2) + 1) + " won the match because Player " + (this.nextPlayer + 1) + " didn't play in time!");
 			this.scoreboard.setTimer(0);
 			this.scoreboard.setWinner((this.nextPlayer + 1) % 2);
@@ -395,10 +404,8 @@ class MyGame extends CGFobject {
 	}
 
 	undoMove() {
-		if(this.boardsList.length < 2)
+		if (this.finished || this.boardsList.length < 2)
 			return;
-
-		console.log(this.boardsList);
 
 		this.undo = true;
 
@@ -423,9 +430,19 @@ class MyGame extends CGFobject {
 
 		this.beforeMina = this.beforeMinaList[this.beforeMinaList.length - 2];
 		this.beforeMinaList.pop();
-		
+
 		this.board.undo();
+
+		this.animating = false;
+		this.animationTime = 0;
+
+		if(this.nextPlayer == 0)
+			this.scene.interface.activeCamera.setPosition([0,7,3]);
+
+		else this.scene.interface.activeCamera.setPosition([0,7,-3]);
+
 		this.timer = 0;
+
 		this.validMoves();
 	}
 }
