@@ -11,11 +11,11 @@
 		<background r="0.0" g="0.01" b="0.15" a="1.0" />
 	</ambient>
 	<lights>
-		<omni id="light0" enabled="0">
-			<location x="0" y="10" z="10" w="1" />
+		<omni id="light0" enabled="1">
+			<location x="-10" y="0" z="0" w="0.25" />
 			<ambient r="0" g="0" b="0" a="1" />
-			<diffuse r="1" g="1" b="1" a="1" />
-			<specular r="1" g="1" b="1" a="1" />
+			<diffuse r="0.35" g="0.14" b="0.05" a="1" />
+			<specular r="0.35" g="0.14" b="0.05" a="1" />
 		</omni>
 	</lights>
 	<textures>
